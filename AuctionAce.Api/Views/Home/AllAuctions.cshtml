@@ -1,5 +1,5 @@
 ﻿@{
-    /* Layout = null; */
+    /*Layout = null; */
 }
 
 <!DOCTYPE html>
@@ -15,21 +15,20 @@
         }
     </style>
 </head>
-<body>   
-    
-    <div class="container-fluid">        
-        
+<body>
+    <div class="container-fluid">
+        <center>
+            <h1>
+                Current promotions
+            </h1>
+
+        </center>
+        <div class="text-right">
+            <a href="#" class="btn btn-primary">See all</a>
+        </div>
         <div class="row">
-            <div class="col-md-12 center" style="text-align:center">
-                <h1>
-                    Current promotions
-                </h1>
-            </div>
-        </div>
 
-
-        <div class="row">
-            <div class="col-md-3">
+            <div class="col-lg-3 col-md-6">
                 <div class="card">
                     <img class="card-img-top" src="https://studentprawa.pl/media/k2/items/cache/af6038056f6231c664e3ef073c45af10_L.jpg" alt="Card image cap">
                     <div class="card-body">
@@ -45,7 +44,7 @@
 
 
 
-            <div class="col-md-3">
+            <div class="col-lg-3 col-md-6">
                 <div class="card">
                     <img class="card-img-top" src="https://studentprawa.pl/media/k2/items/cache/af6038056f6231c664e3ef073c45af10_L.jpg" alt="Card image cap">
                     <div class="card-body">
@@ -60,7 +59,7 @@
             </div>
 
 
-            <div class="col-lg-3">
+            <div class="col-lg-3 col-md-6">
                 <div class="card">
                     <img class="card-img-top" src="https://studentprawa.pl/media/k2/items/cache/af6038056f6231c664e3ef073c45af10_L.jpg" alt="Card image cap">
                     <div class="card-body">
@@ -75,7 +74,7 @@
             </div>
 
 
-            <div class="col-lg-3">
+            <div class="col-lg-3 col-md-6">
                 <div class="card">
                     <img class="card-img-top" src="https://studentprawa.pl/media/k2/items/cache/af6038056f6231c664e3ef073c45af10_L.jpg" alt="Card image cap">
                     <div class="card-body">
@@ -87,29 +86,14 @@
                         <a href="#" class="btn btn-primary">View Auction</a>
                     </div>
                 </div>
-            </div>   
-        </div>
-        <div class="row" style="margin-top:20px ">
-            <div class="d-grid gap-2 col-6 mx-auto">
-                <button onclick="window.location.href = '@Url.Action("AllAuctions","Home")'" type="button" class="btn btn-primary btn-lg" style="margin-right:0px">See more</button>
             </div>
+
+
 
         </div>
-        
-        <script>
-
-        </script>
     </div>
 
 
-    @* <div class="category">
-        <div class="btn-group" role="group" aria-label="Basic example">
-            <button type="button" class="btn btn-secondary">Electronics</button>
-            <button type="button" class="btn btn-secondary">Clothing</button>
-            <button type="button" class="btn btn-secondary">Books</button>
-            <!-- Dodaj więcej przycisków kategorii według potrzeb -->
-        </div>
-    </div> *@
 
 
 </body>
