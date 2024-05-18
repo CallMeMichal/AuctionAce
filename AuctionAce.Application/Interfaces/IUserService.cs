@@ -8,5 +8,6 @@ namespace AuctionAce.Application.Interfaces
 {
     public interface IUserService
     {
+        public Task<bool> UserLogin(string email, string password);
     }
 }

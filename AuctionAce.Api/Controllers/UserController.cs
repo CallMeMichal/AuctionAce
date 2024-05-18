@@ -7,8 +7,9 @@ namespace AuctionAce.Api.Controllers
 {
     public class UserController : Controller
     {
-        private readonly IUserService _userService;
-        public UserController(IUserService userService)
+        //private readonly IUserService _userService;
+        private readonly UserService _userService;
+        public UserController(UserService userService)
         {
             _userService = userService;
         }
@@ -17,11 +18,11 @@ namespace AuctionAce.Api.Controllers
         [HttpPost]
         public IActionResult LoginAction(string email, string password)
         {
+            var loginStatus = _userService.UserLogin(email, password);
 
-            
             //service
             //userRepository
-            UserRepository userRepository = new();
+            /*UserRepository userRepository = new();*/
 
             Console.WriteLine(email + ":" + password);
             return View();

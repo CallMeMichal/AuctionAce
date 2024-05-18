@@ -1,20 +1,28 @@
-﻿using AuctionAce.Application.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using AuctionAce.Infrastructure.Repositories;
 
 namespace AuctionAce.Application.Services
 {
-    public class UserService : IUserService
+    public class UserService
     {
-        public UserService() { }
+        /* public UserService() { }*/
+
+        public readonly UserRepository _userRepository;
+
+        public UserService(UserRepository userRepository)
+        {
+            _userRepository = userRepository;
+        }
+
+        public async Task<bool> UserLogin(string email, string password)
+        {
+            var userLoginStatus = await _userRepository.UserLogin(email, password);
+
+            if (userLoginStatus == true) 
+                return true;
+            else
+                return false;
+        }
     }
 }
 
 
-/*
- * Scaffold-DbContext "Server=MICHAť\SQLEXPRESS,port;database=nazwa_bazy_danych;Persist Security Info=True;User ID=user_id;password=user_password;" 
-Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models
- **-/
