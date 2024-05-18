@@ -12,6 +12,8 @@ namespace AuctionAce.Api.Controllers
             return View();
         }
 
+       
+
 
         [HttpGet]
         public IActionResult AllAuctions()

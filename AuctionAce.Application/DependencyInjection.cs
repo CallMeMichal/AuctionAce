@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using AuctionAce.Application.Interfaces;
+using AuctionAce.Application.Services;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,9 +13,12 @@ namespace AuctionAce.Application
     {
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
+            services.AddScoped<UserService>();
             //dowiedziec czym sie rozni scope,transit,singleton
             //services.AddScoped
             return services;
         }
+
+
     }
 }

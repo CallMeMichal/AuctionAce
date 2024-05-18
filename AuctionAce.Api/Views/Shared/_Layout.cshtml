@@ -1,13 +1,16 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
+   
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - AuctionAce.Api</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="~/css/style.css">
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/AuctionAce.Api.styles.css" asp-append-version="true" />
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cdbootstrap/css/bootstrap.min.css" />
@@ -15,7 +18,6 @@
     <script src="https://cdn.jsdelivr.net/npm/cdbootstrap/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/cdbootstrap/js/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/cdbootstrap/js/cdb.min.js"></script>
-    @await RenderSectionAsync("Scripts", required: false)
 </head>
 <body>
     <div class="container-fluid">
@@ -61,21 +63,23 @@
                 </div>
                 <div class="modal-body">
                     <!-- Form content -->
-                    <form>
+                    <form id="loginForm">
                         <div class="mb-3">
-                            <label for="exampleInputEmail1" class="form-label">Email address</label>
-                            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                            <label for="loginEmail" class="form-label">Email address</label>
+                            <input type="email" class="form-control" id="loginEmail" aria-describedby="emailHelp">
                             <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
                         </div>
                         <div class="mb-3">
-                            <label for="exampleInputPassword1" class="form-label">Password</label>
-                            <input type="password" class="form-control" id="exampleInputPassword1">
+                            <label for="loginPassword" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="loginPassword">
                         </div>
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="submit" class="btn btn-primary w-100">Submit</button>
                     </form>
                     <div class="mt-3">
                         <p>Don't have an account? <a href="#" id="registerLink">Register here</a>.</p>
                     </div>
+
+                    <script src="~/js/Login.js"></script>
                 </div>
             </div>
         </div>
@@ -91,13 +95,14 @@
                 </div>
                 <div class="modal-body">
                     <!-- Form content -->
-                    <form>
+                    <form id="registerForm" action="Home/RegisterAction" method="post">
                         <div class="mb-3">
-                            <label for="registerPassword" class="form-label">Name</label>
-                            <input  class="form-control" id="userName">
+                            <label for="userName" class="form-label">Name</label>
+                            <input class="form-control" id="userName">
                         </div>
+
                         <div class="mb-3">
-                            <label for="registerPassword" class="form-label">Surname</label>
+                            <label for="userSurname" class="form-label">Surname</label>
                             <input class="form-control" id="userSurname">
                         </div>
 
@@ -114,14 +119,58 @@
                             <label for="registerConfirmPassword" class="form-label">Confirm Password</label>
                             <input type="password" class="form-control" id="registerConfirmPassword">
                         </div>
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <div class="mb-3">
+                            <label class="form-label">Select User Type</label>
+                            <div class="radio-container">
+                                <div class="form-check form-check-inline w-50">
+                                    <input class="form-check-input" type="radio" name="userRole" id="roleUser" value="1" checked>
+                                    <label class="radio-label" for="roleUser">User</label>
+                                </div>
+                                <div class="form-check form-check-inline w-50">
+                                    <input class="form-check-input" type="radio" name="userRole" id="roleAuctioneer" value="2">
+                                    <label class="radio-label" for="roleAuctioneer">Auctioneer</label>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Submit</button>
+                        <script src="~/js/Register.js"></script>
                     </form>
                 </div>
             </div>
         </div>
     </div>
 
-    <script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //do rozdzielenia do innych plikow z js
+
+
+@*     <script>
         $(document).ready(function () {
             $("a:contains('Login')").click(function () {
                 $('#loginModal').modal('show');
@@ -135,7 +184,81 @@
                 $('#loginModal').modal('hide');
                 $('#registerModal').modal('show');
             });
+
+            $("#loginForm").submit(function (event) {
+                event.preventDefault();
+
+                var email = $("#loginEmail").val();
+                var password = $("#loginPassword").val();
+
+                $.ajax({
+                    type: "POST",
+                    url: "/User/LoginAction",
+                    data: {
+                        email: email,
+                        password: password
+                    },
+
+
+
+
+                    success: function (response) {
+                        console.log(response);
+                        if (response.role === 'auctioneer') {
+                            window.location.href = "/Auctioneer/Dashboard";
+                        } else {
+                            window.location.href = "/User/Dashboard";
+                        }
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+
+
+
+
+                });
+            });
+
+            $("#registerForm").submit(function (event) {
+                event.preventDefault();
+
+                var email = $("#registerEmail").val();
+                var password = $("#registerPassword").val();
+                var confirmPassword = $("#registerConfirmPassword").val();
+                var role = $("input[name='userRole']:checked").val();
+
+                $.ajax({
+                    type: "POST",
+                    url: "/User/RegisterAction",
+                    data: {
+                        email: email,
+                        password: password,
+                        confirmPassword: confirmPassword,
+                        role: role
+                    },
+
+
+
+                    success: function (response) {
+                        console.log(response);
+                        $('#registerModal').modal('hide');
+                        if (role === 'auctioneer') {
+                            window.location.href = "/Auctioneer/Dashboard";
+                        } else {
+                            window.location.href = "/User/Dashboard";
+                        }
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+
+
+
+
+                });
+            });
         });
-    </script>
+    </script> *@
 </body>
 </html>
