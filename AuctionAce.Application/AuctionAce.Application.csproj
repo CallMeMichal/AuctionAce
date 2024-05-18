@@ -8,15 +8,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AuctionAce.Domain\AuctionAce.Domain.csproj" />
+    <ProjectReference Include="..\AuctionAce.Infrastructure\AuctionAce.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Interfaces\" />
-    <Folder Include="Services\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.5" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1" />
   </ItemGroup>
 

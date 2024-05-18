@@ -1,0 +1,31 @@
+﻿radio-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+
+
+.radio-label {
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.form-check-input:checked + .radio-label {
+    background-color: #0d6efd;
+    color: white;
+}
+
+.form-check-input {
+    display: none;
+}
+
+.modal-dialog {
+    max-width: 600px;
+}

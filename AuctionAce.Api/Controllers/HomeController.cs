@@ -6,19 +6,17 @@ namespace AuctionAce.Api.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
-        {
-            _logger = logger;
-        }
-
+        //get
         public IActionResult Index()
         {
             return View();
         }
 
-        public IActionResult Privacy()
+       
+
+
+        [HttpGet]
+        public IActionResult AllAuctions()
         {
             return View();
         }
