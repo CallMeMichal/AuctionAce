@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AuctionAce.Infrastructure.Data.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace AuctionAce.Api;
 

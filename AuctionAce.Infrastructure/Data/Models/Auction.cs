@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace AuctionAce.Api;
+namespace AuctionAce.Infrastructure.Data.Models;
 
 public partial class Auction
 {
