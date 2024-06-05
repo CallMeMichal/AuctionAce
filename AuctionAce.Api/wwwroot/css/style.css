@@ -29,3 +29,21 @@
 .modal-dialog {
     max-width: 600px;
 }
+
+.nav-link-custom {
+    color: #ffffff;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+    .nav-link-custom:hover {
+        background-color: #495057;
+        color: #f8f9fa;
+    }
+
+    .nav-link-custom i {
+        margin-right: 10px;
+    }
+
+.bg-dark-custom {
+    background-color: #343a40 !important;
+}

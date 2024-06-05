@@ -7,6 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Views\Home\AddAuction.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Views\Auction\AddAuction.cshtml" />
     <None Include="wwwroot\css\style.css" />
   </ItemGroup>
 
@@ -20,6 +25,14 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AuctionAce.Application\AuctionAce.Application.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\Home\AddAuction.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Views\Home\AddAuction.cshtml" />
   </ItemGroup>
 
 </Project>
