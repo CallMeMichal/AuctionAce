@@ -24,7 +24,7 @@ namespace AuctionAce.Application.Services
             else if (userLoginStatus != null)
                 return "Auctioner";
             else
-                return false;
+                return "unknow";
         }
     }
 }

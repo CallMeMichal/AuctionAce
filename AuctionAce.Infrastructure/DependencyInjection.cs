@@ -1,4 +1,4 @@
-﻿using AuctionAce.Api;
+﻿using AuctionAce.Infrastructure.Data.AuctionAceDbContext;
 using AuctionAce.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -10,10 +10,10 @@ namespace AuctionAce.Infrastructure
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services,IConfiguration configuration)
         {
-            services.AddDbContext<AuctionAceDbContext>(options =>
+            services.AddDbContext<AuctionAceContext>(options =>
             options.UseSqlServer(
             configuration.GetConnectionString("DefaultConnection"),
-            b => b.MigrationsAssembly(typeof(AuctionAceDbContext).Assembly.FullName)));
+            b => b.MigrationsAssembly(typeof(AuctionAceContext).Assembly.FullName)));
 
             services.AddScoped<UserRepository> ();
 

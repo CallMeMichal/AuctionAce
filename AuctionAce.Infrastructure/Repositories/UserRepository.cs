@@ -1,30 +1,30 @@
-﻿using AuctionAce.Api;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+
+using AuctionAce.Infrastructure.Data.AuctionAceDbContext;
 
 namespace AuctionAce.Infrastructure.Repositories
 {
     public class UserRepository
     {
-        private readonly AuctionAceDbContext _context;
+        private readonly AuctionAceContext _context;
 
-        public UserRepository(AuctionAceDbContext context)
+        public UserRepository(AuctionAceContext context)
         {
             _context = context;
         }
 
-        public async Task<bool> UserLogin(string email, string password)
+        public async Task<string> UserLogin(string email, string password)
         {
 
-            var user = _context.Users.Where(x => x.Email == email).Where(x => x.Password == password).FirstOrDefault();
-            
-            if(user == null)
-                return false;
+            var userUser = _context.Users.Where(x => x.Email == email && x.Password == password && x.IdRoles == 1).FirstOrDefault();
+            var userAuctioner = _context.Users.Where(x => x.Email == email && x.Password == password && x.IdRoles == 2).FirstOrDefault();
+
+            if (userUser.IdRoles == 1)
+                return "user";
+            else if (userUser.IdRoles == 2)
+                return "auctioner";
             else
-                return true;
+                return "unknow";
 
         }
     }
