@@ -1,4 +1,5 @@
 using AuctionAce.Api.Models;
+using AuctionAce.Api.Models.Login;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -6,10 +7,17 @@ namespace AuctionAce.Api.Controllers
 {
     public class HomeController : Controller
     {
+
+
         //get
         public IActionResult Index()
         {
-            return View();
+            //var loginStatus = await _userService.UserLogin(email, password);
+
+            LoginResult loginResult = new LoginResult();
+            loginResult.Role = "auctioner";
+
+            return View(loginResult);
         }
 
        

@@ -24,9 +24,9 @@
 
 
 
-            success: function (response) {
+            /*success: function (response) {
                 console.log(response);
-                if (response.role === 'auctioneer') {
+                if (response === 'auctioneer') {
                     window.location.href = "/Auctioneer/Dashboard";
                 } else {
                     window.location.href = "/User/Dashboard";
@@ -34,7 +34,7 @@
             },
             error: function (error) {
                 console.log(error);
-            }
+            }*/
 
 
 

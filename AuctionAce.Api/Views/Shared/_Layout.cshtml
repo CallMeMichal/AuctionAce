@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using AuctionAce.Api.Models.Login
+@model LoginResult
+<!DOCTYPE html>
 <html lang="en">
 <head>
    
@@ -43,22 +45,27 @@
                                 <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Register</span>
                             </a>
                         </li>
-                        <li>
 
-                            <a href="@Url.Action("AddAuction","Auction")" class="nav-link px-0 align-middle">
-                                <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Add Auction</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" class="nav-link px-0 align-middle">
-                                <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">My Auctions</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" class="nav-link px-0 align-middle">
-                                <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Wishlist</span>
-                            </a>
-                        </li>
+                        @if (Model.Role == "auctioner")
+                        {
+                            <li>
+
+                                <a href="@Url.Action("AddAuction","Auction")" class="nav-link px-0 align-middle">
+                                    <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Add Auction</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="nav-link px-0 align-middle">
+                                    <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">My Auctions</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="nav-link px-0 align-middle">
+                                    <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Wishlist</span>
+                                </a>
+                            </li>
+                        }
+                       
                     </ul>
                     <hr>
                 </div>

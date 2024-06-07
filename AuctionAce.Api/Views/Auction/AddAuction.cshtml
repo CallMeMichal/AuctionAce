@@ -1,8 +1,4 @@
-﻿@{
-    /*Layout = null; */
-}
-
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -10,147 +6,185 @@
     <title>Aukcja Formularz</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="~/css/AddAuctionStyle.css" asp-append-version="true" />
+   
 </head>
 <body>
-
-        <div class="container mt-5">
-            <h1 class="mb-4">Formularz Aukcji</h1>
-            <form id="auctionForm">
-                <div class="form-group">
-                    <label for="auctionName">Nazwa Aukcji</label>
-                    <input type="text" class="form-control" id="auctionName" name="auctionName" required>
-                </div>
-                <div class="form-group">
-                    <label for="description">Opis</label>
-                    <textarea class="form-control" id="description" name="description" rows="3"></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="startDate">Data i godzina rozpoczęcia</label>
-                    <input type="datetime-local" class="form-control" id="startDate" name="startDate" required>
-                </div>
-                <div class="form-group">
-                    <label for="endDate">Data i godzina zakończenia</label>
-                    <input type="datetime-local" class="form-control" id="endDate" name="endDate" required>
-                </div>
-                <div class="form-group">
-                    <label for="image">Zdjęcie</label>
-                    <input type="file" class="form-control-file" id="image" name="image">
-                </div>
-                <!-- Tabela przedmiotów -->
-                <div id="itemList">
-                    <h2>Lista Przedmiotów</h2>
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Nazwa</th>
-                                <th>Opis</th>
-                                <th>Kategoria</th>
-                                <th>Zdjęcie</th>
-                                <th>Cena Startowa</th>
-                                <th>Cena Kup Teraz</th>
-                                <th>Nowe/Uzywane</th>
-                            </tr>
-                        </thead>
-                        <tbody id="itemsTableBody">
-                            <!-- Tutaj będą dynamicznie dodawane wiersze -->
-                        </tbody>
-                    </table>
-                </div>
+    <div class="container mt-5">
+        <h1 class="mb-4">Formularz Aukcji</h1>
+        <form id="auctionForm">
+            <div class="form-group">
+                <label for="auctionName">Nazwa Aukcji</label>
+                <input type="text" class="form-control" id="auctionName" name="auctionName" required>
+            </div>
+            <div class="form-group">
+                <label for="description">Opis</label>
+                <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="startDate">Data i godzina rozpoczęcia</label>
+                <input type="datetime-local" class="form-control" id="startDate" name="startDate" required>
+            </div>
+            <div class="form-group">
+                <label for="endDate">Data i godzina zakończenia</label>
+                <input type="datetime-local" class="form-control" id="endDate" name="endDate" required>
+            </div>
+            <div class="form-group">
+                <label for="image">Zdjęcie</label>
+                <input type="file" class="form-control-file" id="image" name="image">
+            </div>
+            <!-- Tabela przedmiotów -->
+            <div id="itemList">
+                <h2>Lista Przedmiotów</h2>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Nazwa</th>
+                            <th>Opis</th>
+                            <th>Kategoria</th>
+                            <th>Zdjęcie</th>
+                            <th>Cena Startowa</th>
+                            <th>Cena Kup Teraz</th>
+                            <th>Nowe/Uzywane</th>
+                        </tr>
+                    </thead>
+                    <tbody id="itemsTableBody">
+                        <!-- Tutaj będą dynamicznie dodawane wiersze -->
+                    </tbody>
+                </table>
+            </div>
 
             <div class="form-group">
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addItemModal">Dodaj Przedmiot</button>
                 <button type="button" class="btn btn-primary float-right" id="saveButton">Zapisz</button>
             </div>
-            
-            </form>
-        </div>
 
-        <div class="modal fade" id="addItemModal" tabindex="-1" role="dialog" aria-labelledby="addItemModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="addItemModalLabel">Dodaj Przedmiot</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form id="addItemForm">
-                            <div class="form-group">
-                                <label for="itemName">Nazwa</label>
-                                <input type="text" class="form-control" id="itemName" name="itemName" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="itemDescription">Opis</label>
-                                <textarea class="form-control" id="itemDescription" name="itemDescription" rows="3"></textarea>
-                            </div>
-                            <div class="form-group">
-                                <label for="itemCategory">Kategoria</label>
-                                <input type="text" class="form-control" id="itemCategory" name="itemCategory">
-                            </div>
-                            <div class="form-group">
-                                <label for="itemImage">Zdjęcie</label>
-                                <input type="file" class="form-control-file" id="itemImage" name="itemImage">
-                            </div>
-                            <div class="form-group">
-                                <label for="startPrice">Cena Startowa</label>
-                                <input type="number" class="form-control" id="startPrice" name="startPrice">
-                            </div>
-                            <div class="form-group">
-                                <label for="buyNowPrice">Cena Kup Teraz</label>
-                                <input type="number" class="form-control" id="buyNowPrice" name="buyNowPrice">
-                            </div>
-                            <div class="form-group">
-                                <label for="condition">Stan:</label><br>
-                                <input type="radio" id="newCondition" name="condition" value="nowa">
-                                <label for="newCondition">Nowy</label><br>
-                                <input type="radio" id="usedCondition" name="condition" value="używana">
-                                <label for="usedCondition">Uzywany</label><br>
-                            </div>
-                            <button type="submit" class="btn btn-primary">Dodaj</button>
-                        </form>
-                    </div>
+        </form>
+    </div>
+
+    <div class="modal fade" id="addItemModal" tabindex="-1" role="dialog" aria-labelledby="addItemModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addItemModalLabel">Dodaj Przedmiot</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="addItemForm">
+                        <div class="form-group">
+                            <label for="itemName">Nazwa</label>
+                            <input type="text" class="form-control" id="itemName" name="itemName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="itemDescription">Opis</label>
+                            <textarea class="form-control" id="itemDescription" name="itemDescription" rows="3"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="itemCategory">Kategoria</label>
+                            <input type="text" class="form-control" id="itemCategory" name="itemCategory">
+                        </div>
+                        <div class="form-group">
+                            <label for="itemImage">Zdjęcie</label>
+                            <input type="file" class="form-control-file" id="itemImage" name="itemImage">
+                        </div>
+                        <div class="form-group">
+                            <label for="startPrice">Cena Startowa</label>
+                            <input type="number" class="form-control" id="startPrice" name="startPrice">
+                        </div>
+                        <div class="form-group">
+                            <label for="buyNowPrice">Cena Kup Teraz</label>
+                            <input type="number" class="form-control" id="buyNowPrice" name="buyNowPrice">
+                        </div>
+                        <div class="form-group">
+                            <label for="condition">Stan:</label><br>
+                            <input type="radio" id="newCondition" name="condition" value="nowa">
+                            <label for="newCondition">Nowy</label><br>
+                            <input type="radio" id="usedCondition" name="condition" value="używana">
+                            <label for="usedCondition">Uzywany</label><br>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Dodaj</button>
+                    </form>
                 </div>
             </div>
         </div>
+    </div>
+
+    <div id="noItemModal" class="custom-modal">
+        <div class="custom-modal-content">
+            <span class="close" id="closeNoItemModal">&times;</span>
+            <h5>Brak przedmiotów!</h5>
+            <p>Musisz dodać przynajmniej jeden przedmiot do aukcji.</p>
+            <button type="button" class="btn btn-secondary" id="closeCustomModal">Zamknij</button>
+        </div>
+    </div>
+
+    <div id="successModal" class="custom-modal">
+        <div class="custom-modal-content">
+            <span class="close" id="closeSuccessModal">&times;</span>
+            <h5>Pomyślnie zapisano aukcje</h5>
+            <button type="button" class="btn btn-secondary" id="closeCustomModal">Zamknij</button>
+        </div>
+    </div>
 
 
-        <script>
-            $(document).ready(function () {
-                $("#addItemForm").submit(function (event) {
-                    event.preventDefault(); 
-                    var itemName = $("#itemName").val();
-                    var itemDescription = $("#itemDescription").val();
-                    var itemCategory = $("#itemCategory").val();
-                    var itemImage = $("#itemImage")[0].files[0]; 
-                    var startPrice = $("#startPrice").val();
-                    var buyNowPrice = $("#buyNowPrice").val();
-                    var isNew = $("input[name='condition']:checked").val(); /
-                    var tableRow = $("<tr>").append(
-                        $("<td>").text(itemName),
-                        $("<td>").text(itemDescription),
-                        $("<td>").text(itemCategory),
-                        $("<td>").append(itemImage ? $("<img>").attr("src", URL.createObjectURL(itemImage)).addClass("img-thumbnail") : ""), 
-                        $("<td>").text(startPrice),
-                        $("<td>").text(buyNowPrice),
-                        $("<td>").text(isNew)
-                    );
-                    $("#itemsTableBody").append(tableRow);
+    <script>
+    $(document).ready(function () {
+        $("#saveButton").click(function () {
+            var itemCount = $("#itemsTableBody tr").length;
+            if (itemCount < 1) {
+                $('#noItemModal').css('display', 'block');
+                return false;
+            } else if (itemCount > 1) {
+                $('#successModal').css('display', 'block');
+                $("#auctionForm").submit();
+            } else {
 
-                    // Czyścimy formularz
-                    $("#addItemForm")[0].reset();
+                $("#auctionForm").submit();
+            }
+        });
 
-                    // Ukrywamy modal
-                    $("#addItemModal").modal("hide");
-                });
+        $("#addItemForm").submit(function (event) {
+            event.preventDefault();
+            var itemName = $("#itemName").val();
+            var itemDescription = $("#itemDescription").val();
+            var itemCategory = $("#itemCategory").val();
+            var itemImage = $("#itemImage")[0].files[0];
+            var startPrice = $("#startPrice").val();
+            var buyNowPrice = $("#buyNowPrice").val();
+            var isNew = $("input[name='condition']:checked").val();
+            var tableRow = $("<tr>").append(
+                $("<td>").text(itemName),
+                $("<td>").text(itemDescription),
+                $("<td>").text(itemCategory),
+                $("<td>").append(itemImage ? $("<img>").attr("src", URL.createObjectURL(itemImage)).addClass("img-thumbnail") : ""),
+                $("<td>").text(startPrice),
+                $("<td>").text(buyNowPrice),
+                $("<td>").text(isNew)
+            );
+            $("#itemsTableBody").append(tableRow);
+
+            // Clear the form
+            $("#addItemForm")[0].reset();
+
+            // Hide the modal
+            $("#addItemModal").modal("hide");
+        });
+
+            $(document).on('click', '.close', function () {
+                $(this).closest(".custom-modal").css('display', 'none');
             });
-        </script>
+
+            $(document).on('click', '#closeCustomModal', function () {
+                $(this).closest(".custom-modal").css('display', 'none');
+            });
+
+    });
+</script>
 
 
 </body>
-
-
 </html>
-

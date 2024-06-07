@@ -1,4 +1,5 @@
-﻿using AuctionAce.Application.Interfaces;
+﻿using AuctionAce.Api.Models.Login;
+using AuctionAce.Application.Interfaces;
 using AuctionAce.Application.Services;
 using AuctionAce.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Mvc;
@@ -16,16 +17,14 @@ namespace AuctionAce.Api.Controllers
 
         //działa
         [HttpPost]
-        public IActionResult LoginAction(string email, string password)
+        public  IActionResult LoginAction(string email, string password)
         {
             var loginStatus = _userService.UserLogin(email, password);
-
-            //service
-            //userRepository
-            /*UserRepository userRepository = new();*/
-
-            Console.WriteLine(email + ":" + password);
-            return View();
+            
+            LoginResult loginResult = new LoginResult();
+            loginResult.Role = loginStatus.Result;
+            
+            return View(loginResult);
         }
 
         //działa
