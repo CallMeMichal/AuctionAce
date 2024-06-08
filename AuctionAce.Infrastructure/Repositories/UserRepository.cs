@@ -1,6 +1,8 @@
 ﻿
 
 using AuctionAce.Infrastructure.Data.AuctionAceDbContext;
+using AuctionAce.Infrastructure.Data.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace AuctionAce.Infrastructure.Repositories
 {
@@ -13,19 +15,62 @@ namespace AuctionAce.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<string> UserLogin(string email, string password)
+        public async Task<User> UserLoginAsync(string email, string password)
         {
 
-            var userUser = _context.Users.Where(x => x.Email == email && x.Password == password && x.IdRoles == 1).FirstOrDefault();
-            var userAuctioner = _context.Users.Where(x => x.Email == email && x.Password == password && x.IdRoles == 2).FirstOrDefault();
+            var userUser =  _context.Users.FirstOrDefault(x => x.Email == email && x.Password == password);
+            if(userUser != null) 
+            {
+                userUser.IsLogined = true;
+                _context.SaveChanges();
+                return userUser;
+            }
+            
+            return null;
+        }
 
-            if (userUser.IdRoles == 1)
-                return "user";
-            else if (userUser.IdRoles == 2)
-                return "auctioner";
+        public async Task<User> GetUserByIdAsync(int idUser)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == idUser);
+
+            if(user != null)
+            {
+                return user;
+            }
             else
-                return "unknow";
+            {
+                return null;
+            }
+        }
 
+        public async Task<bool> isLoginedAsync(int idUser)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(x=>x.Id == idUser);
+            if(user != null)
+            {
+                if(user.IsLogined == true)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+
+        public async Task<bool> LogoutUserAsync(int idUser)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == idUser);
+            if(user != null)
+            {
+               if(user.IsLogined == true)
+               {
+                    user.IsLogined = false;
+                    _context.SaveChanges();
+                    return true;
+               }
+            }
+            return false;
         }
     }
 }

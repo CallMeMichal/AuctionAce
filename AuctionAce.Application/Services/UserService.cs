@@ -1,6 +1,10 @@
 ﻿
 
+using AuctionAce.Infrastructure.Data.Models;
 using AuctionAce.Infrastructure.Repositories;
+using Azure;
+using Azure.Core;
+using System.Globalization;
 
 namespace AuctionAce.Application.Services
 {
@@ -15,16 +19,25 @@ namespace AuctionAce.Application.Services
             _userRepository = userRepository;
         }
 
-        public async Task<string> UserLogin(string email, string password)
+        public  User UserLogin(string email, string password)
         {
-            var userLoginStatus = await _userRepository.UserLogin(email, password);
-
+            var userLoginStatus = _userRepository.UserLoginAsync(email, password);
             if (userLoginStatus != null)
-                return "User";
-            else if (userLoginStatus != null)
-                return "Auctioner";
-            else
-                return "unknow";
+            {
+                return userLoginStatus.Result;
+            }
+            return null;
+        }
+
+        public async Task<bool> UserLogout(int idUser)
+        {
+            var logoutUser = await _userRepository.LogoutUserAsync(idUser);
+            if (logoutUser == true)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

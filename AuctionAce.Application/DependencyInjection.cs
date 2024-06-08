@@ -14,6 +14,7 @@ namespace AuctionAce.Application
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
             services.AddScoped<UserService>();
+            services.AddScoped<AuctionService>();
             //dowiedziec czym sie rozni scope,transit,singleton
             //services.AddScoped
             return services;

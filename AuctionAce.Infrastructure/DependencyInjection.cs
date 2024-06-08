@@ -16,6 +16,7 @@ namespace AuctionAce.Infrastructure
             b => b.MigrationsAssembly(typeof(AuctionAceContext).Assembly.FullName)));
 
             services.AddScoped<UserRepository> ();
+            services.AddScoped<AuctionRespository> ();
 
             return services;
         }

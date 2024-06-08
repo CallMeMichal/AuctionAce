@@ -1,5 +1,6 @@
-﻿@using AuctionAce.Api.Models.Login
-@model LoginResult
+﻿@using AuctionAce.Api.Models.Auctions
+
+@model HomeViewModel
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,6 +21,13 @@
     <script src="https://cdn.jsdelivr.net/npm/cdbootstrap/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/cdbootstrap/js/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/cdbootstrap/js/cdb.min.js"></script>
+    
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/AddAuctionStyle.css" asp-append-version="true" />
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
 </head>
 <body>
     <div class="container-fluid">
@@ -30,42 +38,56 @@
                         <span class="fs-5 d-none d-sm-inline">AuctionAce</span>
                     </a>
                     <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
-                        <li class="nav-item">
-                            <a href="#" class="nav-link align-middle px-0">
-                                <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline">Auctions</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" class="nav-link px-0 align-middle">
-                                <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline">Login</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" class="nav-link px-0 align-middle">
-                                <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Register</span>
-                            </a>
-                        </li>
-
-                        @if (Model.Role == "auctioner")
+                        @if(Model.User != null)
                         {
-                            <li>
+                            if (Model.User.IdRoles == 2)
+                            {
+                                <li>
 
-                                <a href="@Url.Action("AddAuction","Auction")" class="nav-link px-0 align-middle">
-                                    <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Add Auction</span>
+                                    <a href="@Url.Action("AddAuction","Auction")" class="nav-link px-0 align-middle">
+                                        <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Add Auction</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="nav-link px-0 align-middle">
+                                        <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">My Auctions</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="nav-link px-0 align-middle">
+                                        <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Wishlist</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" id="logoutButton" class="nav-link px-0 align-middle">
+                                        <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Logout</span>
+                                    </a>
+                                </li>
+                            }
+                            else if (Model.User.IdRoles == 1)
+                            {
+
+                            }
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a href="#" class="nav-link align-middle px-0">
+                                    <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline">Auctions</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="#" class="nav-link px-0 align-middle">
-                                    <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">My Auctions</span>
+                                    <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline">Login</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="#" class="nav-link px-0 align-middle">
-                                    <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Wishlist</span>
+                                    <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Register</span>
                                 </a>
                             </li>
                         }
-                       
+
                     </ul>
                     <hr>
                 </div>

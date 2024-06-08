@@ -1,5 +1,7 @@
 using AuctionAce.Api.Models;
-using AuctionAce.Api.Models.Login;
+using AuctionAce.Api.Models.Auctions;
+using AuctionAce.Application.Services;
+using AuctionAce.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -7,17 +9,44 @@ namespace AuctionAce.Api.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly UserRepository _userRepository;
+        private readonly AuctionService _auctionService;
+
+        public HomeController(UserRepository userRepository, AuctionService auctionService)
+        {
+            _userRepository = userRepository;
+            _auctionService = auctionService;
+        }
+
+
+
+
+
 
 
         //get
         public IActionResult Index()
         {
-            //var loginStatus = await _userService.UserLogin(email, password);
+            var cookie = Request.Cookies["Id"];
+            var model = new HomeViewModel();
+            var auctions = _auctionService.GetAuctionsAsync().Result;
+            if (cookie != null) 
+            {
+                int idUser = Int32.Parse(cookie);
+                var isLogged = _userRepository.isLoginedAsync(idUser).Result;
+                if (isLogged)
+                {
+                    var user = _userRepository.GetUserByIdAsync(idUser).Result;
+                    model.User = user;
+                    model.Auctions = auctions;
+                    return View(model);
+                }
+            }
 
-            LoginResult loginResult = new LoginResult();
-            loginResult.Role = "auctioner";
+            
+            model.Auctions = auctions;
 
-            return View(loginResult);
+        return View(model);
         }
 
        
