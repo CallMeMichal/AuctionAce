@@ -39,10 +39,28 @@ namespace AuctionAce.Api.Controllers
         [HttpPost]
         public IActionResult AddAuction(AuctionModel model)
         {
-            _auctionService.AddAuctionAsync(model.auctionName, model.description, model.startDate, model.endDate);
+            var cookie = Request.Cookies["Id"];
+            int idUser = Int32.Parse(cookie);
+            _auctionService.AddAuctionAsync(model.AuctionName, model.Description, model.StartDate, model.EndDate,idUser);
             
             return View(AddAuction());
         }
+
+        [HttpGet]
+        public IActionResult FindAuctionForAuctioner()
+        {
+            var cookie = Request.Cookies["Id"];
+            int idUser = Int32.Parse(cookie);
+            var auctions = _auctionService.GetAuctionsByIdUserAsync(idUser);
+            return View(auctions);
+        }
+        /*[HttpGet]
+        public IActionResult MyAuctions(int ownerId)
+        {
+            
+
+            return View();
+        }*/
 
 
     }

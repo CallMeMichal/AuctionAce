@@ -1,24 +1,24 @@
 ﻿    <div class="container mt-5">
-        <h1 class="mb-4">Formularz Aukcji</h1>
+        <h1 class="mb-4">Auction Form</h1>
         <form id="auctionForm">
             <div class="form-group">
-                <label for="auctionName">Nazwa Aukcji</label>
+                <label for="auctionName">Auction Name</label>
                 <input type="text" class="form-control" id="auctionName" name="auctionName" required>
             </div>
             <div class="form-group">
-                <label for="description">Opis</label>
+                <label for="description">Desciption</label>
                 <textarea class="form-control" id="description" name="description" rows="3"></textarea>
             </div>
             <div class="form-group">
-                <label for="startDate">Data i godzina rozpoczęcia</label>
+                <label for="startDate">Start Date</label>
                 <input type="datetime-local" class="form-control" id="startDate" name="startDate" required>
             </div>
             <div class="form-group">
-                <label for="endDate">Data i godzina zakończenia</label>
+                <label for="endDate">End Date</label>
                 <input type="datetime-local" class="form-control" id="endDate" name="endDate" required>
             </div>
             <div class="form-group">
-                <label for="image">Zdjęcie</label>
+                <label for="image">Photo</label>
                 <input type="file" class="form-control-file" id="image" name="image">
             </div>
             <!-- Tabela przedmiotów -->
@@ -27,13 +27,13 @@
                 <table class="table">
                     <thead>
                         <tr>
-                            <th>Nazwa</th>
-                            <th>Opis</th>
-                            <th>Kategoria</th>
-                            <th>Zdjęcie</th>
-                            <th>Cena Startowa</th>
-                            <th>Cena Kup Teraz</th>
-                            <th>Nowe/Uzywane</th>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Categoy</th>
+                            <th>Photo</th>
+                            <th>Start Price</th>
+                            <th>Buy Now Price</th>
+                            <th>New/Used</th>
                         </tr>
                     </thead>
                     <tbody id="itemsTableBody">
@@ -63,57 +63,40 @@
                 <div class="modal-body">
                     <form id="addItemForm">
                         <div class="form-group">
-                            <label for="itemName">Nazwa</label>
+                            <label for="itemName">Name</label>
                             <input type="text" class="form-control" id="itemName" name="itemName" required>
                         </div>
                         <div class="form-group">
-                            <label for="itemDescription">Opis</label>
+                            <label for="itemDescription">Item Description</label>
                             <textarea class="form-control" id="itemDescription" name="itemDescription" rows="3"></textarea>
                         </div>
                         <div class="form-group">
-                            <label for="itemCategory">Kategoria</label>
+                            <label for="itemCategory">Category</label>
                             <input type="text" class="form-control" id="itemCategory" name="itemCategory">
                         </div>
                         <div class="form-group">
-                            <label for="itemImage">Zdjęcie</label>
+                            <label for="itemImage">Photo</label>
                             <input type="file" class="form-control-file" id="itemImage" name="itemImage">
                         </div>
                         <div class="form-group">
-                            <label for="startPrice">Cena Startowa</label>
+                            <label for="startPrice">Start Price</label>
                             <input type="number" class="form-control" id="startPrice" name="startPrice">
                         </div>
                         <div class="form-group">
-                            <label for="buyNowPrice">Cena Kup Teraz</label>
+                            <label for="buyNowPrice">Buy Now Price</label>
                             <input type="number" class="form-control" id="buyNowPrice" name="buyNowPrice">
                         </div>
                         <div class="form-group">
-                            <label for="condition">Stan:</label><br>
+                            <label for="condition">State:</label><br>
                             <input type="radio" id="newCondition" name="condition" value="nowa">
-                            <label for="newCondition">Nowy</label><br>
+                            <label for="newCondition">New</label><br>
                             <input type="radio" id="usedCondition" name="condition" value="uzywana">
-                            <label for="usedCondition">Uzywany</label><br>
+                            <label for="usedCondition">Used</label><br>
                         </div>
-                        <button type="submit" class="btn btn-primary">Dodaj</button>
+                        <button type="submit" class="btn btn-primary">Add Item</button>
                     </form>
                 </div>
             </div>
-        </div>
-    </div>
-
-    <div id="noItemModal" class="custom-modal">
-        <div class="custom-modal-content">
-            <span class="close" id="closeNoItemModal">&times;</span>
-            <h5>Brak przedmiotów!</h5>
-            <p>Musisz dodać przynajmniej jeden przedmiot do aukcji.</p>
-            <button type="button" class="btn btn-secondary" id="closeCustomModal">Zamknij</button>
-        </div>
-    </div>
-
-    <div id="successModal" class="custom-modal">
-        <div class="custom-modal-content">
-            <span class="close" id="closeSuccessModal">&times;</span>
-            <h5>Pomyślnie zapisano aukcje</h5>
-            <button type="button" class="btn btn-secondary" id="closeCustomModal">Zamknij</button>
         </div>
     </div>
 
@@ -144,6 +127,13 @@
 
         // Hide the modal
         $("#addItemModal").modal("hide");
+
+        Swal.fire({
+            icon: 'success',
+            title: 'Item added',
+            showConfirmButton: false,
+            timer: 1500
+        });
     });
 
     $(document).on('click', '.close', function () {
@@ -154,54 +144,84 @@
         $(this).closest(".custom-modal").css('display', 'none');
     });
 
-    $("#saveButton").click(function () {
-        // Zbierz dane z formularza
-        var formData = new FormData();
-        formData.append('auctionName', $('#auctionName').val());
-        formData.append('description', $('#description').val());
-        formData.append('startDate', $('#startDate').val());
-        formData.append('endDate', $('#endDate').val());
 
-        // Dodaj zdjęcie aukcji, jeśli istnieje
-        var auctionImage = $('#image')[0].files[0];
-        if (auctionImage) {
-            formData.append('image', auctionImage);
+    $("#saveButton").click(function () {
+
+        var itemCount = $("#itemsTableBody tr").length;
+
+        
+        if (itemCount === 0) {
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "There are no items in the auction to save.",
+                
+            });
+            return; 
         }
 
-        // Zbierz dane przedmiotów
-        // $('#itemsTableBody tr').each(function (index, tr) {
-        //     var itemData = {
-        //         itemName: $(tr).find('td:eq(0)').text(),
-        //         itemDescription: $(tr).find('td:eq(1)').text(),
-        //         itemCategory: $(tr).find('td:eq(2)').text(),
-        //         startPrice: $(tr).find('td:eq(4)').text(),
-        //         buyNowPrice: $(tr).find('td:eq(5)').text(),
-        //         condition: $(tr).find('td:eq(6)').text()
-        //     };
-        //     formData.append('items[' + index + ']', JSON.stringify(itemData));
 
-        //     // Dodaj zdjęcie przedmiotu, jeśli istnieje
-        //     var itemImage = $(tr).find('td:eq(3) img').attr('src');
-        //     if (itemImage) {
-        //         formData.append('itemImages[' + index + ']', itemImage);
-        //     }
-        // });
 
-        // Wysłanie danych do kontrolera
-        $.ajax({
-            type: "POST",
-            url: "/Auction/AddAuction",
-            data: formData,
-            contentType: false,
-            processData: false,
-            success: function (response) {
-                // Wyświetl modal sukcesu
-                $("#successModal").css('display', 'block');
-            },
-            error: function (error) {
-                console.log(error);
+        Swal.fire({
+            title: "Do you want to save auction?",
+            showDenyButton: true,
+            showCancelButton: true,
+            confirmButtonText: "Save",
+            denyButtonText: `Don't save`
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Zbierz dane z formularza
+                var formData = new FormData();
+                formData.append('auctionName', $('#auctionName').val());
+                formData.append('description', $('#description').val());
+                formData.append('startDate', $('#startDate').val());
+                formData.append('endDate', $('#endDate').val());
+
+                // Dodaj zdjęcie aukcji, jeśli istnieje
+                var auctionImage = $('#image')[0].files[0];
+                if (auctionImage) {
+                    formData.append('image', auctionImage);
+                }
+
+                // Zbierz dane przedmiotów
+                // $('#itemsTableBody tr').each(function (index, tr) {
+                //     var itemData = {
+                //         itemName: $(tr).find('td:eq(0)').text(),
+                //         itemDescription: $(tr).find('td:eq(1)').text(),
+                //         itemCategory: $(tr).find('td:eq(2)').text(),
+                //         startPrice: $(tr).find('td:eq(4)').text(),
+                //         buyNowPrice: $(tr).find('td:eq(5)').text(),
+                //         condition: $(tr).find('td:eq(6)').text()
+                //     };
+                //     formData.append('items[' + index + ']', JSON.stringify(itemData));
+
+                //     // Dodaj zdjęcie przedmiotu, jeśli istnieje
+                //     var itemImage = $(tr).find('td:eq(3) img').attr('src');
+                //     if (itemImage) {
+                //         formData.append('itemImages[' + index + ']', itemImage);
+                //     }
+                // });
+
+                // Wysłanie danych do kontrolera
+
+                // Wysłanie danych do kontrolera
+                $.ajax({
+                    type: "POST",
+                    url: "/Auction/AddAuction",
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function () {
+                        Swal.fire("Saved!", "", "success");
+                    }
+                });
+            } else if (result.isDenied) {
+                Swal.fire("Zmiany nie zostały zapisane", "", "info");
             }
         });
     });
 </script>
 
+
+
+                        

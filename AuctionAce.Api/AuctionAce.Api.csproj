@@ -7,11 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Views\Auction\MyAuctions.cshtml" />
     <Content Remove="Views\Home\AddAuction.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
     <None Include="Views\Auction\AddAuction.cshtml" />
+    <None Include="Views\Auction\MyAuctions.cshtml" />
     <None Include="wwwroot\css\style.css" />
   </ItemGroup>
 
@@ -32,7 +34,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <_ContentIncludedByDefault Remove="Views\Auction\MyAuctions.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Home\AddAuction.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\Auction\MyAuctions.cshtml" />
   </ItemGroup>
 
 </Project>

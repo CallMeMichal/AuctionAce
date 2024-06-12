@@ -1,0 +1,28 @@
+﻿@using AuctionAce.Api.Models.Auctions
+@model HomeViewModel
+
+<div class="container-fluid">
+    <div class="row">
+
+        @if (Model.Auctions != null)
+        {
+            foreach (var item in Model.Auctions)
+            {
+                <div class="col-md-3">
+                    <div class="card">
+                        <img class="card-img-top" src="https://studentprawa.pl/media/k2/items/cache/af6038056f6231c664e3ef073c45af10_L.jpg" alt="Card image cap">
+                        <div class="card-body">
+                            <h5 class="card-title">@item.AuctionName</h5>
+                            <p class="card-text">Start Date: <span id="start-date">@item.StartDate</span></p>
+                            <p class="card-text">End Date: <span id="end-date">@item.EndDate</span></p>
+                            <p class="card-text">Registered Members: <span id="registered-members">[Registered Members Value]</span></p>
+                            <p class="card-text">Items: <span id="items">[Items Value]</span></p>
+                            <a href="#" class="btn btn-primary">View Auction</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+
+</div>

@@ -2,9 +2,12 @@
 {
     public class AuctionModel
     {
-        public string auctionName { get; set; }
-        public string description { get; set; }
-        public string startDate { get; set; }
-        public string endDate { get; set; }
+        public int AuctionerId { get; set; }
+
+        public string AuctionPhoto { get; set; }
+        public string AuctionName { get; set; }
+        public string Description { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
     }
 }
