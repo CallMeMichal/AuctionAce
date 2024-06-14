@@ -1,5 +1,6 @@
 ﻿using AuctionAce.Infrastructure.Data.AuctionAceDbContext;
 using AuctionAce.Infrastructure.Data.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,20 +30,26 @@ namespace AuctionAce.Infrastructure.Repositories
 
         public async Task<List<Auction>> GetAuctionsByIdUserAsync(int idUser)
         {
-            var auctionList = new List<Auction>();
-            //aktywna aukcja
-            var auctions = _context.Auctions.Where(x => x.IdStatus == 1 && x.IdUsers == idUser);
-            auctionList.AddRange(auctions);
-            return auctionList;
+            var auctions = await _context.Auctions.Where(x => x.IdUsers == idUser).ToListAsync();
+            return auctions;
         }
 
-        public async Task AddAuctionAsync(Auction auction)
+        public async Task<bool> AddAuctionAsync(Auction auction)
         {
-            _context.Auctions.Add(auction);
-            _context.SaveChanges();
+            try
+            {
+                await _context.Auctions.AddAsync(auction);
+                await _context.SaveChangesAsync(); // Ensure SaveChangesAsync is awaited
+                return true;
+            }
+            catch (Exception ex)
+            {
+
+                return false;
+            }
         }
 
-        
+
 
     }
 }

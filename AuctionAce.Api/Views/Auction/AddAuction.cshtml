@@ -211,12 +211,19 @@
                     data: formData,
                     contentType: false,
                     processData: false,
-                    success: function () {
-                        Swal.fire("Saved!", "", "success");
+                    success: function (response) {
+                        console.log(response)
+                        if (response.success) {
+                            Swal.fire("Saved!", "", "success").then(() => {
+                                window.location.href = "/Auction/MyAuctions"; // Przekierowanie do widoku MyAuctions
+                            });
+                        } else {
+                            Swal.fire("Error, Something went wrong", "", "error");
+                        }
                     }
                 });
             } else if (result.isDenied) {
-                Swal.fire("Zmiany nie zostały zapisane", "", "info");
+                Swal.fire("Changes were not saved", "", "info");
             }
         });
     });

@@ -1,6 +1,6 @@
-﻿namespace AuctionAce.Api.Models.Login
+﻿namespace AuctionAce.Api.Models.DTO.Login
 {
-    public class LoginResult
+    public class LoginResponse
     {
         public string Name { get; set; }
         public int Role { get; set; }

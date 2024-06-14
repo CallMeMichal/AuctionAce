@@ -1,7 +1,12 @@
-﻿using AuctionAce.Api.Models.Auctions;
+﻿using AuctionAce.Api.Models.DTO.Auctions.Request;
+using AuctionAce.Api.Models.DTO.Auctions.Response;
+using AuctionAce.Api.Models.ViewModels.Auctions;
+using AuctionAce.Api.Models.ViewModels.Home;
 using AuctionAce.Application.Services;
+using AuctionAce.Infrastructure.Data.Models;
 using AuctionAce.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Mvc;
+
 
 namespace AuctionAce.Api.Controllers
 {
@@ -16,8 +21,28 @@ namespace AuctionAce.Api.Controllers
             _auctionService = auctionService;
         }
 
-        [HttpGet]
-        public IActionResult AddAuction()
+        public async Task<IActionResult> Index()
+        {
+            var model = new AuctionViewModel();
+            var cookie = Request.Cookies["Id"];
+
+            if (cookie != null && int.TryParse(cookie, out int idUser))
+            {
+                var isLogged = await _userRepository.isLoginedAsync(idUser);
+                if (isLogged)
+                {
+                    var auctions = await _auctionService.GetAuctionsByIdUserAsync(idUser);
+                    var user = _userRepository.GetUserByIdAsync(idUser).Result;
+                    model.User = user;
+                    model.Auctions = auctions;
+                }
+            }
+
+            return View(model);
+        }
+
+        [HttpGet] 
+        public async Task<IActionResult> AddAuction()
         {
             var cookie = Request.Cookies["Id"];
             var model = new HomeViewModel();
@@ -25,10 +50,10 @@ namespace AuctionAce.Api.Controllers
             if (cookie != null)
             {
                 int idUser = Int32.Parse(cookie);
-                var isLogged = _userRepository.isLoginedAsync(idUser).Result;
+                var isLogged = await _userRepository.isLoginedAsync(idUser);
                 if (isLogged)
                 {
-                    var user = _userRepository.GetUserByIdAsync(idUser).Result;
+                    var user = await _userRepository.GetUserByIdAsync(idUser);
                     model.User = user;
                     return View(model);
                 }
@@ -37,31 +62,36 @@ namespace AuctionAce.Api.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddAuction(AuctionModel model)
+        public async Task<AuctionResponse> AddAuction(AddAuctionRequest request)
         {
+            AuctionResponse response = new AuctionResponse();
             var cookie = Request.Cookies["Id"];
             int idUser = Int32.Parse(cookie);
-            _auctionService.AddAuctionAsync(model.AuctionName, model.Description, model.StartDate, model.EndDate,idUser);
-            
-            return View(AddAuction());
+            response.Success = await _auctionService.AddAuctionAsync(request.AuctionName, request.Description, request.StartDate, request.EndDate,idUser);
+            return response;
         }
 
-        [HttpGet]
-        public IActionResult FindAuctionForAuctioner()
-        {
-            var cookie = Request.Cookies["Id"];
-            int idUser = Int32.Parse(cookie);
-            var auctions = _auctionService.GetAuctionsByIdUserAsync(idUser);
-            return View(auctions);
-        }
         /*[HttpGet]
-        public IActionResult MyAuctions(int ownerId)
+        public async Task<IActionResult> MyAuctions()
         {
-            
+            AuctionViewModel model = new AuctionViewModel();
+            var cookie = Request.Cookies["Id"];
 
-            return View();
+            if (cookie != null)
+            {
+                int idUser = Int32.Parse(cookie);                
+                var isLogged = await _userRepository.isLoginedAsync(idUser);// do poprawy
+                if (isLogged)
+                {
+                    List<Auction> auctions = await _auctionService.GetAuctionsByIdUserAsync(idUser);
+                    model.Auctions = auctions;
+                }
+            }
+
+            return View(model);
+
+
+
         }*/
-
-
     }
 }

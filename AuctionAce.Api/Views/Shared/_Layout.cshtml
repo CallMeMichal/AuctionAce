@@ -1,6 +1,7 @@
-﻿@using AuctionAce.Api.Models.Auctions
+﻿@using AuctionAce.Api.Models.ViewModels.Base
 
-@model HomeViewModel
+
+@model BaseViewModel
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -50,6 +51,8 @@
                         <span class="fs-5 d-none d-sm-inline">AuctionAce</span>
                     </a>
                     <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
+
+                        
                         @if(Model.User != null)
                         {
                             if (Model.User.IdRoles == 2)
@@ -61,12 +64,12 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="@Url.Action("MyAuctions","Auction")" class="nav-link px-0 align-middle">
+                                    <a href="@Url.Action("Index","Auction")" class="nav-link px-0 align-middle">
                                         <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">My Auctions</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="@Url.Action("Wishlist","Auction")" class="nav-link px-0 align-middle">
+                                    <a href="@Url.Action("Index","Test")" class="nav-link px-0 align-middle">
                                         <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Wishlist</span>
                                     </a>
                                 </li>

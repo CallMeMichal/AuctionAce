@@ -1,4 +1,4 @@
-﻿using AuctionAce.Api.Models.Login;
+﻿using AuctionAce.Api.Models.DTO.Login;
 using AuctionAce.Application.Interfaces;
 using AuctionAce.Application.Services;
 using AuctionAce.Domain.Entities;

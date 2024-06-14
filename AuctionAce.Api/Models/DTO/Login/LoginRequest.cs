@@ -1,4 +1,4 @@
-﻿namespace AuctionAce.Api.Models.Login
+﻿namespace AuctionAce.Api.Models.DTO.Login
 {
     public class LoginRequest
     {
