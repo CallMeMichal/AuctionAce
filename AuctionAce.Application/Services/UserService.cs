@@ -19,14 +19,11 @@ namespace AuctionAce.Application.Services
             _userRepository = userRepository;
         }
 
-        public  User UserLogin(string email, string password)
+        public async  Task<User> UserLogin(string email, string password)
         {
-            var userLoginStatus = _userRepository.UserLoginAsync(email, password);
-            if (userLoginStatus != null)
-            {
-                return userLoginStatus.Result;
-            }
-            return null;
+            var userLoginStatus = await _userRepository.UserLoginAsync(email, password);
+            return userLoginStatus;
+            
         }
 
         public async Task<bool> UserLogout(int idUser)

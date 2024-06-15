@@ -19,14 +19,14 @@ namespace AuctionAce.Infrastructure.Repositories
         {
 
             var userUser =  _context.Users.FirstOrDefault(x => x.Email == email && x.Password == password);
+
             if(userUser != null) 
             {
                 userUser.IsLogined = true;
                 _context.SaveChanges();
-                return userUser;
+                
             }
-            
-            return null;
+            return userUser;
         }
 
         public async Task<User> GetUserByIdAsync(int idUser)

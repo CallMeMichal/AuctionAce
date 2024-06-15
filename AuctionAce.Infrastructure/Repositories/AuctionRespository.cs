@@ -51,5 +51,13 @@ namespace AuctionAce.Infrastructure.Repositories
 
 
 
+        public async Task<List<AuctionItem>> GetAuctionAsync(int auctionId)
+        {
+
+            var auction = await _context.AuctionItems.Where(x => x.IdAuctions == auctionId).ToListAsync();
+
+            return auction;
+        }
+
     }
 }

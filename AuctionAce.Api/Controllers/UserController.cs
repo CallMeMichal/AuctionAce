@@ -22,9 +22,9 @@ namespace AuctionAce.Api.Controllers
 
         //działa
         [HttpPost]
-        public  IActionResult LoginAction(LoginRequest loginRequest)
+        public  async Task<IActionResult> LoginAction(LoginRequest loginRequest)
         {
-            var user =  _userService.UserLogin(loginRequest.Email, loginRequest.Password);
+            var user =  await _userService.UserLogin(loginRequest.Email, loginRequest.Password);
             if (user != null)
             {
                 return Json(new { type = "auctioner", Id = user.Id });

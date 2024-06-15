@@ -1,3 +1,4 @@
+
 using AuctionAce.Api.Models;
 using AuctionAce.Api.Models.ViewModels.Home;
 using AuctionAce.Application.Services;
@@ -11,53 +12,27 @@ namespace AuctionAce.Api.Controllers
     {
         private readonly UserRepository _userRepository;
         private readonly AuctionService _auctionService;
+        private readonly LoginService _loginService;
 
-        public HomeController(UserRepository userRepository, AuctionService auctionService)
+        public HomeController(UserRepository userRepository, AuctionService auctionService, LoginService loginService)
         {
             _userRepository = userRepository;
             _auctionService = auctionService;
+            _loginService = loginService;
         }
-
-
-
-
-
-
-
-        //get
-        public IActionResult Index()
-        {
-            var cookie = Request.Cookies["Id"];
-            var model = new HomeViewModel();
-            var auctions = _auctionService.GetAuctionsAsync().Result;
-            if (cookie != null) 
-            {
-                int idUser = Int32.Parse(cookie);
-                var isLogged = _userRepository.isLoginedAsync(idUser).Result;
-                if (isLogged)
-                {
-                    var user = _userRepository.GetUserByIdAsync(idUser).Result;
-                    model.User = user;
-                    model.Auctions = auctions;
-                    return View(model);
-                }
-            }
-
-            
-            model.Auctions = auctions;
-
-        return View(model);
-        }
-
-       
-
 
         [HttpGet]
-        public IActionResult AllAuctions()
+        public async Task<IActionResult> Index()
         {
-            return View();
-        }
+            HomeViewModel model = new HomeViewModel();
+            var cookie = Request.Cookies["Id"];
+            int.TryParse(cookie, out int idUser);
 
+            model.User = await _loginService.UserLogin(idUser);
+            var auctions = await _auctionService.GetAuctionsByIdUserAsync(idUser);
+            model.Auctions = auctions;
+            return View(model);
+        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

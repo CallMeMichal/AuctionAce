@@ -1,0 +1,42 @@
+﻿@using AuctionAce.Api.Models.ViewModels.Auctions
+@model AuctionViewModel
+@{
+    if (Model.User != null)
+    {
+        int userId = Model.User.Id;
+        if (userId != 0)
+        {
+            Layout = "~/Views/Shared/_LayoutLogged.cshtml";
+        }
+        else
+        {
+            Layout = "~/Views/Shared/_LayoutUnlogged.cshtml";
+        }
+
+    }
+
+}
+
+
+
+<div class="row">
+
+    @if (Model.AuctionItems != null)
+    {
+        foreach (var item in Model.AuctionItems)
+        {
+            <div class="col-md-3">
+                <div class="card">
+                    <img class="card-img-top" src="https://studentprawa.pl/media/k2/items/cache/af6038056f6231c664e3ef073c45af10_L.jpg" alt="Card image cap">
+                    <div class="card-body">
+                        <h5 class="card-title">@item.Name<h5>
+                        <h5 class="card-title">@item.Id</h5>
+                        <p class="card-text">Registered Members: <span id="registered-members">[Registered Members Value]</span></p>
+                        <p class="card-text">Items: <span id="items">[Items Value]</span></p>
+                        <a href="@Url.Action("AuctionItemList", "Auction", new { auctionId = item.Id })" class="btn btn-primary">View Auction</a>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+</div>

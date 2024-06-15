@@ -5,7 +5,6 @@ namespace AuctionAce.Api.Models.ViewModels.Home
 {
     public class HomeViewModel : BaseViewModel
     {
-        //public User? User { get; set; }
         public List<Auction>? Auctions { get; set; }
     }
 }

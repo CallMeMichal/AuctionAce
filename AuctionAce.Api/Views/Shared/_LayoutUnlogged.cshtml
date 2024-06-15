@@ -1,8 +1,4 @@
-﻿@using AuctionAce.Api.Models.ViewModels.Base
-
-
-@model BaseViewModel
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
    
@@ -52,57 +48,21 @@
                     </a>
                     <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
 
-                        
-                        @if(Model.User != null)
-                        {
-                            if (Model.User.IdRoles == 2)
-                            {
-                                <li>
-
-                                    <a href="@Url.Action("AddAuction","Auction")" class="nav-link px-0 align-middle">
-                                        <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Add Auction</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="@Url.Action("Index","Auction")" class="nav-link px-0 align-middle">
-                                        <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">My Auctions</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="@Url.Action("Index","Test")" class="nav-link px-0 align-middle">
-                                        <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Wishlist</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" id="logoutButton" class="nav-link px-0 align-middle">
-                                        <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Logout</span>
-                                    </a>
-                                </li>
-                            }
-                            else if (Model.User.IdRoles == 1)
-                            {
-
-                            }
-                        }
-                        else
-                        {
-                            <li class="nav-item">
-                                <a href="#" class="nav-link align-middle px-0">
-                                    <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline">Auctions</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" class="nav-link px-0 align-middle">
-                                    <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline">Login</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" class="nav-link px-0 align-middle">
-                                    <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Register</span>
-                                </a>
-                            </li>
-                        }
-
+                        <li class="nav-item">
+                            <a href="@Url.Action("AllAuctions","Auction")" class="nav-link align-middle px-0">
+                                <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline">Auctions</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="nav-link px-0 align-middle">
+                                <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline">Login</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="nav-link px-0 align-middle">
+                                <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Register</span>
+                            </a>
+                        </li>
                     </ul>
                     <hr>
                 </div>

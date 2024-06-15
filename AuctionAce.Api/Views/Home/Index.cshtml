@@ -1,58 +1,16 @@
 ﻿@using AuctionAce.Api.Models.ViewModels.Home
 @model HomeViewModel
+@{
 
-    <div class="container-fluid">        
-        
-        <div class="row">
-            <div class="col-md-12 center" style="text-align:center">
-                <h1>
-                    Current promotions
-                </h1>
-            </div>
-        </div>
+    int userId = Model.User.Id;
+    if (userId != 0)
+    {
+        Layout = "~/Views/Shared/_LayoutLogged.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_LayoutUnlogged.cshtml";
+    }
 
-
-        <div class="row">
-
-            @if (Model.Auctions != null)
-            {
-                foreach (var item in Model.Auctions)
-                {
-                    <div class="col-md-3">
-                        <div class="card">
-                            <img class="card-img-top" src="https://studentprawa.pl/media/k2/items/cache/af6038056f6231c664e3ef073c45af10_L.jpg" alt="Card image cap">
-                            <div class="card-body">
-                                <h5 class="card-title">@item.AuctionName</h5>
-                                <p class="card-text">Start Date: <span id="start-date">@item.StartDate</span></p>
-                                <p class="card-text">End Date: <span id="end-date">@item.EndDate</span></p>
-                                <p class="card-text">Registered Members: <span id="registered-members">[Registered Members Value]</span></p>
-                                <p class="card-text">Items: <span id="items">[Items Value]</span></p>
-                                <a href="#" class="btn btn-primary">View Auction</a>
-                            </div>
-                        </div>
-                    </div>
-                }
-            }
-        </div>
-        <div class="row" style="margin-top:20px ">
-            <div class="d-grid gap-2 col-6 mx-auto">
-                <button onclick="window.location.href = '@Url.Action("AllAuctions","Home")'" type="button" class="btn btn-primary btn-lg" style="margin-right:0px">See more</button>
-            </div>
-
-        </div>
-        
-        <script>
-
-        </script>
-    </div>
-
-
-    @* <div class="category">
-        <div class="btn-group" role="group" aria-label="Basic example">
-            <button type="button" class="btn btn-secondary">Electronics</button>
-            <button type="button" class="btn btn-secondary">Clothing</button>
-            <button type="button" class="btn btn-secondary">Books</button>
-            <!-- Dodaj więcej przycisków kategorii według potrzeb -->
-        </div>
-    </div> *@
+}
 

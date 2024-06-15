@@ -1,4 +1,5 @@
-﻿using AuctionAce.Infrastructure.Data.Models;
+﻿using AuctionAce.Domain.Entities;
+using AuctionAce.Infrastructure.Data.Models;
 using AuctionAce.Infrastructure.Repositories;
 using System;
 using System.Data;
@@ -38,7 +39,7 @@ namespace AuctionAce.Application.Services
             return null;
         }
 
-        public async Task<bool> AddAuctionAsync(string auctionName, string description, DateTime startDate, DateTime endDate,int auctinerId)
+        public async Task<bool> AddAuctionAsync(string auctionName, string description, DateTime startDate, DateTime endDate,int auctinerId,List<AuctionItem> items)
         {
             Auction auction = new Auction();
             auction.AuctionName = auctionName;
@@ -49,12 +50,22 @@ namespace AuctionAce.Application.Services
             auction.IdPayments = 1;
             auction.IdUsers = auctinerId;
             auction.IdData = 1;
+            auction.AuctionItems = items;
 
             var response = await _auctionRespository.AddAuctionAsync(auction);
             return response;
         }
 
         
+        public async Task<List<AuctionItem>> GetAuctionAsync(int auctionId)
+        {
+            var auctions = await _auctionRespository.GetAuctionAsync(auctionId);
 
+            if (auctions != null)
+            {
+                return auctions;
+            }
+            return null;
+        }
     }
 }
