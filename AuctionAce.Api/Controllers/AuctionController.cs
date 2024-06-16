@@ -45,6 +45,15 @@ namespace AuctionAce.Api.Controllers
 
             return View(model);
         }
+        [HttpPost]
+        public async Task<AuctionResponse> AddAuction(AddAuctionRequest request)
+        {
+            AuctionResponse response = new AuctionResponse();
+            var cookie = Request.Cookies["Id"];
+            int idUser = Int32.Parse(cookie);
+            response.Success = await _auctionService.AddAuctionAsync(request.AuctionName, request.Description, request.StartDate, request.EndDate, idUser, request.Items);
+            return response;
+        }
 
         [HttpGet]
         public async Task<IActionResult> AllAuctionsById()
@@ -71,15 +80,7 @@ namespace AuctionAce.Api.Controllers
             return View(model);
         }
 
-        [HttpPost]
-        public async Task<AuctionResponse> AddAuction(AddAuctionRequest request)
-        {
-            AuctionResponse response = new AuctionResponse();
-            var cookie = Request.Cookies["Id"];
-            int idUser = Int32.Parse(cookie);
-            response.Success = await _auctionService.AddAuctionAsync(request.AuctionName, request.Description, request.StartDate, request.EndDate,idUser,request.Items);
-            return response;
-        }
+        
 
         [HttpGet]
         public async Task<IActionResult> AuctionItemList(int auctionId)

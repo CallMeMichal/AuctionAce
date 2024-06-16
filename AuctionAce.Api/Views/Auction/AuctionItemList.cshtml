@@ -1,5 +1,6 @@
 ﻿@using AuctionAce.Api.Models.ViewModels.Auctions
 @model AuctionViewModel
+
 @{
     if (Model.User != null)
     {
@@ -12,31 +13,41 @@
         {
             Layout = "~/Views/Shared/_LayoutUnlogged.cshtml";
         }
-
     }
-
 }
 
-
-
-<div class="row">
-
+<div class="container mt-5">
     @if (Model.AuctionItems != null)
     {
-        foreach (var item in Model.AuctionItems)
-        {
-            <div class="col-md-3">
-                <div class="card">
-                    <img class="card-img-top" src="https://studentprawa.pl/media/k2/items/cache/af6038056f6231c664e3ef073c45af10_L.jpg" alt="Card image cap">
-                    <div class="card-body">
-                        <h5 class="card-title">@item.Name<h5>
-                        <h5 class="card-title">@item.Id</h5>
-                        <p class="card-text">Registered Members: <span id="registered-members">[Registered Members Value]</span></p>
-                        <p class="card-text">Items: <span id="items">[Items Value]</span></p>
-                        <a href="@Url.Action("AuctionItemList", "Auction", new { auctionId = item.Id })" class="btn btn-primary">View Auction</a>
-                    </div>
-                </div>
-            </div>
-        }
+        <table class="table table-bordered table-hover">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col">Item Name</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Category</th>
+                    <th scope="col">Start Price</th>
+                    <th scope="col">Buy Now Price</th>
+                    <th scope="col">Photo</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.AuctionItems)
+                {
+                    <tr>
+                        <td>@item.Name</td>
+                        <td>@item.Description</td>
+                        <td>@item.Category</td>
+                        @* <td>@item.Condition</td> *@
+                        <td>@item.StartingPrice</td>
+                        <td>@item.BuyNowPrice</td>
+                        <td><img src="@item.Photo" alt="@item.Name" class="img-thumbnail" style="max-width: 100px;"></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>No auction items available.</p>
     }
 </div>
