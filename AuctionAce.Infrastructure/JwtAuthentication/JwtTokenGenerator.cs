@@ -26,6 +26,7 @@ namespace AuctionAce.Infrastructure.JwtAuthentication
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.GivenName, user.Name),
+                new Claim(JwtRegisteredClaimNames.Typ, user.IdRoles.ToString()),
                 new Claim(JwtRegisteredClaimNames.FamilyName, user.Surname),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };

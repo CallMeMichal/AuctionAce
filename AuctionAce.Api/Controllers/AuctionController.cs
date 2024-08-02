@@ -7,9 +7,9 @@ using AuctionAce.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-
 namespace AuctionAce.Api.Controllers
 {
+    
     public class AuctionController : Controller
     {
         private readonly AuctionService _auctionService;
@@ -27,13 +27,14 @@ namespace AuctionAce.Api.Controllers
             AuctionViewModel model = new AuctionViewModel();
             var cookie = Request.Cookies["Id"];
             int.TryParse(cookie, out int idUser);
-            model.User =await _loginService.UserLogin(idUser);
+            model.User = await _loginService.UserLogin(idUser);
             var auctions = await _auctionService.GetAuctionsByIdUserAsync(idUser);
             model.Auctions = auctions;
             return View(model);
         }
 
-        [HttpGet] 
+        [Authorize]
+        [HttpGet]
         public async Task<IActionResult> AddAuction()
         {
             AuctionViewModel model = new AuctionViewModel();
@@ -45,6 +46,7 @@ namespace AuctionAce.Api.Controllers
 
             return View(model);
         }
+
         [HttpPost]
         public async Task<AuctionResponse> AddAuction(AddAuctionRequest request)
         {
@@ -64,8 +66,9 @@ namespace AuctionAce.Api.Controllers
             model.Auctions = await _auctionService.GetAuctionsByIdUserAsync(idUser);
             model.User = await _loginService.UserLogin(idUser);
 
-            return View("AllAuctions",model);
+            return View("AllAuctions", model);
         }
+
         [HttpGet]
         public async Task<IActionResult> AllAuctions()
         {
@@ -79,8 +82,6 @@ namespace AuctionAce.Api.Controllers
 
             return View(model);
         }
-
-        
 
         [HttpGet]
         public async Task<IActionResult> AuctionItemList(int auctionId)

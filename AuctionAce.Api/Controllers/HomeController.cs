@@ -1,4 +1,3 @@
-
 using AuctionAce.Api.Models;
 using AuctionAce.Api.Models.ViewModels.Home;
 using AuctionAce.Application.Services;
@@ -21,6 +20,7 @@ namespace AuctionAce.Api.Controllers
             _loginService = loginService;
         }
 
+        //[Authorize]
         [HttpGet]
         public async Task<IActionResult> Index()
         {

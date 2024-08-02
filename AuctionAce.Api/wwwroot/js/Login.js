@@ -8,24 +8,17 @@
     });
 
     $("#logoutButton").click(function () {
-
         $.ajax({
             type: "POST",
             url: "/User/LogoutAction",
             success: function (response) {
-                //setCookie("Id", response.id, -10)
                 document.cookie = "Id=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
                 location.href = "/Home/Index"
             },
             error: function (error) {
                 console.log(error);
             }
-
-
-
-
         });
-
     });
 
     $("#loginForm").submit(function (event) {
@@ -42,16 +35,13 @@
                 password: password
             },
             success: function (response) {
-                setCookie("Id", response.id, 1)
+                console.log(response)
+                setCookie("Id", response.token, 1)
                 location.href = "/Home/Index"
             },
             error: function (error) {
                 console.log(error);
             }
-
-
-
-
         });
 
         function setCookie(name, value, days) {
@@ -82,6 +72,5 @@
                     ";expires=Thu, 01 Jan 1970 00:00:01 GMT";
             }
         }
-
     });
 });

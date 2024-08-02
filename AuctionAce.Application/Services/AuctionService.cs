@@ -39,7 +39,7 @@ namespace AuctionAce.Application.Services
             return null;
         }
 
-        public async Task<bool> AddAuctionAsync(string auctionName, string description, DateTime startDate, DateTime endDate,int auctinerId,List<AuctionItem> items)
+        public async Task<bool> AddAuctionAsync(string auctionName, string description, DateTime startDate, DateTime endDate, int auctinerId, List<AuctionItem> items)
         {
             Auction auction = new Auction();
             auction.AuctionName = auctionName;
@@ -47,7 +47,6 @@ namespace AuctionAce.Application.Services
             auction.StartDate = startDate;
             auction.EndDate = endDate;
             auction.IdStatus = 1;
-            auction.IdPayments = 1;
             auction.IdUsers = auctinerId;
             auction.IdData = 1;
             auction.AuctionItems = items;
@@ -56,7 +55,6 @@ namespace AuctionAce.Application.Services
             return response;
         }
 
-        
         public async Task<List<AuctionItem>> GetAuctionAsync(int auctionId)
         {
             var auctions = await _auctionRespository.GetAuctionAsync(auctionId);

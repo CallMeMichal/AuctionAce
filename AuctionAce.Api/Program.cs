@@ -14,7 +14,6 @@ namespace AuctionAce.Api
             builder.Services.AddApplication();
             builder.Services.AddInfrastructure(builder.Configuration);
             var app = builder.Build();
-
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {
@@ -23,12 +22,24 @@ namespace AuctionAce.Api
                 app.UseHsts();
             }
 
+            builder.Services.AddDistributedMemoryCache();
+
+            builder.Services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromSeconds(10);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             app.UseRouting();
 
+            app.UseSession();
+
             app.UseAuthorization();
+            //app.UseAuthentication();
 
             app.MapControllerRoute(
                 name: "default",

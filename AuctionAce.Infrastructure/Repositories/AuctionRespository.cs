@@ -1,5 +1,4 @@
-﻿using AuctionAce.Infrastructure.Data.AuctionAceDbContext;
-using AuctionAce.Infrastructure.Data.Models;
+﻿using AuctionAce.Infrastructure.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -12,18 +11,17 @@ namespace AuctionAce.Infrastructure.Repositories
 {
     public class AuctionRespository
     {
-        private readonly AuctionAceContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public AuctionRespository(AuctionAceContext context)
+        public AuctionRespository(ApplicationDbContext context)
         {
             _context = context;
         }
 
-
         public async Task<List<Auction>> GetAuctionsAsync()
         {
             var auctionList = new List<Auction>();
-            var auctions = _context.Auctions.Where(x=>x.IdStatus == 1);
+            var auctions = _context.Auctions.Where(x => x.IdStatus == 1);
             auctionList.AddRange(auctions);
             return auctionList;
         }
@@ -44,18 +42,15 @@ namespace AuctionAce.Infrastructure.Repositories
             }
             catch (Exception ex)
             {
-
                 return false;
             }
         }
 
         public async Task<List<AuctionItem>> GetAuctionAsync(int auctionId)
         {
-
             var auction = await _context.AuctionItems.Where(x => x.IdAuctions == auctionId).ToListAsync();
 
             return auction;
         }
-
     }
 }
