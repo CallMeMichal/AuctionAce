@@ -1,1 +1,1 @@
-Scaffold-DbContext "Server=MICHAť\SQLEXPRESS;database=AuctionAce;Integrated Security=True;encrypt=false" Microsoft.EntityFrameworkCore.SqlServer -OutputDir ../AuctionAce.Domain/Models
+Scaffold-DbContext "data source=MICHAť\SQLEXPRESS;initial catalog=AuctionAce;MultipleActiveResultSets=True;App=EntityFramework;TrustServerCertificate=True;Trusted_Connection=True" Microsoft.EntityFrameworkCore.SqlServer -OutputDir "C:\Users\micha\source\repos\AuctionAce\AuctionAce.Infrastructure\Data\Models" -Context ApplicationDbContext -Verbose -force
