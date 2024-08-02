@@ -1,13 +1,6 @@
 ﻿using AuctionAce.Api.Models.DTO.Login;
-using AuctionAce.Application.Interfaces;
 using AuctionAce.Application.Services;
-using AuctionAce.Domain.Entities;
-using AuctionAce.Infrastructure.Data.Models;
-using AuctionAce.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System.Net;
-using System.Web;
 
 namespace AuctionAce.Api.Controllers
 {

@@ -12,6 +12,5 @@ public partial class ItemHistory
     public decimal? Price { get; set; }
 
     public int? IdAuctionItems { get; set; }
-
     public virtual AuctionItem? IdAuctionItemsNavigation { get; set; }
 }

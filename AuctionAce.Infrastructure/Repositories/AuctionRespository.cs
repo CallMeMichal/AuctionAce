@@ -3,6 +3,7 @@ using AuctionAce.Infrastructure.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,7 +23,6 @@ namespace AuctionAce.Infrastructure.Repositories
         public async Task<List<Auction>> GetAuctionsAsync()
         {
             var auctionList = new List<Auction>();
-            //aktywna aukcja
             var auctions = _context.Auctions.Where(x=>x.IdStatus == 1);
             auctionList.AddRange(auctions);
             return auctionList;
@@ -48,8 +48,6 @@ namespace AuctionAce.Infrastructure.Repositories
                 return false;
             }
         }
-
-
 
         public async Task<List<AuctionItem>> GetAuctionAsync(int auctionId)
         {
