@@ -16,6 +16,8 @@ namespace AuctionAce.Application
             services.AddScoped<UserService>();
             services.AddScoped<AuctionService>();
             services.AddScoped<LoginService>();
+            services.AddScoped<AuthenticationService>();
+            services.AddScoped<CalendarService>();
             //dowiedziec czym sie rozni scope,transit,singleton
             //services.AddScoped
             return services;

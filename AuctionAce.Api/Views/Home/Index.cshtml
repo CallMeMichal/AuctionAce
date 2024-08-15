@@ -1,9 +1,7 @@
-﻿@using AuctionAce.Api.Models.ViewModels.Home
-@model HomeViewModel
-@{
-
-    int userId = Model.User.Id;
-    if (userId != 0)
+﻿@{
+    string userIdString = Context.Session.GetString("UserId");    
+    int userId = 0;
+    if (!string.IsNullOrEmpty(userIdString) && int.TryParse(userIdString, out userId))
     {
         Layout = "~/Views/Shared/_LayoutLogged.cshtml";
     }

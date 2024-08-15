@@ -1,16 +1,18 @@
-﻿@using AuctionAce.Api.Models.ViewModels.Home
-@model HomeViewModel
-@{
-    if (Model.User != null)
+﻿@{
+    string userIdString = Context.Session.GetString("UserId");
+    int userId = 0;
+    if (!string.IsNullOrEmpty(userIdString) && int.TryParse(userIdString, out userId))
     {
-        int userId = Model.User.Id;
         Layout = "~/Views/Shared/_LayoutLogged.cshtml";
     }
     else
     {
         Layout = "~/Views/Shared/_LayoutUnlogged.cshtml";
     }
+
 }
+
+
 
 
 <div class="container-fluid">

@@ -1,7 +1,6 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - AuctionAce.Api</title>
@@ -10,30 +9,23 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/AuctionAce.Api.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/IndexStyle.css" asp-append-version="true" />
-
-
-
     <script src="https://cdn.jsdelivr.net/npm/cdbootstrap/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/cdbootstrap/js/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/cdbootstrap/js/cdb.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-
+    
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js'></script>
+    
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cdbootstrap/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cdbootstrap/css/cdb.min.css" />
-
     <link rel="stylesheet" href="~/css/AddAuctionStyle.css" asp-append-version="true" />
-
-
-
 </head>
 <body>
     <div class="container-fluid">
@@ -44,64 +36,43 @@
                         <span class="fs-5 d-none d-sm-inline">AuctionAce</span>
                     </a>
                     <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
-                                <li>
-
-                                    <a href="@Url.Action("AddAuction","Auction")" class="nav-link px-0 align-middle">
-                                        <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Add Auction</span>
-                                    </a>
-                                </li>
-                                <li>
-                                     <a href="@Url.Action("AllAuctionsById","Auction")" class="nav-link px-0 align-middle">
-                                        <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">My Auctions</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="@Url.Action("AllAuctions","Auction")" class="nav-link px-0 align-middle">
-                                        <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Auctions</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="@Url.Action("Index","Test")" class="nav-link px-0 align-middle">
-                                        <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Wishlist</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" id="logoutButton" class="nav-link px-0 align-middle">
-                                        <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Logout</span>
-                                    </a>
-                                </li>
+                        <li>
+                            <a href="@Url.Action("AddAuction","Auction")" class="nav-link px-0 align-middle">
+                                <i class="fs-4 bi-people"></i>
+                                <span class="ms-1 d-none d-sm-inline">Add Auction</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("AllAuctionsById","Auction")" class="nav-link px-0 align-middle">
+                                <i class="fs-4 bi-people"></i>
+                                <span class="ms-1 d-none d-sm-inline">My Auctions</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("AllAuctions","Auction")" class="nav-link px-0 align-middle">
+                                <i class="fs-4 bi-people"></i>
+                                <span class="ms-1 d-none d-sm-inline">Auctions</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("GetCalendarData","Calendar")" class="nav-link px-0 align-middle">
+                                <i class="fs-4 bi-people"></i>
+                                <span class="ms-1 d-none d-sm-inline">Calendar</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" id="logoutButton" class="nav-link px-0 align-middle">
+                                <i class="fs-4 bi-people"></i>
+                                <span class="ms-1 d-none d-sm-inline">Logout</span>
+                            </a>
+                        </li>
                     </ul>
                     <hr>
                 </div>
             </div>
-            <div class="col py-3">
-                @RenderBody()
-            </div>
+            <div class="col py-3"> @RenderBody() </div>
         </div>
     </div>
+    <script src="~/js/Login.js"></script>
 </body>
 </html>
-
-
-<script>
-    $("#logoutButton").click(function () {
-
-        $.ajax({
-            type: "POST",
-            url: "/User/LogoutAction",
-            success: function (response) {
-                //setCookie("Id", response.id, -10)
-                document.cookie = "Id=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-                location.href = "/Home/Index"
-            },
-            error: function (error) {
-                console.log(error);
-            }
-
-
-
-
-        });
-
-    });
-</script>

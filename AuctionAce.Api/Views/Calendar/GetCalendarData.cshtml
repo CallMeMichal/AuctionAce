@@ -1,0 +1,39 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutLogged.cshtml";
+}
+
+<div id="calendar"></div>
+
+<!-- Dodaj odpowiednie pliki FullCalendar -->
+<link href='https://unpkg.com/fullcalendar@5.11.3/main.min.css' rel='stylesheet' />
+<script src='https://unpkg.com/fullcalendar@5.11.3/main.min.js'></script>
+
+<script>
+    // Sprawdź dane JSON w konsoli
+    var eventsFromServer = @Html.Raw(ViewBag.EventsJson);
+    console.log(eventsFromServer);
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var calendarEl = document.getElementById('calendar');
+
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            headerToolbar: {
+                start: 'dayGridMonth,timeGridWeek,timeGridDay',
+                center: 'title',
+                end: 'prevYear,prev,next,nextYear'
+            },
+            initialView: 'dayGridMonth',
+            initialDate: '2024-08-12',
+            events: eventsFromServer,
+            eventContent: function (arg) {
+                var isFavorite = arg.event.extendedProps.isFavorite;
+                var heartIcon = isFavorite ? '<span style="color: red;">&#9829;</span>' : '';
+                return {
+                    html: `<div>${heartIcon} ${arg.event.title}</div>`
+                };
+            }
+        });
+
+        calendar.render();
+    });
+</script>

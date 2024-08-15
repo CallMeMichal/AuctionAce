@@ -1,6 +1,4 @@
-﻿using AuctionAce.Infrastructure.Data.Models;
-
-namespace AuctionAce.Api.Models.DTO.Login
+﻿namespace AuctionAce.Api.Models.DTO.Login
 {
     public class LoginViewModel
     {

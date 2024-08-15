@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
-namespace AuctionAce.Infrastructure.Data.Models;
+namespace AuctionAce.Api;
 
 public partial class ApplicationDbContext : DbContext
 {
@@ -172,8 +172,8 @@ public partial class ApplicationDbContext : DbContext
                 .HasConstraintName("FK_Users_Roles");
         });
 
-        //OnModelCreatingPartial(modelBuilder);
+        OnModelCreatingPartial(modelBuilder);
     }
 
-    // private partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+    partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 }

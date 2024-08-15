@@ -1,5 +1,4 @@
-﻿using AuctionAce.Infrastructure.Data.Models;
-using AuctionAce.Infrastructure.JwtAuthentication;
+﻿using AuctionAce.Api;
 using AuctionAce.Infrastructure.Repositories;
 using Azure;
 using Azure.Core;
@@ -10,18 +9,15 @@ namespace AuctionAce.Application.Services
     public class UserService
     {
         public readonly UserRepository _userRepository;
-        public readonly JwtTokenGenerator _jwtTokenGenerator;
 
-        public UserService(UserRepository userRepository, JwtTokenGenerator jwtTokenGenerator)
+        public UserService(UserRepository userRepository)
         {
             _userRepository = userRepository;
-            _jwtTokenGenerator = jwtTokenGenerator;
         }
 
         public async Task<User> UserLogin(string email, string password)
         {
             var userLoginStatus = await _userRepository.UserLoginAsync(email, password);
-            var token = _jwtTokenGenerator.GenerateToken(userLoginStatus);
             return userLoginStatus;
         }
 

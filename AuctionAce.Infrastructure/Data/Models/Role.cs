@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace AuctionAce.Infrastructure.Data.Models;
+namespace AuctionAce.Api;
 
 public partial class Role
 {

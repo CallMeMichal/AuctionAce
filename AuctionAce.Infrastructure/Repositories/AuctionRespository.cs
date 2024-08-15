@@ -1,4 +1,4 @@
-﻿using AuctionAce.Infrastructure.Data.Models;
+﻿using AuctionAce.Api;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -26,9 +26,9 @@ namespace AuctionAce.Infrastructure.Repositories
             return auctionList;
         }
 
-        public async Task<List<Auction>> GetAuctionsByIdUserAsync(int idUser)
+        public async Task<List<Auction>> GetAuctionsByIdUserAsync(int userId)
         {
-            var auctions = await _context.Auctions.Where(x => x.IdUsers == idUser).ToListAsync();
+            var auctions = await _context.Auctions.Where(x => x.IdUsers == userId).ToListAsync();
             return auctions;
         }
 

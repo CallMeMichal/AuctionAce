@@ -1,8 +1,5 @@
-﻿using AuctionAce.Domain.Entities;
-using AuctionAce.Infrastructure.Data.Models;
+﻿using AuctionAce.Api;
 using AuctionAce.Infrastructure.Repositories;
-using System;
-using System.Data;
 
 namespace AuctionAce.Application.Services
 {
