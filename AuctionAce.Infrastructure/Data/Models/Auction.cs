@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace AuctionAce.Infrastructure.Data.Models;
+namespace AuctionAce.Api;
 
 public partial class Auction
 {
@@ -17,21 +17,15 @@ public partial class Auction
 
     public int? IdData { get; set; }
 
-    public int? IdStatus { get; set; }
-
     public int? IdCategory { get; set; }
 
-    public int? IdPayments { get; set; }
+    public string? Description { get; set; }
+
+    public string? ImagePath { get; set; }
 
     public virtual ICollection<AuctionItem> AuctionItems { get; set; } = new List<AuctionItem>();
 
     public virtual Category? IdCategoryNavigation { get; set; }
 
-    public virtual Calendar? IdDataNavigation { get; set; }
-
-    public virtual Status? IdStatusNavigation { get; set; }
-
     public virtual User? IdUsersNavigation { get; set; }
-
-    public virtual ICollection<Watchlist> Watchlists { get; set; } = new List<Watchlist>();
 }

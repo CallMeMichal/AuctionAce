@@ -1,8 +1,8 @@
-
 using AuctionAce.Api.Models;
 using AuctionAce.Api.Models.ViewModels.Home;
+using AuctionAce.Application.Middleware;
 using AuctionAce.Application.Services;
-using AuctionAce.Infrastructure.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -10,17 +10,16 @@ namespace AuctionAce.Api.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly UserRepository _userRepository;
         private readonly AuctionService _auctionService;
         private readonly LoginService _loginService;
 
-        public HomeController(UserRepository userRepository, AuctionService auctionService, LoginService loginService)
+        public HomeController(AuctionService auctionService, LoginService loginService)
         {
-            _userRepository = userRepository;
             _auctionService = auctionService;
             _loginService = loginService;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> Index()
         {

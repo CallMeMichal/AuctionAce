@@ -1,6 +1,4 @@
-﻿
-
-using AuctionAce.Infrastructure.Data.Models;
+﻿using AuctionAce.Api;
 using AuctionAce.Infrastructure.Repositories;
 using Azure;
 using Azure.Core;
@@ -10,8 +8,6 @@ namespace AuctionAce.Application.Services
 {
     public class UserService
     {
-        /* public UserService() { }*/
-
         public readonly UserRepository _userRepository;
 
         public UserService(UserRepository userRepository)
@@ -19,11 +15,10 @@ namespace AuctionAce.Application.Services
             _userRepository = userRepository;
         }
 
-        public async  Task<User> UserLogin(string email, string password)
+        public async Task<User> UserLogin(string email, string password)
         {
             var userLoginStatus = await _userRepository.UserLoginAsync(email, password);
             return userLoginStatus;
-            
         }
 
         public async Task<bool> UserLogout(int idUser)
@@ -38,5 +33,3 @@ namespace AuctionAce.Application.Services
         }
     }
 }
-
-

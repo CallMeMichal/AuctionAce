@@ -1,5 +1,4 @@
-﻿using AuctionAce.Infrastructure.Data.AuctionAceDbContext;
-using AuctionAce.Infrastructure.Data.Models;
+﻿using AuctionAce.Api;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -12,25 +11,30 @@ namespace AuctionAce.Infrastructure.Repositories
 {
     public class AuctionRespository
     {
-        private readonly AuctionAceContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public AuctionRespository(AuctionAceContext context)
+        public AuctionRespository(ApplicationDbContext context)
         {
             _context = context;
         }
 
-
         public async Task<List<Auction>> GetAuctionsAsync()
         {
-            var auctionList = new List<Auction>();
-            var auctions = _context.Auctions.Where(x=>x.IdStatus == 1);
-            auctionList.AddRange(auctions);
-            return auctionList;
+           
+            var auctions = await _context.Auctions.ToListAsync();           
+            return auctions;
         }
 
-        public async Task<List<Auction>> GetAuctionsByIdUserAsync(int idUser)
+        public async Task<List<AuctionItem>> GetAuctionsItemsAsync()
         {
-            var auctions = await _context.Auctions.Where(x => x.IdUsers == idUser).ToListAsync();
+
+            var auctions = await _context.AuctionItems.ToListAsync();
+            return auctions;
+        }
+
+        public async Task<List<Auction>> GetAuctionsByIdUserAsync(int userId)
+        {
+            var auctions = await _context.Auctions.Where(x => x.IdUsers == userId).ToListAsync();
             return auctions;
         }
 
@@ -44,18 +48,15 @@ namespace AuctionAce.Infrastructure.Repositories
             }
             catch (Exception ex)
             {
-
                 return false;
             }
         }
 
         public async Task<List<AuctionItem>> GetAuctionAsync(int auctionId)
         {
-
             var auction = await _context.AuctionItems.Where(x => x.IdAuctions == auctionId).ToListAsync();
 
             return auction;
         }
-
     }
 }

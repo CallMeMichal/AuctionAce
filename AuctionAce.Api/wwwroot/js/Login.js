@@ -2,30 +2,47 @@
     $("a:contains('Login')").click(function () {
         $('#loginModal').modal('show');
     });
+
     $("#registerLink").click(function () {
         $('#loginModal').modal('hide');
         $('#registerModal').modal('show');
     });
 
     $("#logoutButton").click(function () {
-
-        $.ajax({
-            type: "POST",
-            url: "/User/LogoutAction",
-            success: function (response) {
-                //setCookie("Id", response.id, -10)
-                document.cookie = "Id=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-                location.href = "/Home/Index"
-            },
-            error: function (error) {
-                console.log(error);
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "Do you really want to log out?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, log out!',
+            cancelButtonText: 'No, cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: "POST",
+                    url: "/User/LogoutAction",
+                    success: function (response) {
+                        if (response.success) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Logout Successful',
+                                text: response.message
+                            }).then(function () {
+                                location.href = "/Home/Index";
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: response.message
+                            });
+                        }
+                    }
+                });
             }
-
-
-
-
         });
-
     });
 
     $("#loginForm").submit(function (event) {
@@ -42,46 +59,26 @@
                 password: password
             },
             success: function (response) {
-                setCookie("Id", response.id, 1)
-                location.href = "/Home/Index"
-            },
-            error: function (error) {
-                console.log(error);
+                if (response.success) {
+                    $('#loginModal').modal('hide');
+
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Login Successful',
+                        text: response.message
+                    }).then(function () {
+                        location.href = "/Home/Index";
+                    });
+                } else {
+                    $('#loginModal').modal('show');
+
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Login Failed',
+                        text: response.message
+                    });
+                }
             }
-
-
-
-
         });
-
-        function setCookie(name, value, days) {
-            var expires = "";
-            if (days) {
-                var date = new Date();
-                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-                expires = "; expires=" + date.toUTCString();
-            }
-            document.cookie = name + "=" + (value || "") + expires + "; path=/";
-        }
-        function getCookie(name) {
-            var nameEQ = name + "=";
-            var ca = document.cookie.split(';');
-            for (var i = 0; i < ca.length; i++) {
-                var c = ca[i];
-                while (c.charAt(0) == ' ') c = c.substring(1, c.length);
-                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
-            }
-            return null;
-        }
-
-        function delete_cookie(name, path, domain) {
-            if (get_cookie(name)) {
-                document.cookie = name + "=" +
-                    ((path) ? ";path=" + path : "") +
-                    ((domain) ? ";domain=" + domain : "") +
-                    ";expires=Thu, 01 Jan 1970 00:00:01 GMT";
-            }
-        }
-
     });
 });

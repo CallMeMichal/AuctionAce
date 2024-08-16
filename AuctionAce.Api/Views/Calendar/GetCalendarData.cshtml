@@ -1,0 +1,38 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutLogged.cshtml";
+}
+
+<div id="calendar"></div>
+
+<script>
+    // Sprawdź dane JSON w konsoli
+    var eventsFromServer = @Html.Raw(ViewBag.EventsJson);
+    console.log(eventsFromServer);
+
+    var formattedEvents = eventsFromServer.map(event => ({
+        title: event.Title,
+        start: event.Start,
+        end: event.End,    
+        color: event.Color 
+    }));
+
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var calendarEl = document.getElementById('calendar');
+
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            headerToolbar: {
+                start: 'dayGridMonth,timeGridWeek,timeGridDay',
+                center: 'title',
+                end: 'prevYear,prev,next,nextYear'
+            },
+            initialView: 'dayGridMonth',
+            initialDate: '2024-08-12',
+            events: formattedEvents
+        });
+
+        calendar.render();
+
+    });
+</script>
+

@@ -1,8 +1,7 @@
-﻿using AuctionAce.Domain.Entities;
-using AuctionAce.Infrastructure.Data.Models;
+﻿using AuctionAce.Api;
+using AuctionAce.Domain.Entities;
 using AuctionAce.Infrastructure.Repositories;
-using System;
-using System.Data;
+using System.Net.NetworkInformation;
 
 namespace AuctionAce.Application.Services
 {
@@ -15,16 +14,58 @@ namespace AuctionAce.Application.Services
             _auctionRespository = auctionRespository;
         }
 
-        public async Task<List<Auction>> GetAuctionsAsync()
+        public async Task<List<AuctionListDomain>> GetAuctionsAsync()
         {
             var auctions = await _auctionRespository.GetAuctionsAsync();
+            var auctionsItem = await _auctionRespository.GetAuctionsItemsAsync();
+            List<AuctionListDomain> auctionList = new List<AuctionListDomain>();
+            
+            var today = DateTime.Now;
 
-            if (auctions != null)
+            foreach (var auction in auctions)
             {
-                return auctions;
-            }
+                var status = "Pending";
 
-            return null;
+                if(auction.StartDate.HasValue && auction.EndDate.HasValue)
+                {
+                    if (today < auction.StartDate.Value.Date)
+                    {
+                        status = "Pending";
+                    }
+                    else if (today >= auction.StartDate.Value.Date && today <= auction.EndDate.Value.Date)
+                    {
+                        status = "Active";
+                    }
+                    else
+                    {
+                        status = "Inactive";
+                    }
+                }
+                auctionList.Add(new AuctionListDomain
+                {
+                    Id = auction.Id,
+                    Description = auction.Description ?? string.Empty,
+                    ImagePath = auction.ImagePath ?? string.Empty,
+                    AuctionName = auction.AuctionName ?? string.Empty,
+                    IdUsers = auction.IdUsers ?? 0,
+                    StartDate = auction.StartDate ?? DateTime.MinValue,
+                    EndDate = auction.EndDate ?? DateTime.MinValue,
+                    Status = status,
+                    AuctionsListItem = auctionsItem.Where(x=>x.IdAuctions == auction.Id).Select(item => new AuctionsItemList
+                    {
+                        Id = item.Id,
+                        Name = item.Name ?? string.Empty,
+                        Description = item.Description ?? string.Empty,
+                        Category = item.Category ?? string.Empty,
+                        ImagePath = item.ImagePath ?? string.Empty,
+                        StartingPrice = item.StartingPrice ?? string.Empty,
+                        BuyNowPrice = item.BuyNowPrice ?? string.Empty,
+                        Amount = item.Amount ?? string.Empty,
+                        NewUsed = item.NewUsed ?? false,
+                    }).ToList()
+                });
+            }
+            return auctionList;
         }
 
         public async Task<List<Auction>> GetAuctionsByIdUserAsync(int idUser)
@@ -39,24 +80,23 @@ namespace AuctionAce.Application.Services
             return null;
         }
 
-        public async Task<bool> AddAuctionAsync(string auctionName, string description, DateTime startDate, DateTime endDate,int auctinerId,List<AuctionItem> items)
+        public async Task<bool> AddAuctionAsync(string auctionName, string description, DateTime startDate, DateTime endDate, int auctinerId, List<AuctionItem> items)
         {
             Auction auction = new Auction();
             auction.AuctionName = auctionName;
-            auction.IdCategory = 1;
+            auction.Description = description;
+            //auction.IdCategory = 1;
             auction.StartDate = startDate;
             auction.EndDate = endDate;
-            auction.IdStatus = 1;
-            auction.IdPayments = 1;
+            //auction.IdStatus = 1;
             auction.IdUsers = auctinerId;
-            auction.IdData = 1;
+            //auction.IdData = 1;
             auction.AuctionItems = items;
 
             var response = await _auctionRespository.AddAuctionAsync(auction);
             return response;
         }
 
-        
         public async Task<List<AuctionItem>> GetAuctionAsync(int auctionId)
         {
             var auctions = await _auctionRespository.GetAuctionAsync(auctionId);

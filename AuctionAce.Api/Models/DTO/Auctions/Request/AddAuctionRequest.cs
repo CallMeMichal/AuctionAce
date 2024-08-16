@@ -1,5 +1,4 @@
-﻿using AuctionAce.Infrastructure.Data.Models;
-namespace AuctionAce.Api.Models.DTO.Auctions.Request
+﻿namespace AuctionAce.Api.Models.DTO.Auctions.Request
 {
     public class AddAuctionRequest
     {

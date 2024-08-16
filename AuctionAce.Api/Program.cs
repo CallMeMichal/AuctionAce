@@ -1,4 +1,5 @@
 using AuctionAce.Application;
+using AuctionAce.Application.Services;
 using AuctionAce.Infrastructure;
 
 namespace AuctionAce.Api
@@ -12,9 +13,19 @@ namespace AuctionAce.Api
             // Add services to the container.
             builder.Services.AddControllersWithViews();
             builder.Services.AddApplication();
+            builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
             builder.Services.AddInfrastructure(builder.Configuration);
-            var app = builder.Build();
+            builder.Services.AddDistributedMemoryCache();
+            AuthenticationService.Initialize(builder.Configuration);
+            builder.Services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromSeconds(10000000);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
 
+            var app = builder.Build();
+            app.UseSession();
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {
@@ -23,12 +34,17 @@ namespace AuctionAce.Api
                 app.UseHsts();
             }
 
+            builder.Services.AddDistributedMemoryCache();
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             app.UseRouting();
 
+            
+
             app.UseAuthorization();
+            app.UseAuthentication();
 
             app.MapControllerRoute(
                 name: "default",

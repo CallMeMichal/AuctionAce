@@ -1,53 +1,64 @@
 ﻿@using AuctionAce.Api.Models.ViewModels.Auctions
 @model AuctionViewModel
-
 @{
-    if (Model.User != null)
+    string userIdString = Context.Session.GetString("UserId");
+    int userId = 0;
+    if (!string.IsNullOrEmpty(userIdString) && int.TryParse(userIdString, out userId))
     {
-        int userId = Model.User.Id;
-        if (userId != 0)
-        {
-            Layout = "~/Views/Shared/_LayoutLogged.cshtml";
-        }
-        else
-        {
-            Layout = "~/Views/Shared/_LayoutUnlogged.cshtml";
-        }
-    }
-}
-
-<div class="container mt-5">
-    @if (Model.AuctionItems != null)
-    {
-        <table class="table table-bordered table-hover">
-            <thead class="thead-light">
-                <tr>
-                    <th scope="col">Item Name</th>
-                    <th scope="col">Description</th>
-                    <th scope="col">Category</th>
-                    <th scope="col">Start Price</th>
-                    <th scope="col">Buy Now Price</th>
-                    <th scope="col">Photo</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model.AuctionItems)
-                {
-                    <tr>
-                        <td>@item.Name</td>
-                        <td>@item.Description</td>
-                        <td>@item.Category</td>
-                        @* <td>@item.Condition</td> *@
-                        <td>@item.StartingPrice</td>
-                        <td>@item.BuyNowPrice</td>
-                        <td><img src="@item.Photo" alt="@item.Name" class="img-thumbnail" style="max-width: 100px;"></td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+        Layout = "~/Views/Shared/_LayoutLogged.cshtml";
     }
     else
     {
-        <p>No auction items available.</p>
+        Layout = "~/Views/Shared/_LayoutUnlogged.cshtml";
+    }
+}
+<div class="container mt-5">
+    @if (Model.AuctionItems != null)
+    {
+        <div class="auction-container">
+            @*
+        <h3>@Model.Auction.AuctionName</h3>
+        <p>@Model.Auction.Description</p>
+        *@
+            @*
+        <p>Status: @auction.Status</p>
+        *@
+            <table class="table table-bordered table-hover">
+                <thead class="thead-light">
+                    <tr>
+                        <th scope="col">Item Name</th>
+                        <th scope="col">Description</th>
+                        <th scope="col">Category</th>
+                        <th scope="col">Start Price</th>
+                        <th scope="col">Buy Now Price</th>
+                        <th scope="col">Photo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var i in Model.AuctionItems)
+                    {
+                        <tr>
+                            <td>@i.Name</td>
+                            <td>@i.Description</td>
+                            @*
+                    <td>@item.Category</td>
+                    *@
+                            <td>@i.StartingPrice</td>
+                            <td>@i.BuyNowPrice</td>
+                            <td>
+                                @if (!string.IsNullOrEmpty(i.ImagePath))
+                                {
+                                    <img src="@i.ImagePath" alt="@i.Name" class="img-thumbnail" style="max-width: 100px;">
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <p>No auctions available.</p>
     }
 </div>
