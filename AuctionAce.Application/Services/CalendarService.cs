@@ -16,8 +16,6 @@ namespace AuctionAce.Application.Services
         {
             var currentDate = DateTime.Now;
             var auctions = await _auctionRespository.GetAuctionsByIdUserAsync(userId);
-
-            // Przekształć aukcje na obiekty CalendarEvent
             var calendarData = auctions.Select(a => new AuctionCalendarData
             {
                 Title = a.AuctionName,

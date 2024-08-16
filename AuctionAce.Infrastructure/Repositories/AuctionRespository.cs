@@ -20,10 +20,16 @@ namespace AuctionAce.Infrastructure.Repositories
 
         public async Task<List<Auction>> GetAuctionsAsync()
         {
-            var auctionList = new List<Auction>();
-            var auctions = _context.Auctions.Where(x => x.IdStatus == 1);
-            auctionList.AddRange(auctions);
-            return auctionList;
+           
+            var auctions = await _context.Auctions.ToListAsync();           
+            return auctions;
+        }
+
+        public async Task<List<AuctionItem>> GetAuctionsItemsAsync()
+        {
+
+            var auctions = await _context.AuctionItems.ToListAsync();
+            return auctions;
         }
 
         public async Task<List<Auction>> GetAuctionsByIdUserAsync(int userId)

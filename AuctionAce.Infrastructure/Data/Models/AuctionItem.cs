@@ -15,7 +15,7 @@ public partial class AuctionItem
 
     public string? Category { get; set; }
 
-    public string? Photo { get; set; }
+    public string? ImagePath { get; set; }
 
     public string? StartingPrice { get; set; }
 

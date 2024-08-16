@@ -2,7 +2,6 @@
 using AuctionAce.Application.Services;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace AuctionAce.Api.Controllers
 {
@@ -14,7 +13,7 @@ namespace AuctionAce.Api.Controllers
         {
             _calendarService = calendarService;
         }
-
+        [HttpGet]
         public IActionResult GetCalendarData()
         {
             var userId = SessionHelper.GetUserIdFromSession(HttpContext);

@@ -1,18 +1,17 @@
 ﻿@using AuctionAce.Api.Models.ViewModels.Auctions
 @model AuctionViewModel
 @{
-    if (Model.User != null)
+    string userIdString = Context.Session.GetString("UserId");
+    int userId = 0;
+    if (!string.IsNullOrEmpty(userIdString) && int.TryParse(userIdString, out userId))
     {
-        int userId = Model.User.Id;
-        if (userId != 0)
-        {
-            Layout = "~/Views/Shared/_LayoutLogged.cshtml";
-        }
-        else
-        {
-            Layout = "~/Views/Shared/_LayoutUnlogged.cshtml";
-        }
+        Layout = "~/Views/Shared/_LayoutLogged.cshtml";
     }
+    else
+    {
+        Layout = "~/Views/Shared/_LayoutUnlogged.cshtml";
+    }
+
 }
 
 <div class="container-fluid">
@@ -23,22 +22,22 @@
     </div>
 
     <div class="row" id="auction-container">
-        @if (Model.Auctions != null)
+        @if (Model.AuctionStatus != null)
         {
-            foreach (var item in Model.Auctions)
+            foreach (var item in Model.AuctionStatus)
             {
                 <div class="col-md-3">
-                    @* <div class="card position-relative" data-status="@item.Status"> *@
-                    <div class="card position-relative" data-status="Status">
-                        <img class="card-img-top" src="https://studentprawa.pl/media/k2/items/cache/af6038056f6231c664e3ef073c45af10_L.jpg" alt="Card image cap">
-                        <div class="card-body">
-                            <h5 class="card-title">@item.AuctionName</h5>
-                            @* <p class="card-text">@item.Description</p> *@
-                            <p class="card-text">Description</p>
-                            <a href="@Url.Action("AuctionItemList", "Auction", new { auctionId = item.Id })" class="btn btn-primary">View Auction</a>
-                        </div>
-                        <div class="like-container">
-                            <span class="like-icon" data-auction-id="@item.Id">&#9829;</span> <!-- Serduszko -->
+                    <div class="card position-relative" data-status="@item.Status">
+                        <div class="card position-relative" data-status="Status">
+                            <img class="card-img-top" src="https://studentprawa.pl/media/k2/items/cache/af6038056f6231c664e3ef073c45af10_L.jpg" alt="Card image cap">
+                            <div class="card-body">
+                                <h5 class="card-title">@item.AuctionName</h5>
+                                <p class="card-text">@item.Description</p>
+                                <a href="@Url.Action("AuctionItemList", "Auction", new { auctionId = item.Id })" class="btn btn-primary">View Auction</a>
+                            </div>
+                            <div class="like-container">
+                                <span class="like-icon" data-auction-id="@item.Id">&#9829;</span> <!-- Serduszko -->
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -62,21 +61,18 @@
             statusBubble.classList.add('status-bubble');
 
             switch (statusValue) {
-                case 'Open':
+                case 'Active':
                     statusBubble.classList.add('status-open');
-                    statusBubble.textContent = 'Open';
+                    statusBubble.textContent = 'Active';
                     break;
-                case 'Closed':
+                case 'Inactive':
                     statusBubble.classList.add('status-closed');
-                    statusBubble.textContent = 'Closed';
+                    statusBubble.textContent = 'Inactive';
                     break;
                 case 'Pending':
                     statusBubble.classList.add('status-pending');
                     statusBubble.textContent = 'Pending';
                     break;
-                default:
-                    statusBubble.classList.add('status-default');
-                    statusBubble.textContent = 'Unknown';
             }
 
             card.appendChild(statusBubble);
@@ -118,6 +114,7 @@
             });
         });
     });
+
 </script>
 
 <style>

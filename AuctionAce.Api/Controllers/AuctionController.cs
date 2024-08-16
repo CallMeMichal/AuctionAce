@@ -4,6 +4,7 @@ using AuctionAce.Api.Models.DTO.Auctions.Response;
 using AuctionAce.Api.Models.ViewModels.Auctions;
 using AuctionAce.Application.Middleware;
 using AuctionAce.Application.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AuctionAce.Api.Controllers
@@ -33,12 +34,12 @@ namespace AuctionAce.Api.Controllers
 
         [HttpGet]
         [JwtAuthentication("1", "2")]
-        public async Task<IActionResult> AddAuction()
+        public IActionResult AddAuction()
         {
             AuctionViewModel model = new AuctionViewModel();
             var userId = SessionHelper.GetUserIdFromSession(HttpContext);
-            model.User = await _loginService.UserLogin(userId);
-            var auctions = await _auctionService.GetAuctionsByIdUserAsync(userId);
+            model.User = _loginService.UserLogin(userId).Result;
+            var auctions = _auctionService.GetAuctionsByIdUserAsync(userId).Result;
             model.Auctions = auctions;
 
             return View(model);
@@ -46,49 +47,44 @@ namespace AuctionAce.Api.Controllers
 
         [JwtAuthentication("1", "2")]
         [HttpPost]
-        public async Task<AuctionResponse> AddAuction(AddAuctionRequest request)
+        public AuctionResponse AddAuction(AddAuctionRequest request)
         {
             AuctionResponse response = new AuctionResponse();
             var userId = SessionHelper.GetUserIdFromSession(HttpContext);
-            response.Success = await _auctionService.AddAuctionAsync(request.AuctionName, request.Description, request.StartDate, request.EndDate, userId, request.Items);
+            response.Success = _auctionService.AddAuctionAsync(request.AuctionName, request.Description, request.StartDate, request.EndDate, userId, request.Items).Result;
             return response;
         }
 
         [JwtAuthentication("1", "2")]
         [HttpGet]
-        public async Task<IActionResult> AllAuctionsById()
+        public IActionResult AllAuctionsById()
         {
             AuctionViewModel model = new AuctionViewModel();
             var userId = SessionHelper.GetUserIdFromSession(HttpContext);
-            model.Auctions = await _auctionService.GetAuctionsByIdUserAsync(userId);
-            model.User = await _loginService.UserLogin(userId);
+            model.Auctions = _auctionService.GetAuctionsByIdUserAsync(userId).Result;
+            model.User = _loginService.UserLogin(userId).Result;
 
             return View("AllAuctions", model);
         }
 
         [JwtAuthentication("1", "2")]
         [HttpGet]
-        public async Task<IActionResult> AllAuctions()
+        public IActionResult AllAuctions()
         {
             AuctionViewModel model = new AuctionViewModel();
-            var userId = SessionHelper.GetUserIdFromSession(HttpContext);
-            var auctions = await _auctionService.GetAuctionsAsync();
-
-            model.Auctions = auctions;
-            model.User = await _loginService.UserLogin(userId);
+            var auctions = _auctionService.GetAuctionsAsync().Result;
+            model.AuctionStatus = auctions;
 
             return View(model);
         }
 
         [JwtAuthentication("1", "2")]
         [HttpGet]
-        public async Task<IActionResult> AuctionItemList(int auctionId)
+        public IActionResult AuctionItemList(int auctionId)
         {
             AuctionViewModel model = new AuctionViewModel();
-            var userId = SessionHelper.GetUserIdFromSession(HttpContext);
-            var auction = await _auctionService.GetAuctionAsync(auctionId);
+            var auction = _auctionService.GetAuctionAsync(auctionId).Result;
             model.AuctionItems = auction;
-            model.User = await _loginService.UserLogin(userId);
             return View(model);
         }
     }

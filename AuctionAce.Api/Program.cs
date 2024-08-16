@@ -15,15 +15,17 @@ namespace AuctionAce.Api
             builder.Services.AddApplication();
             builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
             builder.Services.AddInfrastructure(builder.Configuration);
+            builder.Services.AddDistributedMemoryCache();
             AuthenticationService.Initialize(builder.Configuration);
             builder.Services.AddSession(options =>
             {
-                options.IdleTimeout = TimeSpan.FromSeconds(10);
+                options.IdleTimeout = TimeSpan.FromSeconds(10000000);
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
             });
 
             var app = builder.Build();
+            app.UseSession();
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {
@@ -39,7 +41,7 @@ namespace AuctionAce.Api
 
             app.UseRouting();
 
-            app.UseSession();
+            
 
             app.UseAuthorization();
             app.UseAuthentication();

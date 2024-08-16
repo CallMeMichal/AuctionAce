@@ -25,8 +25,6 @@ public partial class ApplicationDbContext : DbContext
 
     public virtual DbSet<Role> Roles { get; set; }
 
-    public virtual DbSet<Status> Statuses { get; set; }
-
     public virtual DbSet<User> Users { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -62,8 +60,8 @@ public partial class ApplicationDbContext : DbContext
                 .HasColumnName("end_date");
             entity.Property(e => e.IdCategory).HasColumnName("id_category");
             entity.Property(e => e.IdData).HasColumnName("id_data");
-            entity.Property(e => e.IdStatus).HasColumnName("id_status");
             entity.Property(e => e.IdUsers).HasColumnName("id_users");
+            entity.Property(e => e.ImagePath).HasColumnName("image_path");
             entity.Property(e => e.StartDate)
                 .HasColumnType("datetime")
                 .HasColumnName("start_date");
@@ -71,10 +69,6 @@ public partial class ApplicationDbContext : DbContext
             entity.HasOne(d => d.IdCategoryNavigation).WithMany(p => p.Auctions)
                 .HasForeignKey(d => d.IdCategory)
                 .HasConstraintName("FK_Auctions_Category");
-
-            entity.HasOne(d => d.IdStatusNavigation).WithMany(p => p.Auctions)
-                .HasForeignKey(d => d.IdStatus)
-                .HasConstraintName("FK_Auctions_Status");
 
             entity.HasOne(d => d.IdUsersNavigation).WithMany(p => p.Auctions)
                 .HasForeignKey(d => d.IdUsers)
@@ -100,11 +94,9 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.Description).HasColumnName("description");
             entity.Property(e => e.IdAuctions).HasColumnName("id_auctions");
             entity.Property(e => e.IdStatus).HasColumnName("id_status");
+            entity.Property(e => e.ImagePath).HasColumnName("image_path");
             entity.Property(e => e.Name).HasColumnName("name");
             entity.Property(e => e.NewUsed).HasColumnName("new_used");
-            entity.Property(e => e.Photo)
-                .HasMaxLength(50)
-                .HasColumnName("photo");
             entity.Property(e => e.StartingPrice)
                 .HasMaxLength(10)
                 .IsFixedLength()
@@ -130,17 +122,6 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.Name)
                 .HasMaxLength(50)
                 .HasColumnName("name");
-        });
-
-        modelBuilder.Entity<Status>(entity =>
-        {
-            entity.ToTable("Status");
-
-            entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.StatusName)
-                .HasMaxLength(10)
-                .IsFixedLength()
-                .HasColumnName("status_name");
         });
 
         modelBuilder.Entity<User>(entity =>
