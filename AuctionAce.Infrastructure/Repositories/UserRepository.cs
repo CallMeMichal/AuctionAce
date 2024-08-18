@@ -66,5 +66,13 @@ namespace AuctionAce.Infrastructure.Repositories
             }
             return false;
         }
+
+        public async Task<bool> CreateUser(User user)
+        {
+            user.IsLogined = true;
+            await _context.Users.AddAsync(user);
+            await _context.SaveChangesAsync();
+            return true;
+        }
     }
 }

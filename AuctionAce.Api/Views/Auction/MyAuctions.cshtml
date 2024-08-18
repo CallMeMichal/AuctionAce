@@ -7,13 +7,12 @@
 
 <div class="container-fluid">
     <div class="row">
-
-        @if (Model.Auctions != null)
+        @if (Model.AuctionStatus != null)
         {
-            foreach (var item in Model.Auctions)
+            foreach (var item in Model.AuctionStatus)
             {
-                <div class="col-md-3">
-                    <div class="card">
+                <div class="col-md-3 mb-4 card-wrapper" data-status="@item.Status">
+                    <div class="card position-relative">
                         <img class="card-img-top" src="https://studentprawa.pl/media/k2/items/cache/af6038056f6231c664e3ef073c45af10_L.jpg" alt="Card image cap">
                         <div class="card-body">
                             <h5 class="card-title">@item.AuctionName</h5>
@@ -21,12 +20,14 @@
                             <p class="card-text">End Date: <span id="end-date">@item.EndDate</span></p>
                             <p class="card-text">Registered Members: <span id="registered-members">[Registered Members Value]</span></p>
                             <p class="card-text">Items: <span id="items">[Items Value]</span></p>
-                            @* <a href="@Url.Action("AuctionItemList", "Auction", new { auctionId = item.Id })" class="btn btn-primary">View Auction</a> *@
+                            <a href="@Url.Action("AuctionItemList", "Auction", new { auctionId = item.Id })" class="btn btn-primary">View Auction</a>
+                        </div>
+                        <div class="status-bubble">
+                            <!-- Status będzie dodany dynamicznie -->
                         </div>
                     </div>
                 </div>
             }
         }
     </div>
-
 </div>

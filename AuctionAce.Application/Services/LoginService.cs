@@ -1,5 +1,6 @@
 ﻿using AuctionAce.Api;
 using AuctionAce.Infrastructure.Repositories;
+using Microsoft.AspNetCore.Identity.Data;
 
 namespace AuctionAce.Application.Services
 {
@@ -25,6 +26,17 @@ namespace AuctionAce.Application.Services
                 }
             }
             return user;
+        }
+
+        public async Task<bool> UserLogout(int idUser)
+        {
+            var logoutUser = await _userRepository.LogoutUserAsync(idUser);
+            if (logoutUser == true)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

@@ -11,13 +11,17 @@
     {
         Layout = "~/Views/Shared/_LayoutUnlogged.cshtml";
     }
-
 }
 
 <div class="container-fluid">
     <div class="row">
-        <div class="col-md-12 center" style="text-align:center">
-            <h1>Current promotions</h1>
+        <div class="col-md-12 mb-3">
+            <div class="btn-group" role="group">
+                <button id="show-active" class="btn btn-success">Show Active</button>
+                <button id="show-inactive" class="btn btn-danger">Show Inactive</button>
+                <button id="show-pending" class="btn btn-secondary">Show Pending</button>
+                <button id="show-all" class="btn btn-light">Show All</button>
+            </div>
         </div>
     </div>
 
@@ -26,57 +30,140 @@
         {
             foreach (var item in Model.AuctionStatus)
             {
-                <div class="col-md-3">
-                    <div class="card position-relative" data-status="@item.Status">
-                        <div class="card position-relative" data-status="Status">
-                            <img class="card-img-top" src="https://studentprawa.pl/media/k2/items/cache/af6038056f6231c664e3ef073c45af10_L.jpg" alt="Card image cap">
-                            <div class="card-body">
-                                <h5 class="card-title">@item.AuctionName</h5>
-                                <p class="card-text">@item.Description</p>
-                                <a href="@Url.Action("AuctionItemList", "Auction", new { auctionId = item.Id })" class="btn btn-primary">View Auction</a>
-                            </div>
-                            <div class="like-container">
-                                <span class="like-icon" data-auction-id="@item.Id">&#9829;</span> <!-- Serduszko -->
-                            </div>
+                <div class="col-md-3 mb-4 card-wrapper" data-status="@item.Status">
+                    <div class="card position-relative">
+                        <img class="card-img-top" src="https://studentprawa.pl/media/k2/items/cache/af6038056f6231c664e3ef073c45af10_L.jpg" alt="Card image cap">
+                        <div class="card-body">
+                            <h5 class="card-title">@item.AuctionName</h5>
+                            <p class="card-text">@item.Description</p>
+                            <a href="@Url.Action("AuctionItemList", "Auction", new { auctionId = item.Id })" class="btn btn-primary">View Auction</a>
+                        </div>
+                        <div class="like-container">
+                            <span class="like-icon" data-auction-id="@item.Id">&#9829;</span> <!-- Serduszko -->
+                        </div>
+                        <div class="status-bubble">
+                            @* Status will be added dynamically *@
                         </div>
                     </div>
                 </div>
             }
         }
     </div>
-    <div class="row" style="margin-top:20px">
-        <div class="d-grid gap-2 col-6 mx-auto">
-            <button onclick="window.location.href = '@Url.Action("AllAuctions","Home")'" type="button" class="btn btn-primary btn-lg" style="margin-right:0px">See more</button>
+
+    <div class="row mt-3">
+        <div class="col-md-12 text-center">
+            <button onclick="window.location.href = '@Url.Action("AllAuctions","Home")'" type="button" class="btn btn-primary btn-lg">See More</button>
         </div>
     </div>
 </div>
 
+<style>
+    .position-relative {
+        position: relative;
+    }
+
+    .card-wrapper {
+        display: block; /* Ensure all cards are visible by default */
+    }
+
+    .status-bubble {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        padding: 8px 12px;
+        border-radius: 12px;
+        color: white;
+        font-weight: bold;
+        text-align: center;
+        font-size: 0.9rem;
+        background: rgba(0, 0, 0, 0.7);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: background 0.3s ease;
+    }
+
+    .status-open {
+        background-color: #28a745; /* Green */
+    }
+
+    .status-closed {
+        background-color: #dc3545; /* Red */
+    }
+
+    .status-pending {
+        background-color: #6c757d; /* Gray */
+    }
+
+    .status-default {
+        background-color: #007bff; /* Blue */
+    }
+
+    .like-container {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+    }
+
+    .like-icon {
+        font-size: 24px;
+        cursor: pointer;
+        color: gray;
+        transition: color 0.3s ease;
+    }
+
+        .like-icon.liked {
+            color: red;
+        }
+
+    /* Styles for filter buttons */
+    .btn-group {
+        display: flex;
+        gap: 10px;
+        justify-content: center; /* Center buttons horizontally */
+    }
+
+    .btn {
+        border-radius: 0; /* Ensure buttons are square-edged */
+    }
+</style>
+
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        var cards = document.querySelectorAll('.card');
+        var cards = document.querySelectorAll('.card-wrapper');
+        var showActiveButton = document.getElementById('show-active');
+        var showInactiveButton = document.getElementById('show-inactive');
+        var showPendingButton = document.getElementById('show-pending');
+        var showAllButton = document.getElementById('show-all');
 
-        cards.forEach(function (card) {
-            var statusValue = card.getAttribute('data-status');
-            var statusBubble = document.createElement('div');
-            statusBubble.classList.add('status-bubble');
+        function filterCards(status) {
+            cards.forEach(function (cardWrapper) {
+                var cardStatus = cardWrapper.getAttribute('data-status');
 
-            switch (statusValue) {
-                case 'Active':
-                    statusBubble.classList.add('status-open');
-                    statusBubble.textContent = 'Active';
-                    break;
-                case 'Inactive':
-                    statusBubble.classList.add('status-closed');
-                    statusBubble.textContent = 'Inactive';
-                    break;
-                case 'Pending':
-                    statusBubble.classList.add('status-pending');
-                    statusBubble.textContent = 'Pending';
-                    break;
-            }
+                if (status === 'All' || cardStatus === status) {
+                    cardWrapper.style.display = 'block';
+                } else {
+                    cardWrapper.style.display = 'none';
+                }
+            });
+        }
 
-            card.appendChild(statusBubble);
+        showActiveButton.addEventListener('click', function () {
+            filterCards('Active');
         });
+
+        showInactiveButton.addEventListener('click', function () {
+            filterCards('Inactive');
+        });
+
+        showPendingButton.addEventListener('click', function () {
+            filterCards('Pending');
+        });
+
+        showAllButton.addEventListener('click', function () {
+            filterCards('All');
+        });
+
+        // Initial display setup
+        filterCards('All');
 
         // Event listener for like icons
         var likeIcons = document.querySelectorAll('.like-icon');
@@ -113,60 +200,27 @@
                     });
             });
         });
+
+        // Add status bubble to each card
+        var statusBubbles = document.querySelectorAll('.status-bubble');
+        cards.forEach(function (cardWrapper) {
+            var cardStatus = cardWrapper.getAttribute('data-status');
+            var statusBubble = cardWrapper.querySelector('.status-bubble');
+
+            switch (cardStatus) {
+                case 'Active':
+                    statusBubble.classList.add('status-open');
+                    statusBubble.textContent = 'Active';
+                    break;
+                case 'Inactive':
+                    statusBubble.classList.add('status-closed');
+                    statusBubble.textContent = 'Inactive';
+                    break;
+                case 'Pending':
+                    statusBubble.classList.add('status-pending');
+                    statusBubble.textContent = 'Pending';
+                    break;
+            }
+        });
     });
-
 </script>
-
-<style>
-    .position-relative {
-        position: relative;
-    }
-
-    .status-bubble {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        padding: 8px 12px;
-        border-radius: 12px;
-        color: white;
-        font-weight: bold;
-        text-align: center;
-        font-size: 0.9rem;
-        background: rgba(0, 0, 0, 0.7);
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        transition: background 0.3s ease;
-    }
-
-    .status-open {
-        background-color: #28a745; /* green */
-    }
-
-    .status-closed {
-        background-color: #dc3545; /* red */
-    }
-
-    .status-pending {
-        background-color: #6c757d; /* gray */
-    }
-
-    .status-default {
-        background-color: #007bff; /* blue */
-    }
-
-    .like-container {
-        position: absolute;
-        top: 10px;
-        left: 10px;
-    }
-
-    .like-icon {
-        font-size: 24px;
-        cursor: pointer;
-        color: gray;
-        transition: color 0.3s ease;
-    }
-
-        .like-icon.liked {
-            color: red;
-        }
-</style>

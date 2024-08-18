@@ -1,6 +1,4 @@
 ﻿$(document).ready(function () {
-
-
     $("a:contains('Register')").click(function () {
         $('#registerModal').modal('show');
     });
@@ -9,24 +7,23 @@
         event.preventDefault();
 
         var email = $("#registerEmail").val();
+        var name = $("#userName").val();
+        var surname = $("#userSurname").val();
         var password = $("#registerPassword").val();
-        var confirmPassword = $("#registerConfirmPassword").val();
-        var role = $("input[name='userRole']:checked").val();
+        var idRole = $("input[name='userRole']:checked").val();
 
         $.ajax({
             type: "POST",
             url: "/User/RegisterAction",
             data: {
+                name: name,
+                surname: surname,
                 email: email,
                 password: password,
-                confirmPassword: confirmPassword,
-                role: role
+                idRole: idRole
             },
 
-
-
             success: function (response) {
-                
                 console.log(response);
                 $('#registerModal').modal('hide');
                 if (role === 'auctioneer') {
@@ -38,10 +35,6 @@
             error: function (error) {
                 console.log(error);
             }
-
-
-
-
         });
     });
 });

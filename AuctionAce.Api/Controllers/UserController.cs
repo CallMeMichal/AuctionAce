@@ -1,5 +1,6 @@
 ﻿using AuctionAce.Api.Controllers.Helpers;
 using AuctionAce.Api.Models.DTO.Login;
+using AuctionAce.Api.Models.DTO.Register;
 using AuctionAce.Api.Models.ViewModels.Home;
 using AuctionAce.Application.Middleware;
 using AuctionAce.Application.Services;
@@ -12,11 +13,13 @@ namespace AuctionAce.Api.Controllers
     {
         private readonly UserService _userService;
         private readonly AuthenticationService _authenticationService;
+        private readonly LoginService _loginService;
 
-        public UserController(UserService userService, AuthenticationService authenticationService)
+        public UserController(UserService userService, AuthenticationService authenticationService, LoginService loginService)
         {
             _userService = userService;
             _authenticationService = authenticationService;
+            _loginService = loginService;
         }
 
         [AllowAnonymous]
@@ -53,9 +56,28 @@ namespace AuctionAce.Api.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-        public IActionResult RegisterAction(string email, string password, string confirmPassword, int role)
+        public IActionResult RegisterAction(UserRegisterRequest request)
         {
-            Console.WriteLine(email + ":" + password);
+            User user = new User()
+            {
+                Name = request.Name,
+                Surname = request.Surname,
+                Email = request.Email,
+                IdRoles = request.IdRoles,
+                Password = request.Password,
+            };
+
+            var result = _userService.UserRegister(user).Result;
+
+            if (result == true)
+            {
+                return Json(new { success = true, message = "User create successful" });
+            }
+            else
+            {
+                return Json(new { success = false, message = "User create unsuccessful" });
+            }
+
             return View();
         }
 
@@ -70,7 +92,7 @@ namespace AuctionAce.Api.Controllers
 
             var userId = SessionHelper.GetUserIdFromSession(HttpContext);
 
-            var logoutUser = _userService.UserLogout(userId).Result;
+            var logoutUser = _loginService.UserLogout(userId).Result;
 
             if (logoutUser == true)
             {

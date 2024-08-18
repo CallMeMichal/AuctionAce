@@ -47,12 +47,29 @@ namespace AuctionAce.Api.Controllers
 
         [JwtAuthentication("1", "2")]
         [HttpPost]
-        public AuctionResponse AddAuction(AddAuctionRequest request)
+        public IActionResult AddAuction([FromForm] AddAuctionRequest request)
         {
-            AuctionResponse response = new AuctionResponse();
             var userId = SessionHelper.GetUserIdFromSession(HttpContext);
-            response.Success = _auctionService.AddAuctionAsync(request.AuctionName, request.Description, request.StartDate, request.EndDate, userId, request.Items).Result;
-            return response;
+
+            var auction = _auctionService.AddAuctionAsync(
+            request.AuctionName,
+            request.Description,
+            request.StartDate,
+            request.EndDate,
+            userId
+            /*request.Items*/
+            /*request.AuctionImage,
+            request.ItemImages*/
+            ).Result;
+
+            if (auction == true)
+            {
+                return Json(new { success = true, message = "Auction succesfully added" });
+            }
+            else
+            {
+                return Json(new { success = false, message = "Auction unsuccesfully added" });
+            }
         }
 
         [JwtAuthentication("1", "2")]
@@ -61,9 +78,7 @@ namespace AuctionAce.Api.Controllers
         {
             AuctionViewModel model = new AuctionViewModel();
             var userId = SessionHelper.GetUserIdFromSession(HttpContext);
-            model.Auctions = _auctionService.GetAuctionsByIdUserAsync(userId).Result;
-            model.User = _loginService.UserLogin(userId).Result;
-
+            model.AuctionStatus = _auctionService.GetAuctionsAsync(userId).Result;
             return View("AllAuctions", model);
         }
 

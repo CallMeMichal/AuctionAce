@@ -16,13 +16,6 @@
     @if (Model.AuctionItems != null)
     {
         <div class="auction-container">
-            @*
-        <h3>@Model.Auction.AuctionName</h3>
-        <p>@Model.Auction.Description</p>
-        *@
-            @*
-        <p>Status: @auction.Status</p>
-        *@
             <table class="table table-bordered table-hover">
                 <thead class="thead-light">
                     <tr>
@@ -40,9 +33,6 @@
                         <tr>
                             <td>@i.Name</td>
                             <td>@i.Description</td>
-                            @*
-                    <td>@item.Category</td>
-                    *@
                             <td>@i.StartingPrice</td>
                             <td>@i.BuyNowPrice</td>
                             <td>

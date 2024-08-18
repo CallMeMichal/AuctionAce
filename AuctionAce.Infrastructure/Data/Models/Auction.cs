@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace AuctionAce.Api;
+﻿namespace AuctionAce.Api;
 
 public partial class Auction
 {

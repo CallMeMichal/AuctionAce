@@ -1,8 +1,5 @@
 ﻿using AuctionAce.Api;
 using AuctionAce.Infrastructure.Repositories;
-using Azure;
-using Azure.Core;
-using System.Globalization;
 
 namespace AuctionAce.Application.Services
 {
@@ -21,7 +18,7 @@ namespace AuctionAce.Application.Services
             return userLoginStatus;
         }
 
-        public async Task<bool> UserLogout(int idUser)
+        /*public async Task<bool> UserLogout(int idUser)
         {
             var logoutUser = await _userRepository.LogoutUserAsync(idUser);
             if (logoutUser == true)
@@ -30,6 +27,12 @@ namespace AuctionAce.Application.Services
             }
 
             return false;
+        }*/
+
+        public async Task<bool> UserRegister(User user)
+        {
+            var response = await _userRepository.CreateUser(user);
+            return response;
         }
     }
 }

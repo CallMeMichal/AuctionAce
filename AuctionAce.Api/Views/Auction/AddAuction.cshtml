@@ -1,238 +1,108 @@
-﻿@{
-    Layout = "~/Views/Shared/_LayoutLogged.cshtml";
-    string url = Url.Action("AllAuctionsById");
-}
+﻿        @{
+            Layout = "~/Views/Shared/_LayoutLogged.cshtml";
+            string url = Url.Action("AllAuctionsById");
+        }
 
-  
- <div class="container mt-5">
-        <h1 class="mb-4">Auction Form</h1>
-        <form id="auctionForm">
-            <div class="form-group">
-                <label for="auctionName">Auction Name</label>
-                <input type="text" class="form-control" id="auctionName" name="auctionName" required>
-            </div>
-            <div class="form-group">
-                <label for="description">Desciption</label>
-                <textarea class="form-control" id="description" name="description" rows="3"></textarea>
-            </div>
-            <div class="form-group">
-                <label for="startDate">Start Date</label>
-                <input type="datetime-local" class="form-control" id="startDate" name="startDate" required>
-            </div>
-            <div class="form-group">
-                <label for="endDate">End Date</label>
-                <input type="datetime-local" class="form-control" id="endDate" name="endDate" required>
-            </div>
-            <div class="form-group">
-                <label for="image">Photo</label>
-                <input type="file" class="form-control-file" id="image" name="image">
-            </div>
-            <!-- Tabela przedmiotów -->
-            <div id="itemList" name="itemList">
-                <h2>Lista Przedmiotów</h2>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Description</th>
-                            <th>Categoy</th>
-                            <th>Photo</th>
-                            <th>Start Price</th>
-                            <th>Buy Now Price</th>
-                            <th>New/Used</th>
-                        </tr>
-                    </thead>
-                    <tbody id="itemsTableBody">
-                        <!-- Tutaj będą dynamicznie dodawane wiersze -->
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="form-group">
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addItemModal">Dodaj Przedmiot</button>
-                <button type="button" class="btn btn-primary float-right" id="saveButton">Zapisz</button>
-            </div>
-
-        </form>
-    </div>
-
-    <div class="modal fade" id="addItemModal" tabindex="-1" role="dialog" aria-labelledby="addItemModalLabel"
-         aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="addItemModalLabel">Dodaj Przedmiot</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+        <div class="container mt-5">
+            <h1 class="mb-4">Auction Form</h1>
+            <form id="auctionForm">
+                <div class="form-group">
+                    <label for="auctionName">Auction Name</label>
+                    <input type="text" class="form-control" id="auctionName" name="auctionName" required>
                 </div>
-                <div class="modal-body">
-                    <form id="addItemForm">
-                        <div class="form-group">
-                            <label for="itemName">Name</label>
-                        <input type="text" class="form-control" id="itemName" name="Name" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="itemDescription">Item Description</label>
-                        <textarea class="form-control" id="itemDescription" name="Description" rows="3"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="itemCategory">Category</label>
-                        <input type="text" class="form-control" id="itemCategory" name="Category">
-                        </div>
-                        <div class="form-group">
-                            <label for="itemImage">Photo</label>
-                        <input type="file" class="form-control-file" id="itemImage" name="Photo">
-                        </div>
-                        <div class="form-group">
-                            <label for="startPrice">Start Price</label>
-                        <input type="number" class="form-control" id="startPrice" name="StartingPrice">
-                        </div>
-                        <div class="form-group">
-                            <label for="buyNowPrice">Buy Now Price</label>
-                        <input type="number" class="form-control" id="buyNowPrice" name="BuyNowPrice">
-                        </div>
-                        <div class="form-group">
-                            <label for="condition">State:</label><br>
-                        <input type="radio" id="newCondition" name="NewUsed" value="nowa">
-                            <label for="newCondition">New</label><br>
-                        <input type="radio" id="usedCondition" name="NewUsed" value="uzywana">
-                            <label for="usedCondition">Used</label><br>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Add Item</button>
-                    </form>
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="startDate">Start Date</label>
+                    <input type="datetime-local" class="form-control" id="startDate" name="startDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="endDate">End Date</label>
+                    <input type="datetime-local" class="form-control" id="endDate" name="endDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="image">Auction Photo</label>
+            <input type="file" class="form-control-file" id="image" name="image">
+                </div>
+
+                <!-- Tabela przedmiotów -->
+                <div id="itemList" name="itemList">
+                    <h2>Item List</h2>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th>Category</th>
+                                <th>Start Price</th>
+                                <th>Buy Now Price</th>
+                                <th>Condition</th>
+                                <th>Photo</th>
+                            </tr>
+                        </thead>
+                        <tbody id="itemsTableBody">
+                            <!-- Tutaj będą dynamicznie dodawane wiersze -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="form-group">
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addItemModal">Add item</button>
+                    <button type="button" class="btn btn-primary float-right" id="saveButton">Save</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Modal dodawania przedmiotu -->
+        <div class="modal fade" id="addItemModal" tabindex="-1" role="dialog" aria-labelledby="addItemModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addItemModalLabel">Add item</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="addItemForm">
+                            <div class="form-group">
+                                <label for="itemName">Name</label>
+                                <input type="text" class="form-control" id="itemName" name="Name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="itemDescription">Item Description</label>
+                                <textarea class="form-control" id="itemDescription" name="Description" rows="3"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="itemCategory">Category</label>
+                                <input type="text" class="form-control" id="itemCategory" name="Category">
+                            </div>
+                            <div class="form-group">
+                                <label for="itemImage">Item Photo</label>
+                                <input type="file" class="form-control-file" id="itemImage" name="itemImage" >
+                            </div>
+                            <div class="form-group">
+                                <label for="startPrice">Start Price</label>
+                                <input type="number" class="form-control" id="startPrice" name="StartingPrice">
+                            </div>
+                            <div class="form-group">
+                                <label for="buyNowPrice">Buy Now Price</label>
+                                <input type="number" class="form-control" id="buyNowPrice" name="BuyNowPrice">
+                            </div>
+                            <div class="form-group">
+                                <label for="condition">State:</label><br>
+                                <input type="radio" id="newCondition" name="condition" value="New">
+                                <label for="newCondition">New</label><br>
+                                <input type="radio" id="usedCondition" name="condition" value="Used">
+                                <label for="usedCondition">Used</label><br>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Save</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-
-<script>
-    $("#addItemForm").submit(function (event) {
-        event.preventDefault();
-        var itemName = $("#itemName").val();
-        var itemDescription = $("#itemDescription").val();
-        var itemCategory = $("#itemCategory").val();
-        var itemImage = $("#itemImage")[0].files[0];
-        var startPrice = $("#startPrice").val();
-        var buyNowPrice = $("#buyNowPrice").val();
-        var isNew = $("input[name='condition']:checked").val();
-        var tableRow = $("<tr>").append(
-            $("<td>").text(itemName),
-            $("<td>").text(itemDescription),
-            $("<td>").text(itemCategory),
-            $("<td>").append(itemImage ? $("<img>").attr("src", URL.createObjectURL(itemImage)).addClass("img-thumbnail") : ""),
-            $("<td>").text(startPrice),
-            $("<td>").text(buyNowPrice),
-            $("<td>").text(isNew)
-        );
-        $("#itemsTableBody").append(tableRow);
-
-        // Clear the form
-        $("#addItemForm")[0].reset();
-
-        // Hide the modal
-        $("#addItemModal").modal("hide");
-
-        Swal.fire({
-            icon: 'success',
-            title: 'Item added',
-            showConfirmButton: false,
-            timer: 1500
-        });
-    });
-
-    $(document).on('click', '.close', function () {
-        $(this).closest(".custom-modal").css('display', 'none');
-    });
-
-    $(document).on('click', '#closeCustomModal', function () {
-        $(this).closest(".custom-modal").css('display', 'none');
-    });
-
-
-    $("#saveButton").click(function () {
-
-        var itemCount = $("#itemsTableBody tr").length;
-
-        
-        if (itemCount === 0) {
-            Swal.fire({
-                icon: "error",
-                title: "Oops...",
-                text: "There are no items in the auction to save.",
-                
-            });
-            return; 
-        }
-
-
-
-        Swal.fire({
-            title: "Do you want to save auction?",
-            showDenyButton: true,
-            showCancelButton: false,
-            confirmButtonText: "Save",
-            denyButtonText: `Correct`
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // Zbierz dane z formularza
-                var formData = new FormData();
-                formData.append('auctionName', $('#auctionName').val());
-                formData.append('description', $('#description').val());
-                formData.append('startDate', $('#startDate').val());
-                formData.append('endDate', $('#endDate').val());
-
-                // Dodaj zdjęcie aukcji, jeśli istnieje
-                var auctionImage = $('#image')[0].files[0];
-                if (auctionImage) {
-                    formData.append('image', auctionImage);
-                }
-
-
-                $('#itemsTableBody tr').each(function (index, tr) {
-                    var itemData = {
-                        itemName: $(tr).find('td:eq(0)').text(),
-                        itemDescription: $(tr).find('td:eq(1)').text(),
-                        itemCategory: $(tr).find('td:eq(2)').text(),
-                        startPrice: $(tr).find('td:eq(4)').text(),
-                        buyNowPrice: $(tr).find('td:eq(5)').text(),
-                        condition: $(tr).find('td:eq(6)').text()
-                    };
-                    formData.append('Items[' + index + '].Name', itemData.itemName);
-                    formData.append('Items[' + index + '].Description', itemData.itemDescription);
-                    formData.append('Items[' + index + '].Category', itemData.itemCategory);
-                    formData.append('Items[' + index + '].StartingPrice', itemData.startPrice);
-                    formData.append('Items[' + index + '].BuyNowPrice', itemData.buyNowPrice);
-                    formData.append('Items[' + index + '].NewUsed', itemData.condition);
-                });
-
-
-                
-                $.ajax({
-                    type: "POST",
-                    url: "/Auction/AddAuction",
-                    data: formData,
-                    contentType: false,
-                    processData: false,
-                    success: function (response) {
-                        console.log(response)
-                        if (response.success) {
-                            Swal.fire("Saved!", "", "success").then(() => {
-                                window.location.href = "/Auction/AllAuctionsById"; // Przekierowanie do widoku MyAuctions
-                            });
-                        } else {
-                            Swal.fire("Error, Something went wrong", "", "error");
-                        }
-                    }
-                });
-            } else if (result.isDenied) {
-                Swal.fire("Changes were not saved", "", "info");
-            }
-        });
-    });
-</script>
-
-
-
-                        
+        <script  src="~/js/AddAuction.js"></script>
