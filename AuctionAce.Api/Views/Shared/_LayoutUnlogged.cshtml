@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="~/AuctionAce.Api.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/IndexStyle.css" asp-append-version="true" />
     
-    
+
     
     
 
@@ -27,6 +27,8 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+    <script src="~/js/Register.js"></script>
 
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 
@@ -87,11 +89,11 @@
                         <div class="mb-3">
                             <label for="loginEmail" class="form-label">Email address</label>
                             <input type="email" class="form-control" id="loginEmail" aria-describedby="emailHelp">
-                            <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+                            <div id="emailHelp" class="form-text" required>We'll never share your email with anyone else.</div>
                         </div>
                         <div class="mb-3">
                             <label for="loginPassword" class="form-label">Password</label>
-                            <input type="password" class="form-control" id="loginPassword">
+                            <input type="password" class="form-control" id="loginPassword" required>
                         </div>
                         <button type="submit" class="btn btn-primary w-100">Submit</button>
                     </form>
@@ -118,26 +120,26 @@
                     <form id="registerForm" action="Home/RegisterAction" method="post">
                         <div class="mb-3">
                             <label for="userName" class="form-label">Name</label>
-                            <input class="form-control" id="userName">
+                            <input class="form-control" id="userName" required>
                         </div>
 
                         <div class="mb-3">
                             <label for="userSurname" class="form-label">Surname</label>
-                            <input class="form-control" id="userSurname">
+                            <input class="form-control" id="userSurname" required>
                         </div>
 
                         <div class="mb-3">
                             <label for="registerEmail" class="form-label">Email address</label>
                             <input type="email" class="form-control" id="registerEmail" aria-describedby="emailHelp">
-                            <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+                            <div id="emailHelp" class="form-text" required>We'll never share your email with anyone else.</div>
                         </div>
                         <div class="mb-3">
                             <label for="registerPassword" class="form-label">Password</label>
-                            <input type="password" class="form-control" id="registerPassword">
+                            <input type="password" class="form-control" id="registerPassword" required>
                         </div>
                         <div class="mb-3">
-                            <label for="registerConfirmPassword" class="form-label">Confirm Password</label>
-                            <input type="password" class="form-control" id="registerConfirmPassword">
+                            <label for="registerConfirmPassword" class="form-label" >Confirm Password</label>
+                            <input type="password" class="form-control" id="registerConfirmPassword" required>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Select User Type</label>
@@ -148,12 +150,11 @@
                                 </div>
                                 <div class="form-check form-check-inline w-50">
                                     <input class="form-check-input" type="radio" name="userRole" id="roleAuctioneer" value="2">
-                                    <label class="radio-label" for="roleAuctioneer">Auctioneer</label>
+                                    <label class="radio-label" for="roleAuctioneer">Auctioner</label>
                                 </div>
                             </div>
                         </div>
                         <button type="submit" class="btn btn-primary w-100">Submit</button>
-                        <script src="~/js/Register.js"></script>
                     </form>
                 </div>
             </div>

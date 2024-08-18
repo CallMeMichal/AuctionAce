@@ -67,18 +67,30 @@ namespace AuctionAce.Api.Controllers
                 Password = request.Password,
             };
 
+            if (request.Password != request.PasswordConfirmation)
+            {
+                return Json(new { success = false, message = "Password are different" });
+            }
+
             var result = _userService.UserRegister(user).Result;
 
             if (result == true)
             {
+                var jwtToken = _authenticationService.GenerateJWTAuthentication(user.Email, request.IdRoles.ToString());
+                Response.Cookies.Append("jwt", jwtToken, new CookieOptions
+                {
+                    HttpOnly = true,
+                    // Secure = true, // Odkomentuj, jeśli aplikacja działa przez HTTPS
+                });
+
+                HttpContext.Session.SetString("UserId", user.Id.ToString());
+                HttpContext.Session.SetString("UserEmail", user.Email);
                 return Json(new { success = true, message = "User create successful" });
             }
             else
             {
                 return Json(new { success = false, message = "User create unsuccessful" });
             }
-
-            return View();
         }
 
         [JwtAuthentication("1", "2")]

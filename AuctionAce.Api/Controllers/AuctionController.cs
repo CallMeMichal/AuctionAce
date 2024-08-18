@@ -4,6 +4,7 @@ using AuctionAce.Api.Models.DTO.Auctions.Response;
 using AuctionAce.Api.Models.ViewModels.Auctions;
 using AuctionAce.Application.Middleware;
 using AuctionAce.Application.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -91,7 +92,9 @@ namespace AuctionAce.Api.Controllers
             model.AuctionStatus = auctions;
 
             return View(model);
+
         }
+        
 
         [JwtAuthentication("1", "2")]
         [HttpGet]
