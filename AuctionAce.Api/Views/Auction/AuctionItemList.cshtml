@@ -35,12 +35,12 @@
                             <td>@i.Description</td>
                             <td>@i.StartingPrice</td>
                             <td>@i.BuyNowPrice</td>
-                            <td>
+                            @* <td>
                                 @if (!string.IsNullOrEmpty(i.ImagePath))
                                 {
                                     <img src="@i.ImagePath" alt="@i.Name" class="img-thumbnail" style="max-width: 100px;">
                                 }
-                            </td>
+                            </td> *@
                         </tr>
                     }
                 </tbody>

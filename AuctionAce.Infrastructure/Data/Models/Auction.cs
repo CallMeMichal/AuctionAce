@@ -1,4 +1,7 @@
-﻿namespace AuctionAce.Api;
+﻿using System;
+using System.Collections.Generic;
+
+namespace AuctionAce.Api;
 
 public partial class Auction
 {
@@ -18,9 +21,9 @@ public partial class Auction
 
     public string? Description { get; set; }
 
-    public string? ImagePath { get; set; }
-
     public virtual ICollection<AuctionItem> AuctionItems { get; set; } = new List<AuctionItem>();
+
+    public virtual ICollection<AuctionsItemsPhoto> AuctionsItemsPhotos { get; set; } = new List<AuctionsItemsPhoto>();
 
     public virtual Category? IdCategoryNavigation { get; set; }
 

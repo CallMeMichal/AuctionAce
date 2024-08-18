@@ -46,7 +46,7 @@ namespace AuctionAce.Application.Services
                 {
                     Id = auction.Id,
                     Description = auction.Description ?? string.Empty,
-                    ImagePath = auction.ImagePath ?? string.Empty,
+                    /*ImagePath = auction.ImagePath ?? string.Empty,*/
                     AuctionName = auction.AuctionName ?? string.Empty,
                     IdUsers = auction.IdUsers ?? 0,
                     StartDate = auction.StartDate ?? DateTime.MinValue,
@@ -58,7 +58,7 @@ namespace AuctionAce.Application.Services
                         Name = item.Name ?? string.Empty,
                         Description = item.Description ?? string.Empty,
                         Category = item.Category ?? string.Empty,
-                        ImagePath = item.ImagePath ?? string.Empty,
+                        /*ImagePath = item.ImagePath ?? string.Empty,*/
                         StartingPrice = item.StartingPrice ?? string.Empty,
                         BuyNowPrice = item.BuyNowPrice ?? string.Empty,
                         Amount = item.Amount ?? string.Empty,
@@ -103,7 +103,7 @@ namespace AuctionAce.Application.Services
                 {
                     Id = auction.Id,
                     Description = auction.Description ?? string.Empty,
-                    ImagePath = auction.ImagePath ?? string.Empty,
+                    /*ImagePath = auction.ImagePath ?? string.Empty,*/
                     AuctionName = auction.AuctionName ?? string.Empty,
                     IdUsers = auction.IdUsers ?? 0,
                     StartDate = auction.StartDate ?? DateTime.MinValue,
@@ -115,7 +115,7 @@ namespace AuctionAce.Application.Services
                         Name = item.Name ?? string.Empty,
                         Description = item.Description ?? string.Empty,
                         Category = item.Category ?? string.Empty,
-                        ImagePath = item.ImagePath ?? string.Empty,
+                        /*ImagePath = item.ImagePath ?? string.Empty,*/
                         StartingPrice = item.StartingPrice ?? string.Empty,
                         BuyNowPrice = item.BuyNowPrice ?? string.Empty,
                         Amount = item.Amount ?? string.Empty,
@@ -138,7 +138,7 @@ namespace AuctionAce.Application.Services
             return null;
         }
 
-        public async Task<bool> AddAuctionAsync(string auctionName, string description, DateTime startDate, DateTime endDate, int auctionerId /*List<AuctionItem> items, IFormFile auctionImage, List<IFormFile> itemImages*/)
+        public async Task<bool> AddAuctionAsync(string auctionName, string description, DateTime startDate, DateTime endDate, int auctionerId, List<AuctionItem> items, IFormFile auctionImage, List<IFormFile> itemImages)
         {
             Auction auction = new Auction();
             auction.AuctionName = auctionName;

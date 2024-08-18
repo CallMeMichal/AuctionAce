@@ -15,8 +15,6 @@ public partial class AuctionItem
 
     public string? Category { get; set; }
 
-    public string? ImagePath { get; set; }
-
     public string? StartingPrice { get; set; }
 
     public string? BuyNowPrice { get; set; }
@@ -26,6 +24,8 @@ public partial class AuctionItem
     public bool? NewUsed { get; set; }
 
     public int? IdStatus { get; set; }
+
+    public virtual ICollection<AuctionsItemsPhoto> AuctionsItemsPhotos { get; set; } = new List<AuctionsItemsPhoto>();
 
     public virtual Auction? IdAuctionsNavigation { get; set; }
 }

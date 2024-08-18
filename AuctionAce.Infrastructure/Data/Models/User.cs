@@ -1,4 +1,7 @@
-﻿namespace AuctionAce.Api;
+﻿using System;
+using System.Collections.Generic;
+
+namespace AuctionAce.Api;
 
 public partial class User
 {

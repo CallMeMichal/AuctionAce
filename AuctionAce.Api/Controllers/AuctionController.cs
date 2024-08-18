@@ -45,22 +45,22 @@ namespace AuctionAce.Api.Controllers
             return View(model);
         }
 
-        [JwtAuthentication("1", "2")]
+        /*[JwtAuthentication("1", "2")]
         [HttpPost]
         public IActionResult AddAuction([FromForm] AddAuctionRequest request)
         {
             var userId = SessionHelper.GetUserIdFromSession(HttpContext);
 
             var auction = _auctionService.AddAuctionAsync(
-            request.AuctionName,
-            request.Description,
-            request.StartDate,
-            request.EndDate,
-            userId
-            /*request.Items*/
-            /*request.AuctionImage,
-            request.ItemImages*/
-            ).Result;
+                request.AuctionName,
+                request.Description,
+                request.StartDate,
+                request.EndDate,
+                userId,
+                request.Items
+                request.AuctionImage,
+                request.ItemImages
+                ).Result;
 
             if (auction == true)
             {
@@ -70,7 +70,7 @@ namespace AuctionAce.Api.Controllers
             {
                 return Json(new { success = false, message = "Auction unsuccesfully added" });
             }
-        }
+        }*/
 
         [JwtAuthentication("1", "2")]
         [HttpGet]

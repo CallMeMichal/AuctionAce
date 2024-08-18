@@ -21,6 +21,8 @@ public partial class ApplicationDbContext : DbContext
 
     public virtual DbSet<AuctionItem> AuctionItems { get; set; }
 
+    public virtual DbSet<AuctionsItemsPhoto> AuctionsItemsPhotos { get; set; }
+
     public virtual DbSet<Category> Categories { get; set; }
 
     public virtual DbSet<Role> Roles { get; set; }
@@ -61,7 +63,6 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.IdCategory).HasColumnName("id_category");
             entity.Property(e => e.IdData).HasColumnName("id_data");
             entity.Property(e => e.IdUsers).HasColumnName("id_users");
-            entity.Property(e => e.ImagePath).HasColumnName("image_path");
             entity.Property(e => e.StartDate)
                 .HasColumnType("datetime")
                 .HasColumnName("start_date");
@@ -94,7 +95,6 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.Description).HasColumnName("description");
             entity.Property(e => e.IdAuctions).HasColumnName("id_auctions");
             entity.Property(e => e.IdStatus).HasColumnName("id_status");
-            entity.Property(e => e.ImagePath).HasColumnName("image_path");
             entity.Property(e => e.Name).HasColumnName("name");
             entity.Property(e => e.NewUsed).HasColumnName("new_used");
             entity.Property(e => e.StartingPrice)
@@ -105,6 +105,25 @@ public partial class ApplicationDbContext : DbContext
             entity.HasOne(d => d.IdAuctionsNavigation).WithMany(p => p.AuctionItems)
                 .HasForeignKey(d => d.IdAuctions)
                 .HasConstraintName("FK_Auction_Items_Auctions");
+        });
+
+        modelBuilder.Entity<AuctionsItemsPhoto>(entity =>
+        {
+            entity.ToTable("Auctions_Items_Photos");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.AuctionItemId).HasColumnName("auction_item_id");
+            entity.Property(e => e.AuctionsId).HasColumnName("auctions_id");
+            entity.Property(e => e.FileName).HasColumnName("file_name");
+            entity.Property(e => e.Path).HasColumnName("path");
+
+            entity.HasOne(d => d.AuctionItem).WithMany(p => p.AuctionsItemsPhotos)
+                .HasForeignKey(d => d.AuctionItemId)
+                .HasConstraintName("FK_Auctions_Items_Photos_Auction_Items");
+
+            entity.HasOne(d => d.Auctions).WithMany(p => p.AuctionsItemsPhotos)
+                .HasForeignKey(d => d.AuctionsId)
+                .HasConstraintName("FK_Auctions_Items_Photos_Auctions");
         });
 
         modelBuilder.Entity<Category>(entity =>
