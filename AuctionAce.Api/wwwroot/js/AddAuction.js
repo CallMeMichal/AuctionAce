@@ -13,11 +13,13 @@
         var startPrice = $("#startPrice").val();
         var buyNowPrice = $("#buyNowPrice").val();
         var isNew = $("input[name='condition']:checked").val();
-        var itemImage = $("#itemImage")[0].files[0];
+        var itemImage = $("#itemImage")[0].files;
 
         // Dodaj zdjęcie przedmiotu do tablicy
-        if (itemImage) {
-            itemImages.push(itemImage);
+        if (itemImage.length > 0) {
+            for (var i = 0; i < itemImage.length; i++) {
+                itemImages.push(itemImage[i]);
+            }
         }
 
         // Dodanie wiersza do tabeli
@@ -29,7 +31,7 @@
                 $("<td>").text(startPrice),
                 $("<td>").text(buyNowPrice),
                 $("<td>").text(isNew),
-                $("<td>").append(itemImage ? $("<img>").attr("src", URL.createObjectURL(itemImage)).addClass("img-thumbnail") : ""),
+                $("<td>").append(itemImage.length > 0 ? $("<img>").attr("src", URL.createObjectURL(itemImage[0])).addClass("img-thumbnail") : ""),
             );
 
         $("#itemsTableBody").append(tableRow);
@@ -83,15 +85,13 @@
                 formData.append('endDate', $('#endDate').val());
 
                 // Dodaj zdjęcie aukcji, jeśli istnieje
-                var auctionImage = $('#image')[0].files[0];
-                if (auctionImage) {
-                    formData.append('auctionImage', auctionImage);
-                }
+                var auctionImage = $('#image')[0].files;
 
-                // Dodaj zdjęcia przedmiotów do formData
-                itemImages.forEach(function (image, index) {
-                    formData.append('Items[' + index + '].ItemImages', image);
-                });
+                if (auctionImage) {
+                    for (var i = 0; i < auctionImage.length; i++) {
+                        formData.append('auctionImage', auctionImage[i]);
+                    }
+                }
 
                 // Dodaj przedmioty do formData
                 $('#itemsTableBody tr').each(function (index, tr) {
@@ -110,7 +110,9 @@
                     formData.append('Items[' + index + '].StartingPrice', itemData.startPrice);
                     formData.append('Items[' + index + '].BuyNowPrice', itemData.buyNowPrice);
                     formData.append('Items[' + index + '].NewUsed', itemData.condition); // Dodanie stanu przedmiotu
-                    formData.append('itemImages[' + index + ']', image);
+                    for (var i = 0; i < itemImages.length; i++) {
+                        formData.append('Items[' + index + '].ItemImages', itemImages[i]);
+                    }
                 });
 
                 // Prześlij dane na serwer
