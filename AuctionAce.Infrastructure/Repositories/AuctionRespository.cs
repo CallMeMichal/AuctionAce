@@ -37,7 +37,7 @@ namespace AuctionAce.Infrastructure.Repositories
             try
             {
                 await _context.Auctions.AddAsync(auction);
-                var a = await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
                 return auction.Id;
             }
             catch (Exception ex)
@@ -69,6 +69,17 @@ namespace AuctionAce.Infrastructure.Repositories
                 };
 
                 await _context.AuctionsItemsPhotos.AddAsync(newPhoto);
+            }
+
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> AddItemsToAuction(List<AuctionItem> items)
+        {
+            foreach (var item in items)
+            {
+                await _context.AuctionItems.AddAsync(item);
             }
 
             await _context.SaveChangesAsync();

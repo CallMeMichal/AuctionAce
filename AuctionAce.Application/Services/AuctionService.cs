@@ -156,10 +156,14 @@ namespace AuctionAce.Application.Services
                 }
             }
 
+            var itemResponse = await AddItemToAuction(itemsInfo, auctionId);
             var auctionImagePath = await _auctionRespository.AddAuctionItemPhoto(auctionImagePaths, auctionId);
             var itemImagePath = await _auctionRespository.AddAuctionItemPhoto(itemsImagePath, auctionId);
 
-            if (auctionImagePath == true && itemImagePath == true)
+
+
+
+            if (auctionImagePath == true && itemImagePath == true && itemResponse == true)
             {
                 return true;
             }
@@ -178,6 +182,27 @@ namespace AuctionAce.Application.Services
                 return auctions;
             }
             return null;
+        }
+
+        public async Task<bool> AddItemToAuction(List<AuctionItemsDomain> request, int idAuction)
+        {
+            var items = request.Select(r => new AuctionItem
+            {
+                Name = r.Name,
+                Description = r.Description,
+                StartingPrice = r.StartingPrice,
+                BuyNowPrice = r.BuyNowPrice,
+                NewUsed = r.NewUsed,
+                IdAuctions = idAuction
+            }).ToList();
+            var response = await _auctionRespository.AddItemsToAuction(items);
+
+            if (response)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }
