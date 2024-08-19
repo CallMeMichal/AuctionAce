@@ -1,8 +1,6 @@
 ﻿using AuctionAce.Api;
 using AuctionAce.Domain.Entities;
 using AuctionAce.Infrastructure.Repositories;
-using Microsoft.AspNetCore.Http;
-using System.Net.NetworkInformation;
 
 namespace AuctionAce.Application.Services
 {
@@ -138,18 +136,37 @@ namespace AuctionAce.Application.Services
             return null;
         }
 
-        public async Task<bool> AddAuctionAsync(string auctionName, string description, DateTime startDate, DateTime endDate, int auctionerId, List<AuctionItem> items, IFormFile auctionImage, List<IFormFile> itemImages)
+        public async Task<bool> AddAuctionAsync(string auctionName, string auctionDescription, DateTime startDate, DateTime endDate, int auctionerId, Dictionary<string, string> auctionImagePaths, List<AuctionItemsDomain> itemsInfo)
         {
-            Auction auction = new Auction();
-            auction.AuctionName = auctionName;
-            auction.Description = description;
-            auction.StartDate = startDate;
-            auction.EndDate = endDate;
-            auction.IdUsers = auctionerId;
-            /*auction.AuctionItems = items;*/
+            Auction auction = new Auction()
+            {
+                AuctionName = auctionName,
+                Description = auctionDescription,
+                StartDate = startDate,
+                EndDate = endDate,
+                IdUsers = auctionerId,
+            };
+            var auctionId = await _auctionRespository.AddAuctionAsync(auction);
+            var itemsImagePath = new Dictionary<string, string>();
+            foreach (var item in itemsInfo)
+            {
+                foreach (var imagePath in item.ItemImagePaths)
+                {
+                    itemsImagePath.Add(imagePath.Key, imagePath.Value);
+                }
+            }
 
-            var response = await _auctionRespository.AddAuctionAsync(auction);
-            return response;
+            var auctionImagePath = await _auctionRespository.AddAuctionItemPhoto(auctionImagePaths, auctionId);
+            var itemImagePath = await _auctionRespository.AddAuctionItemPhoto(itemsImagePath, auctionId);
+
+            if (auctionImagePath == true && itemImagePath == true)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public async Task<List<AuctionItem>> GetAuctionAsync(int auctionId)

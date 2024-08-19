@@ -1,8 +1,5 @@
 ﻿$(document).ready(function () {
-    // Tablica do przechowywania zdjęć przedmiotów
-    var itemImages = [];
-
-    // Dodawanie nowego przedmiotu do tabeli
+    var itemImagesMap = {};
     $("#addItemForm").submit(function (event) {
         event.preventDefault();
 
@@ -14,11 +11,12 @@
         var buyNowPrice = $("#buyNowPrice").val();
         var isNew = $("input[name='condition']:checked").val();
         var itemImage = $("#itemImage")[0].files;
+        var itemIndex = $("#itemsTableBody tr").length;
 
-        // Dodaj zdjęcie przedmiotu do tablicy
         if (itemImage.length > 0) {
+            itemImagesMap[itemIndex] = [];
             for (var i = 0; i < itemImage.length; i++) {
-                itemImages.push(itemImage[i]);
+                itemImagesMap[itemIndex].push(itemImage[i]);
             }
         }
 
@@ -58,6 +56,8 @@
 
     // Zapisz aukcję
     $("#saveButton").click(function () {
+        console.log($('#startDate').val());
+
         var itemCount = $("#itemsTableBody tr").length;
 
         if (itemCount === 0) {
@@ -87,31 +87,35 @@
                 // Dodaj zdjęcie aukcji, jeśli istnieje
                 var auctionImage = $('#image')[0].files;
 
-                if (auctionImage) {
+                if (auctionImage.length > 0) {
                     for (var i = 0; i < auctionImage.length; i++) {
-                        formData.append('auctionImage', auctionImage[i]);
+                        formData.append('auctionImages', auctionImage[i]);
                     }
                 }
 
                 // Dodaj przedmioty do formData
                 $('#itemsTableBody tr').each(function (index, tr) {
+
                     var itemData = {
                         itemName: $(tr).find('td:eq(0)').text(),
                         itemDescription: $(tr).find('td:eq(1)').text(),
                         itemCategory: $(tr).find('td:eq(2)').text(),
                         startPrice: $(tr).find('td:eq(4)').text(),
                         buyNowPrice: $(tr).find('td:eq(5)').text(),
-                        condition: $(tr).find('td:eq(6)').text() // Dodanie stanu przedmiotu
+                        condition: $(tr).find('td:eq(6)').text()
                     };
-
                     formData.append('Items[' + index + '].Name', itemData.itemName);
                     formData.append('Items[' + index + '].Description', itemData.itemDescription);
                     formData.append('Items[' + index + '].Category', itemData.itemCategory);
                     formData.append('Items[' + index + '].StartingPrice', itemData.startPrice);
                     formData.append('Items[' + index + '].BuyNowPrice', itemData.buyNowPrice);
-                    formData.append('Items[' + index + '].NewUsed', itemData.condition); // Dodanie stanu przedmiotu
-                    for (var i = 0; i < itemImages.length; i++) {
-                        formData.append('Items[' + index + '].ItemImages', itemImages[i]);
+                    formData.append('Items[' + index + '].NewUsed', itemData.condition);
+
+                    // Dodaj zdjęcia dla przedmiotu, jeśli są dostępne
+                    if (itemImagesMap[index]) {
+                        for (var i = 0; i < itemImagesMap[index].length; i++) {
+                            formData.append('Items[' + index + '].ItemImages', itemImagesMap[index][i]);
+                        }
                     }
                 });
 

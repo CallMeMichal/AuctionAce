@@ -41,7 +41,7 @@ namespace AuctionAce.Api
 
             app.UseRouting();
 
-            
+
 
             app.UseAuthorization();
             app.UseAuthentication();

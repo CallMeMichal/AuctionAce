@@ -1,11 +1,9 @@
 ﻿using AuctionAce.Api.Controllers.Helpers;
 using AuctionAce.Api.Models.DTO.Auctions.Request;
-using AuctionAce.Api.Models.DTO.Auctions.Response;
 using AuctionAce.Api.Models.ViewModels.Auctions;
 using AuctionAce.Application.Middleware;
 using AuctionAce.Application.Services;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+using AuctionAce.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AuctionAce.Api.Controllers
@@ -46,22 +44,40 @@ namespace AuctionAce.Api.Controllers
             return View(model);
         }
 
-        /*[JwtAuthentication("1", "2")]
+        [JwtAuthentication("1", "2")]
         [HttpPost]
-        public IActionResult AddAuction([FromForm] AddAuctionRequest request)
+        public IActionResult AddAuction(AddAuctionRequest request)
         {
             var userId = SessionHelper.GetUserIdFromSession(HttpContext);
+            var auctionImagesPaths = SessionHelper.SaveFilesAsync(request.AuctionImages, request.AuctionName, true).Result;
+            var itemsDomain = new List<AuctionItemsDomain>();
+
+            foreach (var item in request.Items)
+            {
+
+                var itemImagePaths = SessionHelper.SaveFilesAsync(item.ItemImages, request.AuctionName, false).Result;
+                var auctionItemDomain = new AuctionItemsDomain
+                {
+                    Name = item.Name,
+                    Description = item.Description,
+                    Category = item.Category,
+                    StartingPrice = item.StartingPrice,
+                    BuyNowPrice = item.BuyNowPrice,
+                    NewUsed = item.NewUsed,
+                    ItemImagePaths = itemImagePaths
+                };
+                itemsDomain.Add(auctionItemDomain);
+            }
 
             var auction = _auctionService.AddAuctionAsync(
-                request.AuctionName,
-                request.Description,
-                request.StartDate,
-                request.EndDate,
-                userId,
-                request.Items
-                request.AuctionImage,
-                request.ItemImages
-                ).Result;
+            request.AuctionName,
+            request.Description,
+            request.StartDate,
+            request.EndDate,
+            userId,
+            auctionImagesPaths,
+            itemsDomain
+            ).Result;
 
             if (auction == true)
             {
@@ -71,7 +87,7 @@ namespace AuctionAce.Api.Controllers
             {
                 return Json(new { success = false, message = "Auction unsuccesfully added" });
             }
-        }*/
+        }
 
         [JwtAuthentication("1", "2")]
         [HttpGet]
@@ -94,7 +110,7 @@ namespace AuctionAce.Api.Controllers
             return View(model);
 
         }
-        
+
 
         [JwtAuthentication("1", "2")]
         [HttpGet]

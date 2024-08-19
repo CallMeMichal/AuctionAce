@@ -1,11 +1,5 @@
 ﻿using AuctionAce.Api;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AuctionAce.Infrastructure.Repositories
 {
@@ -20,8 +14,8 @@ namespace AuctionAce.Infrastructure.Repositories
 
         public async Task<List<Auction>> GetAuctionsAsync()
         {
-           
-            var auctions = await _context.Auctions.ToListAsync();           
+
+            var auctions = await _context.Auctions.ToListAsync();
             return auctions;
         }
 
@@ -38,17 +32,17 @@ namespace AuctionAce.Infrastructure.Repositories
             return auctions;
         }
 
-        public async Task<bool> AddAuctionAsync(Auction auction)
+        public async Task<int> AddAuctionAsync(Auction auction)
         {
             try
             {
                 await _context.Auctions.AddAsync(auction);
-                await _context.SaveChangesAsync(); // Ensure SaveChangesAsync is awaited
-                return true;
+                var a = await _context.SaveChangesAsync();
+                return auction.Id;
             }
             catch (Exception ex)
             {
-                return false;
+                return 0;
             }
         }
 
@@ -57,6 +51,28 @@ namespace AuctionAce.Infrastructure.Repositories
             var auction = await _context.AuctionItems.Where(x => x.IdAuctions == auctionId).ToListAsync();
 
             return auction;
+        }
+
+        public async Task<bool> AddAuctionItemPhoto(Dictionary<string, string> file, int auctionId)
+        {
+            foreach (var item in file)
+            {
+                string filePath = item.Key;
+                string fileName = item.Value;
+
+                var newPhoto = new AuctionsItemsPhoto
+                {
+                    Path = filePath,
+                    FileName = fileName,
+                    AuctionsId = auctionId
+
+                };
+
+                await _context.AuctionsItemsPhotos.AddAsync(newPhoto);
+            }
+
+            await _context.SaveChangesAsync();
+            return true;
         }
     }
 }

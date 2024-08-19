@@ -1,11 +1,5 @@
-﻿using AuctionAce.Application.Interfaces;
-using AuctionAce.Application.Services;
+﻿using AuctionAce.Application.Services;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AuctionAce.Application
 {
