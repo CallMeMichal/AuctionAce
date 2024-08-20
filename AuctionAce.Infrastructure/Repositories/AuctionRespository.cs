@@ -53,27 +53,49 @@ namespace AuctionAce.Infrastructure.Repositories
             return auction;
         }
 
-        public async Task<bool> AddAuctionItemPhoto(Dictionary<string, string> file, int auctionId)
+        public async Task<bool> AddAuctionItemPhoto(Dictionary<string, string> file, int auctionId, int? auctionItemId)
         {
-            foreach (var item in file)
+            try
             {
-                string filePath = item.Key;
-                string fileName = item.Value;
-
-                var newPhoto = new AuctionsItemsPhoto
+                foreach (var item in file)
                 {
-                    Path = filePath,
-                    FileName = fileName,
-                    AuctionsId = auctionId
+                    string filePath = item.Key;
+                    string fileName = item.Value;
 
-                };
+                    var newPhoto = new AuctionsItemsPhoto
+                    {
+                        Path = filePath,
+                        FileName = fileName,
+                        AuctionsId = auctionId,
+                        AuctionItemId = auctionItemId
+                    };
+                    await _context.AuctionsItemsPhotos.AddAsync(newPhoto);
+                }
+                await _context.SaveChangesAsync();
 
-                await _context.AuctionsItemsPhotos.AddAsync(newPhoto);
+                return true;
             }
-
-            await _context.SaveChangesAsync();
-            return true;
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
+
+
+        public async Task<int> AddAuctionItemAsync(AuctionItem auctionItem)
+        {
+            try
+            {
+                await _context.AuctionItems.AddAsync(auctionItem);
+                await _context.SaveChangesAsync();
+                return auctionItem.Id;
+            }
+            catch (Exception ex)
+            {
+                return 0;
+            }
+        }
+
 
         public async Task<bool> AddItemsToAuction(List<AuctionItem> items)
         {
@@ -84,6 +106,18 @@ namespace AuctionAce.Infrastructure.Repositories
 
             await _context.SaveChangesAsync();
             return true;
+        }
+
+        public async Task<List<AuctionsItemsPhoto>> GetPhotosForAuction(int auctionId)
+        {
+            return await _context.AuctionsItemsPhotos.Where(x => x.AuctionsId == auctionId && x.AuctionItemId == null).ToListAsync();
+        }
+
+        public async Task<List<List<AuctionsItemsPhoto>>> GetPhotosForItem(int auctionId)
+        {
+            var photos = await _context.AuctionsItemsPhotos.Where(x => x.AuctionsId == auctionId && x.AuctionItemId != null).ToListAsync();
+            return photos.GroupBy(photo => photo.AuctionItemId).Select(group => group.ToList()).ToList();
+
         }
     }
 }

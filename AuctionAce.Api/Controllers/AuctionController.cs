@@ -49,13 +49,16 @@ namespace AuctionAce.Api.Controllers
         public IActionResult AddAuction(AddAuctionRequest request)
         {
             var userId = SessionHelper.GetUserIdFromSession(HttpContext);
+
             var auctionImagesPaths = SessionHelper.SaveFilesAsync(request.AuctionImages, request.AuctionName, true).Result;
+
             var itemsDomain = new List<AuctionItemsDomain>();
 
             foreach (var item in request.Items)
             {
-
                 var itemImagePaths = SessionHelper.SaveFilesAsync(item.ItemImages, request.AuctionName, false).Result;
+                item.ItemImagePaths = itemImagePaths;
+
                 var auctionItemDomain = new AuctionItemsDomain
                 {
                     Name = item.Name,
@@ -66,17 +69,18 @@ namespace AuctionAce.Api.Controllers
                     NewUsed = item.NewUsed,
                     ItemImagePaths = itemImagePaths
                 };
+
                 itemsDomain.Add(auctionItemDomain);
             }
 
             var auction = _auctionService.AddAuctionAsync(
-            request.AuctionName,
-            request.Description,
-            request.StartDate,
-            request.EndDate,
-            userId,
-            auctionImagesPaths,
-            itemsDomain
+                request.AuctionName,
+                request.Description,
+                request.StartDate,
+                request.EndDate,
+                userId,
+                auctionImagesPaths,
+                itemsDomain
             ).Result;
 
             if (auction == true)
@@ -85,7 +89,7 @@ namespace AuctionAce.Api.Controllers
             }
             else
             {
-                return Json(new { success = false, message = "Auction unsuccesfully added" });
+                return Json(new { success = false, message = "Auction unsuccessfully added" });
             }
         }
 
@@ -105,12 +109,30 @@ namespace AuctionAce.Api.Controllers
         {
             AuctionViewModel model = new AuctionViewModel();
             var auctions = _auctionService.GetAuctionsAsync().Result;
-            model.AuctionStatus = auctions;
+            var allAuctionsPhoto = new List<AuctionListDomain>();
+            foreach (var auction in auctions)
+            {
+                var photos = _auctionService.GetPhotos(auction.Id).Result;
+
+                var auctionStatus = new AuctionListDomain
+                {
+                    Id = auction.Id,
+                    Description = auction.Description,
+                    AuctionName = auction.AuctionName,
+                    IdUsers = auction.IdUsers,
+                    StartDate = auction.StartDate,
+                    EndDate = auction.EndDate,
+                    Status = auction.Status,
+                    AllAuctionsPhotos = photos,
+                    AuctionsListItem = auction.AuctionsListItem
+                };
+
+                allAuctionsPhoto.Add(auctionStatus);
+            }
+            model.AuctionStatus = allAuctionsPhoto;
 
             return View(model);
-
         }
-
 
         [JwtAuthentication("1", "2")]
         [HttpGet]
@@ -119,6 +141,7 @@ namespace AuctionAce.Api.Controllers
             AuctionViewModel model = new AuctionViewModel();
             var auction = _auctionService.GetAuctionAsync(auctionId).Result;
             model.AuctionItems = auction;
+            //model.SpecifiedAuctionItem = _auctionService.GetPhotos(auctionId).Result;
             return View(model);
         }
     }

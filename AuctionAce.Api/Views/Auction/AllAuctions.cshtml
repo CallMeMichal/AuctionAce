@@ -32,7 +32,15 @@
             {
                 <div class="col-md-3 mb-4 card-wrapper" data-status="@item.Status">
                     <div class="card position-relative">
-                        <img class="card-img-top" src="https://studentprawa.pl/media/k2/items/cache/af6038056f6231c664e3ef073c45af10_L.jpg" alt="Card image cap">
+                        @if (item.AllAuctionsPhotos != null && item.AllAuctionsPhotos.AuctionImages != null && item.AllAuctionsPhotos.AuctionImages.Count > 0)
+                        {
+                            var firstImage = item.AllAuctionsPhotos.AuctionImages.First();
+                            <img class="card-img-top" src="data:image/png;base64,@firstImage.AuctionImageBase64" alt="Card image cap">
+                        }
+                        else
+                        {
+                            <img class="card-img-top" src="path/to/default/image.png" alt="No image available">
+                        }
                         <div class="card-body">
                             <h5 class="card-title">@item.AuctionName</h5>
                             <p class="card-text">@item.Description</p>

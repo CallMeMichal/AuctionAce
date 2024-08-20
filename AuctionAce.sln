@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuctionAce.Domain", "Auctio
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuctionAce.Infrastructure", "AuctionAce.Infrastructure\AuctionAce.Infrastructure.csproj", "{C220BD94-D7BA-4550-AB2E-DC43D78F31FE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuctionAce.Api", "AuctionAce.Api\AuctionAce.Api.csproj", "{681A549B-24DA-409F-AC89-67AC26014D49}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuctionAce.Api", "AuctionAce.Api\AuctionAce.Api.csproj", "{681A549B-24DA-409F-AC89-67AC26014D49}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

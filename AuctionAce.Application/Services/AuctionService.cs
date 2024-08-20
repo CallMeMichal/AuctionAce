@@ -44,7 +44,6 @@ namespace AuctionAce.Application.Services
                 {
                     Id = auction.Id,
                     Description = auction.Description ?? string.Empty,
-                    /*ImagePath = auction.ImagePath ?? string.Empty,*/
                     AuctionName = auction.AuctionName ?? string.Empty,
                     IdUsers = auction.IdUsers ?? 0,
                     StartDate = auction.StartDate ?? DateTime.MinValue,
@@ -56,7 +55,6 @@ namespace AuctionAce.Application.Services
                         Name = item.Name ?? string.Empty,
                         Description = item.Description ?? string.Empty,
                         Category = item.Category ?? string.Empty,
-                        /*ImagePath = item.ImagePath ?? string.Empty,*/
                         StartingPrice = item.StartingPrice ?? string.Empty,
                         BuyNowPrice = item.BuyNowPrice ?? string.Empty,
                         Amount = item.Amount ?? string.Empty,
@@ -101,7 +99,6 @@ namespace AuctionAce.Application.Services
                 {
                     Id = auction.Id,
                     Description = auction.Description ?? string.Empty,
-                    /*ImagePath = auction.ImagePath ?? string.Empty,*/
                     AuctionName = auction.AuctionName ?? string.Empty,
                     IdUsers = auction.IdUsers ?? 0,
                     StartDate = auction.StartDate ?? DateTime.MinValue,
@@ -113,7 +110,6 @@ namespace AuctionAce.Application.Services
                         Name = item.Name ?? string.Empty,
                         Description = item.Description ?? string.Empty,
                         Category = item.Category ?? string.Empty,
-                        /*ImagePath = item.ImagePath ?? string.Empty,*/
                         StartingPrice = item.StartingPrice ?? string.Empty,
                         BuyNowPrice = item.BuyNowPrice ?? string.Empty,
                         Amount = item.Amount ?? string.Empty,
@@ -138,6 +134,7 @@ namespace AuctionAce.Application.Services
 
         public async Task<bool> AddAuctionAsync(string auctionName, string auctionDescription, DateTime startDate, DateTime endDate, int auctionerId, Dictionary<string, string> auctionImagePaths, List<AuctionItemsDomain> itemsInfo)
         {
+            // Tworzenie rekordu dla aukcji
             Auction auction = new Auction()
             {
                 AuctionName = auctionName,
@@ -146,31 +143,34 @@ namespace AuctionAce.Application.Services
                 EndDate = endDate,
                 IdUsers = auctionerId,
             };
+
+            // Zapis aukcji i uzyskanie jej ID
             var auctionId = await _auctionRespository.AddAuctionAsync(auction);
-            var itemsImagePath = new Dictionary<string, string>();
+
+            // Dodanie zdjęć do aukcji
+            var auctionImageResult = await _auctionRespository.AddAuctionItemPhoto(auctionImagePaths, auctionId, null);
+
+            // Przetwarzanie zdjęć dla poszczególnych przedmiotów
             foreach (var item in itemsInfo)
             {
-                foreach (var imagePath in item.ItemImagePaths)
+                var auctionItem = new AuctionItem
                 {
-                    itemsImagePath.Add(imagePath.Key, imagePath.Value);
-                }
+                    Name = item.Name,
+                    Description = item.Description,
+                    StartingPrice = item.StartingPrice,
+                    BuyNowPrice = item.BuyNowPrice,
+                    NewUsed = item.NewUsed,
+                    IdAuctions = auctionId
+                };
+
+                // Zapis przedmiotu i uzyskanie jego ID
+                var auctionItemId = await _auctionRespository.AddAuctionItemAsync(auctionItem);
+
+                // Dodanie zdjęć do przedmiotu
+                var itemImageResult = await _auctionRespository.AddAuctionItemPhoto(item.ItemImagePaths, auctionId, auctionItemId);
             }
 
-            var itemResponse = await AddItemToAuction(itemsInfo, auctionId);
-            var auctionImagePath = await _auctionRespository.AddAuctionItemPhoto(auctionImagePaths, auctionId);
-            var itemImagePath = await _auctionRespository.AddAuctionItemPhoto(itemsImagePath, auctionId);
-
-
-
-
-            if (auctionImagePath == true && itemImagePath == true && itemResponse == true)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return auctionImageResult;
         }
 
         public async Task<List<AuctionItem>> GetAuctionAsync(int auctionId)
@@ -203,6 +203,15 @@ namespace AuctionAce.Application.Services
             }
 
             return false;
+        }
+
+        public async Task<PhotosAuctionItemDomain> GetPhotos(int auctionId)
+        {
+            var auctionPhoto = await _auctionRespository.GetPhotosForAuction(auctionId);
+            var itemPhoto = await _auctionRespository.GetPhotosForItem(auctionId);
+
+            var photosDomain = Helpers.Helpers.ProcessPhotos(auctionPhoto, itemPhoto);
+            return photosDomain;
         }
     }
 }

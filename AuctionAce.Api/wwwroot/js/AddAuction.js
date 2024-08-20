@@ -10,6 +10,7 @@
         var startPrice = $("#startPrice").val();
         var buyNowPrice = $("#buyNowPrice").val();
         var isNew = $("input[name='condition']:checked").val();
+        console.log(isNew);
         var itemImage = $("#itemImage")[0].files;
         var itemIndex = $("#itemsTableBody tr").length;
 
@@ -95,14 +96,13 @@
 
                 // Dodaj przedmioty do formData
                 $('#itemsTableBody tr').each(function (index, tr) {
-
                     var itemData = {
-                        itemName: $(tr).find('td:eq(0)').text(),
-                        itemDescription: $(tr).find('td:eq(1)').text(),
-                        itemCategory: $(tr).find('td:eq(2)').text(),
-                        startPrice: $(tr).find('td:eq(4)').text(),
-                        buyNowPrice: $(tr).find('td:eq(5)').text(),
-                        condition: $(tr).find('td:eq(6)').text()
+                        itemName: $(tr).find('td:eq(0)').text(),//
+                        itemDescription: $(tr).find('td:eq(1)').text(),//
+                        itemCategory: $(tr).find('td:eq(2)').text(),//
+                        startPrice: $(tr).find('td:eq(3)').text(),// buy now
+                        buyNowPrice: $(tr).find('td:eq(4)').text(),//new
+                        condition: $(tr).find('td:eq(5)').text() // null
                     };
                     formData.append('Items[' + index + '].Name', itemData.itemName);
                     formData.append('Items[' + index + '].Description', itemData.itemDescription);
