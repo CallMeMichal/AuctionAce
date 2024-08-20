@@ -99,7 +99,29 @@ namespace AuctionAce.Api.Controllers
         {
             AuctionViewModel model = new AuctionViewModel();
             var userId = SessionHelper.GetUserIdFromSession(HttpContext);
-            model.AuctionStatus = _auctionService.GetAuctionsAsync(userId).Result;
+            var auctions = _auctionService.GetAuctionsAsync(userId).Result;
+            var allAuctionsPhoto = new List<AuctionListDomain>();
+            foreach (var auction in auctions)
+            {
+                var photos = _auctionService.GetPhotos(auction.Id).Result;
+
+                var auctionStatus = new AuctionListDomain
+                {
+                    Id = auction.Id,
+                    Description = auction.Description,
+                    AuctionName = auction.AuctionName,
+                    IdUsers = auction.IdUsers,
+                    StartDate = auction.StartDate,
+                    EndDate = auction.EndDate,
+                    Status = auction.Status,
+                    AllAuctionsPhotos = photos,
+                    AuctionsListItem = auction.AuctionsListItem
+                };
+
+                allAuctionsPhoto.Add(auctionStatus);
+            }
+
+            model.AuctionStatus = allAuctionsPhoto;
             return View("AllAuctions", model);
         }
 

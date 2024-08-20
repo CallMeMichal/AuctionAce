@@ -1,6 +1,5 @@
 using AuctionAce.Api.Models;
 using AuctionAce.Api.Models.ViewModels.Home;
-using AuctionAce.Application.Middleware;
 using AuctionAce.Application.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
