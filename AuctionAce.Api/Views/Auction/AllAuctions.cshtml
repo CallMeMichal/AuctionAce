@@ -16,7 +16,7 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-12 mb-3">
-            <div class="btn-group" role="group">
+            <div class="btn-group" role="group" id="button-group">
                 <button id="show-active" class="btn btn-success">Show Active</button>
                 <button id="show-inactive" class="btn btn-danger">Show Inactive</button>
                 <button id="show-pending" class="btn btn-secondary">Show Pending</button>
@@ -31,11 +31,11 @@
             foreach (var item in Model.AuctionStatus)
             {
                 <div class="col-md-3 mb-4 card-wrapper" data-status="@item.Status">
-                    <div class="card position-relative">
+                    <div class="card position-relative custom-card-width">
                         @if (item.AllAuctionsPhotos != null && item.AllAuctionsPhotos.AuctionImages != null && item.AllAuctionsPhotos.AuctionImages.Count > 0)
                         {
                             var firstImage = item.AllAuctionsPhotos.AuctionImages.First();
-                            <img class="card-img-top" src="data:image/png;base64,@firstImage.AuctionImageBase64" alt="Card image cap">
+                            <img class="card-img-top img-thumbnail fixed-size" src="data:image/png;base64,@firstImage.AuctionImageBase64" alt="Card image cap" data-bs-toggle="modal" data-bs-target="#carouselModal-@item.Id">
                         }
                         else
                         {
@@ -53,19 +53,48 @@
                             @* Status will be added dynamically *@
                         </div>
                     </div>
+
+                    <!-- Modal z carousel -->
+                    <div class="modal fade" id="carouselModal-@item.Id" tabindex="-1" aria-labelledby="carouselModalLabel-@item.Id" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-body">
+                                    <div id="carousel-@item.Id" class="carousel slide" data-bs-ride="carousel">
+                                        <div class="carousel-inner">
+                                            @for (int i = 0; i < item.AllAuctionsPhotos.AuctionImages.Count; i++)
+                                            {
+                                                var image = item.AllAuctionsPhotos.AuctionImages[i];
+                                                <div class="carousel-item @(i == 0 ? "active" : "")">
+                                                    <img class="d-block w-100" src="data:image/png;base64,@image.AuctionImageBase64" alt="Image @i">
+                                                </div>
+                                            }
+                                        </div>
+                                        <a class="carousel-control-prev" href="#carousel-@item.Id" role="button" data-bs-slide="prev">
+                                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                            <span class="visually-hidden">Previous</span>
+                                        </a>
+                                        <a class="carousel-control-next" href="#carousel-@item.Id" role="button" data-bs-slide="next">
+                                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                            <span class="visually-hidden">Next</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             }
         }
     </div>
-
-    <div class="row mt-3">
-        <div class="col-md-12 text-center">
-            <button onclick="window.location.href = '@Url.Action("AllAuctions","Home")'" type="button" class="btn btn-primary btn-lg">See More</button>
-        </div>
-    </div>
 </div>
 
 <style>
+
+    .fixed-size {
+        height: 200px;
+        object-fit: cover;
+    }
+
     .position-relative {
         position: relative;
     }

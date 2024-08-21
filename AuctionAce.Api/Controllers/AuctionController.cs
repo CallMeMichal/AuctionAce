@@ -162,8 +162,9 @@ namespace AuctionAce.Api.Controllers
         {
             AuctionViewModel model = new AuctionViewModel();
             var auction = _auctionService.GetAuctionAsync(auctionId).Result;
+            var photos = _auctionService.GetPhotos(auctionId).Result;
+            model.SingleItemImages = photos;
             model.AuctionItems = auction;
-            //model.SpecifiedAuctionItem = _auctionService.GetPhotos(auctionId).Result;
             return View(model);
         }
     }
