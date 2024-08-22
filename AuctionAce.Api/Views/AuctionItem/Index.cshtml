@@ -3,7 +3,7 @@
 @{
     Layout = "~/Views/Shared/_LayoutLogged.cshtml";
     string userEmail = Context.Session.GetString("UserEmail");
-    //const userEmail = $('#userEmail').val();
+
 }
 
 <input type="hidden" id="userEmail" value="@userEmail" />
@@ -33,8 +33,9 @@
             })
             .catch(err => console.error("Error establishing connection: ", err.toString()));
 
-        connection.on("ReceiveMessage", function (userEmail, message) {
+        connection.on("ReceiveMessage", function (message) {
             var messageElement = document.createElement("div");
+            const userEmail = $('#userEmail').val();
             messageElement.className = "message";
             messageElement.textContent = `${userEmail}: ${message}`;
             document.getElementById("chatBox").appendChild(messageElement);
