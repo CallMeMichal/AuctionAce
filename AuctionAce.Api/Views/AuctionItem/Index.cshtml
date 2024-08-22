@@ -6,7 +6,6 @@
 
 }
 
-<input type="hidden" id="userEmail" value="@userEmail" />
 
 <div class="container-fluid chat-container">
     <div class="chat-box" id="chatBox">
@@ -33,9 +32,9 @@
             })
             .catch(err => console.error("Error establishing connection: ", err.toString()));
 
-        connection.on("ReceiveMessage", function (message) {
+        connection.on("ReceiveMessage", function (message,userEmail) {
             var messageElement = document.createElement("div");
-            const userEmail = $('#userEmail').val();
+            
             messageElement.className = "message";
             messageElement.textContent = `${userEmail}: ${message}`;
             document.getElementById("chatBox").appendChild(messageElement);
@@ -44,7 +43,8 @@
         $('#sendButton').click(function () {
             const message = $('#messageInput').val();
             if (message) {
-                connection.invoke("SendMessageToGroup", itemGuid, message)
+                const userEmail = '@userEmail';
+                connection.invoke("SendMessageToGroup", itemGuid, message,userEmail)
                     .catch(err => console.error("Error sending message: ", err.toString()));
                 $('#messageInput').val(''); // Wyczyść pole tekstowe po wysłaniu wiadomości
             }

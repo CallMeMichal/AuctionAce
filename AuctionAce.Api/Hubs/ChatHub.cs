@@ -10,9 +10,9 @@ namespace AuctionAce.Api.Hubs
 
         }
 
-        public async Task SendMessageToGroup(string groupName, string message)
+        public async Task SendMessageToGroup(string groupName, string message,string userEmail)
         {
-            await Clients.Group(groupName).SendAsync("ReceiveMessage", message);
+            await Clients.Group(groupName).SendAsync("ReceiveMessage", message,userEmail);
 
         }
 
