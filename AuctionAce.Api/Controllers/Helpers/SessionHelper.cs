@@ -11,6 +11,11 @@
             }
             throw new InvalidOperationException("UserId is not in the session or is not a valid integer.");
         }
+        public static string GetUserEmailFromSession(HttpContext httpContext)
+        {
+            var userEmailString = httpContext.Session.GetString("UserEmail");
+            return userEmailString;
+        }
 
         public static async Task<Dictionary<string, string>> SaveFilesAsync(List<IFormFile> files, string auctionName, bool isAuctionPhoto)
         {

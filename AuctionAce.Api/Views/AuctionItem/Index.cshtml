@@ -3,6 +3,7 @@
 @{
     Layout = "~/Views/Shared/_LayoutLogged.cshtml";
     string userEmail = Context.Session.GetString("UserEmail");
+    //const userEmail = $('#userEmail').val();
 }
 
 <input type="hidden" id="userEmail" value="@userEmail" />
@@ -23,32 +24,33 @@
             .withUrl("/chathub")
             .build();
 
-        const userEmail = $('#userEmail').val();
+        const itemGuid = '@Model.Guid';
 
-        connection.start().catch(err => console.error(err.toString()));
+        connection.start()
+            .then(() => {
+                connection.invoke("JoinGroup", itemGuid)
+                    .catch(err => console.error("Error joining group: ", err.toString()));
+            })
+            .catch(err => console.error("Error establishing connection: ", err.toString()));
 
-        connection.on("ReceiveMessage", function (user, message) {
+        connection.on("ReceiveMessage", function (userEmail, message) {
             var messageElement = document.createElement("div");
-            messageElement.className = "message"; // Możesz dodać klasę CSS, jeśli chcesz
-            messageElement.textContent = `${user}: ${message}`;
+            messageElement.className = "message";
+            messageElement.textContent = `${userEmail}: ${message}`;
             document.getElementById("chatBox").appendChild(messageElement);
         });
 
-
-
         $('#sendButton').click(function () {
-            const message = $('#messageInput').val(); // Pobierz wiadomość z pola tekstowego
-            const guid = '@Model.Guid';
+            const message = $('#messageInput').val();
             if (message) {
-                connection.invoke("SendMessage", userEmail, message)
-                    .catch(err => console.error(err.toString()));
+                connection.invoke("SendMessageToGroup", itemGuid, message)
+                    .catch(err => console.error("Error sending message: ", err.toString()));
                 $('#messageInput').val(''); // Wyczyść pole tekstowe po wysłaniu wiadomości
             }
         });
-
-
     });
 </script>
+
 
 
 <style>
@@ -76,10 +78,10 @@
         background-color: #fff;
     }
 
-    .chat-input input {
-        flex: 1;
-        margin-right: 10px;
-    }
+        .chat-input input {
+            flex: 1;
+            margin-right: 10px;
+        }
 
     .chat-box::-webkit-scrollbar {
         width: 8px;
@@ -90,7 +92,7 @@
         border-radius: 10px;
     }
 
-    .chat-box::-webkit-scrollbar-thumb:hover {
-        background-color: #555;
-    }
+        .chat-box::-webkit-scrollbar-thumb:hover {
+            background-color: #555;
+        }
 </style>
