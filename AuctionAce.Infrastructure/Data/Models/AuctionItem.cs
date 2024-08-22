@@ -22,6 +22,8 @@ public partial class AuctionItem
 
     public int? IdStatus { get; set; }
 
+    public string? Guid { get; set; }
+
     public virtual ICollection<AuctionsItemsPhoto> AuctionsItemsPhotos { get; set; } = new List<AuctionsItemsPhoto>();
 
     public virtual Auction? IdAuctionsNavigation { get; set; }

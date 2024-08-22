@@ -36,5 +36,10 @@ namespace AuctionAce.Application.Services.Helpers
             return Convert.ToBase64String(data);
             //return File.ReadAllBytes(path);
         }
+
+        public static string GetGuid()
+        {
+            return Guid.NewGuid().ToString();
+        }
     }
 }

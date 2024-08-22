@@ -1,3 +1,4 @@
+using AuctionAce.Api.Hubs;
 using AuctionAce.Application;
 using AuctionAce.Application.Services;
 using AuctionAce.Infrastructure;
@@ -13,6 +14,7 @@ namespace AuctionAce.Api
             // Add services to the container.
             builder.Services.AddControllersWithViews();
             builder.Services.AddApplication();
+            builder.Services.AddSignalR();
             builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
             builder.Services.AddInfrastructure(builder.Configuration);
             builder.Services.AddDistributedMemoryCache();
@@ -46,10 +48,12 @@ namespace AuctionAce.Api
             app.UseAuthorization();
             app.UseAuthentication();
 
+
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
 
+            app.MapHub<ChatHub>("/chathub");
             app.Run();
         }
     }

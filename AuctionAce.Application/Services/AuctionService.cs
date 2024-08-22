@@ -160,6 +160,7 @@ namespace AuctionAce.Application.Services
                     StartingPrice = item.StartingPrice,
                     BuyNowPrice = item.BuyNowPrice,
                     NewUsed = item.NewUsed,
+                    Guid = Helpers.Helpers.GetGuid(),
                     IdAuctions = auctionId
                 };
 
@@ -193,6 +194,7 @@ namespace AuctionAce.Application.Services
                 StartingPrice = r.StartingPrice,
                 BuyNowPrice = r.BuyNowPrice,
                 NewUsed = r.NewUsed,
+                Guid = Helpers.Helpers.GetGuid(),
                 IdAuctions = idAuction
             }).ToList();
             var response = await _auctionRespository.AddItemsToAuction(items);

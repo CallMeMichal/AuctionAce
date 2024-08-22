@@ -26,6 +26,7 @@
                         <th scope="col">Buy Now Price</th>
                         <th scope="col">Condition</th>
                         <th scope="col">Photo</th>
+                        <th scope="col">Join bidding</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -42,6 +43,9 @@
                                 <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#carouselModal-@i.Id" data-item-id="@i.Id">
                                     <i class="fas fa-images"></i>
                                 </button>
+                            </td>
+                            <td>
+                                <a href="@Url.Action("Index", "AuctionItem", new { itemId = i.Id,itemGuid =i.Guid})" class="btn btn-primary">Join</a>
                             </td>
                         </tr>
 

@@ -30,7 +30,7 @@
         {
             foreach (var item in Model.AuctionStatus)
             {
-                <div class="col-md-3 mb-4 card-wrapper" data-status="@item.Status" data-enddate="@item.EndDate.ToString("o")">
+                <div class="col-md-3 mb-4 card-wrapper" data-startdate="@item.StartDate.ToString("o")" data-status="@item.Status" data-enddate="@item.EndDate.ToString("o")">
                     <div class="card position-relative custom-card-width">
                         @if (item.AllAuctionsPhotos != null && item.AllAuctionsPhotos.AuctionImages != null && item.AllAuctionsPhotos.AuctionImages.Count > 0)
                         {
@@ -42,10 +42,25 @@
                             <img class="card-img-top" src="path/to/default/image.png" alt="No image available">
                         }
                         <div class="card-body">
-                            <h5 class="card-title">@item.AuctionName</h5>
-                            <p class="card-text">@item.Description</p>
+                            @if(item.AuctionName.Length >27){
+
+                                <h5 class="card-title">@item.AuctionName.Substring(0,24)...</h5>
+                            }
+                            else
+                            {
+                                <h5 class="card-title">@item.AuctionName</h5>
+                            }
+
+                            @if(item.Description.Length >48)
+                            {
+                                <p class="card-text">@item.Description.Substring(0, 45)...</p>
+                            }
+                            else
+                            {
+                               <p class="card-text">@item.Description</p>
+                            }
                             <p class="card-time" id="timer-@item.Id"></p>
-                            <a href="@Url.Action("AuctionItemList", "Auction", new { auctionId = item.Id })" class="btn btn-primary">View Auction</a>
+                            <a href="@Url.Action("AuctionItemList", "Auction", new { auctionId = item.Id })" class="btn btn-primary">View Auction Details</a>
                         </div>
                         <div class="like-container">
                             <span class="like-icon" data-auction-id="@item.Id">&#9829;</span> <!-- Serduszko -->
@@ -267,24 +282,58 @@
         });
 
         function updateTimer() {
-            cards.forEach(function (cardWrapper) {
-                var endDate = new Date(cardWrapper.getAttribute('data-enddate'));
-                var now = new Date();
-                var timeRemaining = endDate - now;
+    cards.forEach(function (cardWrapper) {
+        var endDate = new Date(cardWrapper.getAttribute('data-enddate'));
+        var startDate = new Date(cardWrapper.getAttribute('data-startdate'));
+        var now = new Date();
+        var timeToStart = startDate - now;
+        var timeRemaining = endDate - now;
 
-                if (timeRemaining > 0) {
-                    var days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
-                    var hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                    var minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
-                    var seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+        var statusBubble = cardWrapper.querySelector('.status-bubble');
 
-                    cardWrapper.querySelector('.card-time').textContent =
-                        `Time left: ${days}d ${hours}h ${minutes}m ${seconds}s`;
-                } else {
-                    cardWrapper.querySelector('.card-time').textContent = "Auction ended";
-                }
-            });
+        if (timeToStart > 0) {
+            // Aukcja jeszcze się nie rozpoczęła
+            var daysToStart = Math.floor(timeToStart / (1000 * 60 * 60 * 24));
+            var hoursToStart = Math.floor((timeToStart % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            var minutesToStart = Math.floor((timeToStart % (1000 * 60 * 60)) / (1000 * 60));
+            var secondsToStart = Math.floor((timeToStart % (1000 * 60)) / 1000);
+
+            cardWrapper.querySelector('.card-time').textContent =
+                `Auction starts in: ${daysToStart}d ${hoursToStart}h ${minutesToStart}m ${secondsToStart}s`;
+
+            // Zaktualizuj status na "Pending"
+            cardWrapper.setAttribute('data-status', 'Pending');
+            statusBubble.className = 'status-bubble status-pending';
+            statusBubble.textContent = 'Pending';
+
+        } else if (timeRemaining > 0) {
+            // Aukcja jest aktywna
+            var days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+            var hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            var minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+            var seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+
+            cardWrapper.querySelector('.card-time').textContent =
+                `Time left: ${days}d ${hours}h ${minutes}m ${seconds}s`;
+
+            // Zaktualizuj status na "Active"
+            cardWrapper.setAttribute('data-status', 'Active');
+            statusBubble.className = 'status-bubble status-open';
+            statusBubble.textContent = 'Active';
+
+        } else {
+            // Aukcja zakończona
+            cardWrapper.querySelector('.card-time').textContent = "Auction ended";
+
+            // Zaktualizuj status na "Inactive"
+            cardWrapper.setAttribute('data-status', 'Inactive');
+            statusBubble.className = 'status-bubble status-closed';
+            statusBubble.textContent = 'Inactive';
         }
-        setInterval(updateTimer, 1000);
+    });
+}
+
+setInterval(updateTimer, 1000);
+
     });
 </script>
