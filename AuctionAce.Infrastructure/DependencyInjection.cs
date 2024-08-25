@@ -1,4 +1,4 @@
-﻿using AuctionAce.Api;
+﻿using AuctionAce.Infrastructure.Data;
 using AuctionAce.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -16,6 +16,7 @@ namespace AuctionAce.Infrastructure
             b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
             services.AddScoped<UserRepository>();
             services.AddScoped<AuctionRespository>();
+            services.AddScoped<ChatHistoryRepostiory>();
 
             return services;
         }

@@ -1,6 +1,7 @@
-﻿using AuctionAce.Api;
+﻿using AuctionAce.Infrastructure.Data;
 using AuctionAce.Domain.Entities;
 using AuctionAce.Infrastructure.Repositories;
+using AuctionAce.Infrastructure;
 
 namespace AuctionAce.Application.Services
 {
@@ -58,7 +59,7 @@ namespace AuctionAce.Application.Services
                         StartingPrice = item.StartingPrice ?? string.Empty,
                         BuyNowPrice = item.BuyNowPrice ?? string.Empty,
                         Amount = item.Amount ?? string.Empty,
-                        NewUsed = item.NewUsed ?? false,
+                        NewUsed = item.NewUsed,
                     }).ToList()
                 });
             }
@@ -112,8 +113,8 @@ namespace AuctionAce.Application.Services
                         Category = item.Category ?? string.Empty,
                         StartingPrice = item.StartingPrice ?? string.Empty,
                         BuyNowPrice = item.BuyNowPrice ?? string.Empty,
-                        Amount = item.Amount ?? string.Empty,
-                        NewUsed = item.NewUsed ?? false,
+                        Amount = item.Amount,
+                        NewUsed = item.NewUsed ,
                     }).ToList()
                 });
             }

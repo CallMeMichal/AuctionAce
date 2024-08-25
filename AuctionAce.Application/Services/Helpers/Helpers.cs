@@ -1,11 +1,11 @@
-﻿using AuctionAce.Api;
+﻿using AuctionAce.Infrastructure.Data;
 using AuctionAce.Domain.Entities;
 
 namespace AuctionAce.Application.Services.Helpers
 {
     public static class Helpers
     {
-        public static PhotosAuctionItemDomain ProcessPhotos(List<AuctionsItemsPhoto> auctionPhoto, List<List<AuctionsItemsPhoto>> itemPhoto)
+        public static PhotosAuctionItemDomain ProcessPhotos(List<AuctionsItemsPhotos> auctionPhoto, List<List<AuctionsItemsPhotos>> itemPhoto)
         {
             var auctionImages = auctionPhoto.Select(photo => new AuctionImage
             {
@@ -30,7 +30,7 @@ namespace AuctionAce.Application.Services.Helpers
             };
         }
 
-        public static PhotosAuctionItemDomain ProcessPhotos(List<List<AuctionsItemsPhoto>> itemPhoto)
+        public static PhotosAuctionItemDomain ProcessPhotos(List<List<AuctionsItemsPhotos>> itemPhoto)
         {
             var itemImages = itemPhoto.
                 SelectMany(group => group)

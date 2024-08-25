@@ -7,7 +7,7 @@
         public string Category { get; set; }
         public string StartingPrice { get; set; }
         public string BuyNowPrice { get; set; }
-        public bool? NewUsed { get; set; }
+        public bool NewUsed { get; set; }
         public Dictionary<string, string> ItemImagePaths { get; set; }
     }
 

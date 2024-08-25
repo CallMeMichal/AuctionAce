@@ -1,7 +1,8 @@
-﻿using System;
+﻿using AuctionAce.Infrastructure.Data.Models;
+using System;
 using System.Collections.Generic;
 
-namespace AuctionAce.Api;
+namespace AuctionAce.Infrastructure.Data;
 
 public partial class User
 {
@@ -28,4 +29,6 @@ public partial class User
     public virtual Address? IdAddressNavigation { get; set; }
 
     public virtual Role? IdRolesNavigation { get; set; }
+    public virtual ICollection<ChatHistory> ChatHistories { get; set; }
+    public virtual ICollection<Leaderboards> Leaderboards { get; set; }
 }

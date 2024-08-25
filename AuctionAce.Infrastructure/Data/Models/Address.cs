@@ -1,7 +1,7 @@
-﻿using System;
+﻿using AuctionAce.Infrastructure.Data;
+using System;
 using System.Collections.Generic;
-
-namespace AuctionAce.Api;
+namespace AuctionAce.Infrastructure;
 
 public partial class Address
 {

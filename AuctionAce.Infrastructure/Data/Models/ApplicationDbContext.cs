@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using AuctionAce.Infrastructure.Data;
+using AuctionAce.Infrastructure.Data.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace AuctionAce.Api;
+namespace AuctionAce.Infrastructure.Data;
 
 public partial class ApplicationDbContext : DbContext
 {
@@ -14,16 +14,19 @@ public partial class ApplicationDbContext : DbContext
         : base(options)
     {
     }
-
     public virtual DbSet<Address> Addresses { get; set; }
 
     public virtual DbSet<Auction> Auctions { get; set; }
 
     public virtual DbSet<AuctionItem> AuctionItems { get; set; }
 
-    public virtual DbSet<AuctionsItemsPhoto> AuctionsItemsPhotos { get; set; }
+    public virtual DbSet<AuctionsItemsPhotos> AuctionsItemsPhotos { get; set; }
 
     public virtual DbSet<Category> Categories { get; set; }
+
+    public virtual DbSet<ChatHistory> ChatHistories { get; set; }
+
+    public virtual DbSet<Leaderboards> Leaderboards { get; set; }
 
     public virtual DbSet<Role> Roles { get; set; }
 
@@ -108,7 +111,7 @@ public partial class ApplicationDbContext : DbContext
                 .HasConstraintName("FK_Auction_Items_Auctions");
         });
 
-        modelBuilder.Entity<AuctionsItemsPhoto>(entity =>
+        modelBuilder.Entity<AuctionsItemsPhotos>(entity =>
         {
             entity.ToTable("Auctions_Items_Photos");
 
@@ -122,7 +125,7 @@ public partial class ApplicationDbContext : DbContext
                 .HasForeignKey(d => d.AuctionItemId)
                 .HasConstraintName("FK_Auctions_Items_Photos_Auction_Items");
 
-            entity.HasOne(d => d.Auctions).WithMany(p => p.AuctionsItemsPhotos)
+            entity.HasOne(d => d.Auctions).WithMany(p => p.AuctionsItemsPhotoss)
                 .HasForeignKey(d => d.AuctionsId)
                 .HasConstraintName("FK_Auctions_Items_Photos_Auctions");
         });
@@ -134,6 +137,43 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Descripton).HasColumnName("descripton");
             entity.Property(e => e.Name).HasColumnName("name");
+        });
+
+        modelBuilder.Entity<ChatHistory>(entity =>
+        {
+            entity.ToTable("Chat_History");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.AuctionItemId).HasColumnName("auction_item_id");
+            entity.Property(e => e.Date).HasColumnName("date");
+            entity.Property(e => e.Message).HasColumnName("message");
+            entity.Property(e => e.UserId).HasColumnName("user_id");
+
+            entity.HasOne(d => d.AuctionItem).WithMany(p => p.ChatHistories)
+                .HasForeignKey(d => d.AuctionItemId)
+                .HasConstraintName("FK_Chat_History_Auction_Items");
+
+            entity.HasOne(d => d.User).WithMany(p => p.ChatHistories)
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("FK_Chat_History_Users");
+        });
+
+        modelBuilder.Entity<Leaderboards>(entity =>
+        {
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.AuctionItemId).HasColumnName("auction_item_id");
+            entity.Property(e => e.Date).HasColumnName("date");
+            entity.Property(e => e.IdUser).HasColumnName("id_user");
+            entity.Property(e => e.IsFinal).HasColumnName("isFinal");
+            entity.Property(e => e.Price).HasColumnName("price");
+
+            entity.HasOne(d => d.AuctionItem).WithMany(p => p.Leaderboards)
+                .HasForeignKey(d => d.AuctionItemId)
+                .HasConstraintName("FK_Leaderboards_Auction_Items");
+
+            entity.HasOne(d => d.IdUserNavigation).WithMany(p => p.Leaderboards)
+                .HasForeignKey(d => d.IdUser)
+                .HasConstraintName("FK_Leaderboards_Users");
         });
 
         modelBuilder.Entity<Role>(entity =>

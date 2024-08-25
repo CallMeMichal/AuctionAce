@@ -1,5 +1,7 @@
 ﻿using AuctionAce.Api.Models.ViewModels.Base;
 using AuctionAce.Domain.Entities;
+using AuctionAce.Infrastructure;
+using AuctionAce.Infrastructure.Data;
 
 namespace AuctionAce.Api.Models.ViewModels.Auctions
 {

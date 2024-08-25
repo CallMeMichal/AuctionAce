@@ -1,4 +1,4 @@
-﻿using AuctionAce.Api;
+﻿using AuctionAce.Infrastructure.Data;
 using AuctionAce.Infrastructure.Repositories;
 
 namespace AuctionAce.Application.Services

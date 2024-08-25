@@ -1,9 +1,5 @@
-﻿using AuctionAce.Api;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using AuctionAce.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace AuctionAce.Infrastructure.Repositories
 {
@@ -16,8 +12,11 @@ namespace AuctionAce.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task SaveMessage()
+        public async Task<bool> SaveMessage()
         {
+            var z = await _context.ChatHistories.ToListAsync();
+            var yyy = "";
+            return true;
         }
     }
 }

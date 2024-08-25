@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace AuctionAce.Api;
+namespace AuctionAce.Infrastructure.Data;
 
-public partial class AuctionsItemsPhoto
+public partial class AuctionsItemsPhotos
 {
     public int Id { get; set; }
 

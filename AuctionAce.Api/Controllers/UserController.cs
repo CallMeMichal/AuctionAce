@@ -4,6 +4,7 @@ using AuctionAce.Api.Models.DTO.Register;
 using AuctionAce.Api.Models.ViewModels.Home;
 using AuctionAce.Application.Middleware;
 using AuctionAce.Application.Services;
+using AuctionAce.Infrastructure.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -33,7 +34,7 @@ namespace AuctionAce.Api.Controllers
             if (user != null)
             {
                 model.User = user;
-                model.User.Id = user.Id;
+                //model.User.Id = user.Id;
                 var role = user.IdRoles;
                 var jwtToken = _authenticationService.GenerateJWTAuthentication(user.Email, role.ToString());
 

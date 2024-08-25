@@ -1,4 +1,4 @@
-﻿using AuctionAce.Api;
+﻿using AuctionAce.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace AuctionAce.Infrastructure.Repositories
@@ -14,14 +14,12 @@ namespace AuctionAce.Infrastructure.Repositories
 
         public async Task<List<Auction>> GetAuctionsAsync()
         {
-
             var auctions = await _context.Auctions.ToListAsync();
             return auctions;
         }
 
         public async Task<List<AuctionItem>> GetAuctionsItemsAsync()
         {
-
             var auctions = await _context.AuctionItems.ToListAsync();
             return auctions;
         }
@@ -62,7 +60,7 @@ namespace AuctionAce.Infrastructure.Repositories
                     string filePath = item.Key;
                     string fileName = item.Value;
 
-                    var newPhoto = new AuctionsItemsPhoto
+                    var newPhoto = new AuctionsItemsPhotos
                     {
                         Path = filePath,
                         FileName = fileName,
@@ -81,7 +79,6 @@ namespace AuctionAce.Infrastructure.Repositories
             }
         }
 
-
         public async Task<int> AddAuctionItemAsync(AuctionItem auctionItem)
         {
             try
@@ -96,7 +93,6 @@ namespace AuctionAce.Infrastructure.Repositories
             }
         }
 
-
         public async Task<bool> AddItemsToAuction(List<AuctionItem> items)
         {
             foreach (var item in items)
@@ -108,19 +104,18 @@ namespace AuctionAce.Infrastructure.Repositories
             return true;
         }
 
-        public async Task<List<AuctionsItemsPhoto>> GetPhotosForAuction(int auctionId)
+        public async Task<List<AuctionsItemsPhotos>> GetPhotosForAuction(int auctionId)
         {
             return await _context.AuctionsItemsPhotos.Where(x => x.AuctionsId == auctionId && x.AuctionItemId == null).ToListAsync();
         }
 
-        public async Task<List<List<AuctionsItemsPhoto>>> GetPhotosForItems(int auctionId)
+        public async Task<List<List<AuctionsItemsPhotos>>> GetPhotosForItems(int auctionId)
         {
             var photos = await _context.AuctionsItemsPhotos.Where(x => x.AuctionsId == auctionId && x.AuctionItemId != null).ToListAsync();
             return photos.GroupBy(photo => photo.AuctionItemId).Select(group => group.ToList()).ToList();
-
         }
 
-        public async Task<List<List<AuctionsItemsPhoto>>> GetPhotosForOneItem(int itemId)
+        public async Task<List<List<AuctionsItemsPhotos>>> GetPhotosForOneItem(int itemId)
         {
             var photos = await _context.AuctionsItemsPhotos.Where(x => x.AuctionItemId == itemId).ToListAsync();
             return photos.GroupBy(photo => photo.AuctionItemId).Select(group => group.ToList()).ToList();

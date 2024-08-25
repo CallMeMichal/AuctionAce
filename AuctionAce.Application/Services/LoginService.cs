@@ -1,4 +1,4 @@
-﻿using AuctionAce.Api;
+﻿using AuctionAce.Infrastructure.Data;
 using AuctionAce.Infrastructure.Repositories;
 
 namespace AuctionAce.Application.Services
@@ -15,7 +15,7 @@ namespace AuctionAce.Application.Services
         public async Task<User> UserLogin(int idUser)
         {
             User user = new User();
-
+            
             if (idUser != 0)
             {
                 var isLogged = await _userRepository.isLoginedAsync(idUser);
