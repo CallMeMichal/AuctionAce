@@ -33,6 +33,6 @@
 
         public string? Amount { get; set; }
 
-        public bool? NewUsed { get; set; }
+        public bool NewUsed { get; set; }
     }
 }
