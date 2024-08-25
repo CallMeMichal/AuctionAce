@@ -34,7 +34,7 @@ namespace AuctionAce.Api.Controllers
             if (user != null)
             {
                 model.User = user;
-                //model.User.Id = user.Id;
+                model.User.Id = user.Id;
                 var role = user.IdRoles;
                 var jwtToken = _authenticationService.GenerateJWTAuthentication(user.Email, role.ToString());
 

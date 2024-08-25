@@ -36,6 +36,7 @@ namespace AuctionAce.Api
                 app.UseHsts();
             }
 
+
             builder.Services.AddDistributedMemoryCache();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
