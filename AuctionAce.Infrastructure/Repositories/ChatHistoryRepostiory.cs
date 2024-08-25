@@ -13,11 +13,15 @@ namespace AuctionAce.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<bool> SaveMessage()
+        public async Task AddChatHistory(ChatHistory chat)
         {
-            var z = await _context.ChatHistories.ToListAsync();
-            var yyy = "";
-            return true;
+            await _context.ChatHistories.AddAsync(chat);            
         }
-    }
+
+        public async Task<List<ChatHistory>> GetListChatHistoryByAuctionItemId(int id)
+        {
+            var chatHistory = await _context.ChatHistories.Where(x => x.Id == id).ToListAsync();
+            return chatHistory;
+        }
+    } 
 }

@@ -31,8 +31,6 @@ public partial class ApplicationDbContext : DbContext
 
     public virtual DbSet<Role> Roles { get; set; }
 
-    public virtual DbSet<Test1> Test1s { get; set; }
-
     public virtual DbSet<User> Users { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -148,7 +146,9 @@ public partial class ApplicationDbContext : DbContext
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.AuctionItemId).HasColumnName("auction_item_id");
-            entity.Property(e => e.Date).HasColumnName("date");
+            entity.Property(e => e.Date)
+                .HasColumnType("datetime")
+                .HasColumnName("date");
             entity.Property(e => e.Message).HasColumnName("message");
             entity.Property(e => e.UserId).HasColumnName("user_id");
 
@@ -185,22 +185,6 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.Name)
                 .HasMaxLength(50)
                 .HasColumnName("name");
-        });
-
-        modelBuilder.Entity<Test1>(entity =>
-        {
-            entity.ToTable("Test1");
-
-            entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.Name)
-                .HasMaxLength(10)
-                .IsFixedLength()
-                .HasColumnName("name");
-            entity.Property(e => e.UserId).HasColumnName("user_id");
-
-            entity.HasOne(d => d.User).WithMany(p => p.Test1s)
-                .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK_Test1_Users");
         });
 
         modelBuilder.Entity<User>(entity =>
