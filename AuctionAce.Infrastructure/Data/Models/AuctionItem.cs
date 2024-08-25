@@ -1,7 +1,6 @@
-﻿using AuctionAce.Infrastructure.Data;
-using AuctionAce.Infrastructure.Data.Models;
+﻿using AuctionAce.Infrastructure.Data.Models;
 
-namespace AuctionAce.Infrastructure;
+namespace AuctionAce.Infrastructure.Data.Models;
 
 public partial class AuctionItem
 {

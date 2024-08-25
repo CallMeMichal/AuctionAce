@@ -2,7 +2,7 @@
 using AuctionAce.Infrastructure.Data.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace AuctionAce.Infrastructure.Data;
+namespace AuctionAce.Infrastructure.Data.Models;
 
 public partial class ApplicationDbContext : DbContext
 {
