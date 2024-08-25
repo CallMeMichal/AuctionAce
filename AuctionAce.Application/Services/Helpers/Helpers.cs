@@ -30,6 +30,25 @@ namespace AuctionAce.Application.Services.Helpers
             };
         }
 
+        public static PhotosAuctionItemDomain ProcessPhotos(List<List<AuctionsItemsPhoto>> itemPhoto)
+        {
+            var itemImages = itemPhoto.
+                SelectMany(group => group)
+                .GroupBy(photo => photo.AuctionItemId.Value)
+                .ToDictionary(
+                group => group.Key,
+                group => group.Select(photo => new ItemImages
+                {
+                    Id = photo.Id,
+                    ItemImageBase64 = GetImageDataBase64(photo.Path)
+                }).ToList()
+                );
+            return new PhotosAuctionItemDomain()
+            {
+                ItemImages = itemImages
+            };
+        }
+
         public static string GetImageDataBase64(string path)
         {
             var data = File.ReadAllBytes(path);

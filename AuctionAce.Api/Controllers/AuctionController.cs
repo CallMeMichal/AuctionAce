@@ -167,7 +167,5 @@ namespace AuctionAce.Api.Controllers
             model.AuctionItems = auction;
             return View(model);
         }
-
-
     }
 }

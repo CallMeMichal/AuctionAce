@@ -1,6 +1,5 @@
 ﻿using AuctionAce.Api;
 using AuctionAce.Infrastructure.Repositories;
-using Microsoft.AspNetCore.Identity.Data;
 
 namespace AuctionAce.Application.Services
 {

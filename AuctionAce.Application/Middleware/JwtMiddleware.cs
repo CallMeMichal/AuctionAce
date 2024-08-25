@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc.Filters;
+﻿using AuctionAce.Application.Services;
 using Microsoft.AspNetCore.Mvc;
-using AuctionAce.Application.Services;
+using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace AuctionAce.Application.Middleware
 {

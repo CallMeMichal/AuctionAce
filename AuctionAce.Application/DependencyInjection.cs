@@ -16,7 +16,5 @@ namespace AuctionAce.Application
             //services.AddScoped
             return services;
         }
-
-
     }
 }

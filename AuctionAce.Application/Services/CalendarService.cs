@@ -12,7 +12,7 @@ namespace AuctionAce.Application.Services
             _auctionRespository = auctionRespository;
         }
 
-        public async  Task<List<AuctionCalendarData>> GetCalendarData(int userId)
+        public async Task<List<AuctionCalendarData>> GetCalendarData(int userId)
         {
             var currentDate = DateTime.Now;
             var auctions = await _auctionRespository.GetAuctionsByIdUserAsync(userId);

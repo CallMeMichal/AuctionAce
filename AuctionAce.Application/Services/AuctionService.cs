@@ -207,13 +207,43 @@ namespace AuctionAce.Application.Services
             return false;
         }
 
+        /// <summary>
+        /// pobieranie wszystkich itemów i wszystkich zdjec dla aukcji oraz itemu
+        /// </summary>
+        /// <param name="auctionId"></param>
+        /// <returns></returns>
         public async Task<PhotosAuctionItemDomain> GetPhotos(int auctionId)
         {
             var auctionPhoto = await _auctionRespository.GetPhotosForAuction(auctionId);
-            var itemPhoto = await _auctionRespository.GetPhotosForItem(auctionId);
+            var itemPhoto = await _auctionRespository.GetPhotosForItems(auctionId);
 
             var photosDomain = Helpers.Helpers.ProcessPhotos(auctionPhoto, itemPhoto);
             return photosDomain;
+        }
+
+        /// <summary>
+        /// pobieranie zdjec dla okreslonego itemId
+        /// </summary>
+        /// <param name="itemId"></param>
+        /// <returns></returns>
+        public async Task<List<PhotosItemDomain>> GetPhotosForOneItem(int itemId)
+        {
+            var itemPhoto = await _auctionRespository.GetPhotosForOneItem(itemId);
+            var photosDomain = Helpers.Helpers.ProcessPhotos(itemPhoto);
+            if (itemPhoto != null)
+            {
+                var itemImages = photosDomain.ItemImages[itemId];
+
+                return new List<PhotosItemDomain>
+                {
+                    new PhotosItemDomain
+                    {
+                        Id = itemId,
+                        ItemImageBase64 = itemImages.Select(image => image.ItemImageBase64).ToList()
+                    }
+                };
+            }
+            return null;
         }
     }
 }

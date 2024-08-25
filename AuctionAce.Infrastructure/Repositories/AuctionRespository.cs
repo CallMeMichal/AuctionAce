@@ -113,11 +113,17 @@ namespace AuctionAce.Infrastructure.Repositories
             return await _context.AuctionsItemsPhotos.Where(x => x.AuctionsId == auctionId && x.AuctionItemId == null).ToListAsync();
         }
 
-        public async Task<List<List<AuctionsItemsPhoto>>> GetPhotosForItem(int auctionId)
+        public async Task<List<List<AuctionsItemsPhoto>>> GetPhotosForItems(int auctionId)
         {
             var photos = await _context.AuctionsItemsPhotos.Where(x => x.AuctionsId == auctionId && x.AuctionItemId != null).ToListAsync();
             return photos.GroupBy(photo => photo.AuctionItemId).Select(group => group.ToList()).ToList();
 
+        }
+
+        public async Task<List<List<AuctionsItemsPhoto>>> GetPhotosForOneItem(int itemId)
+        {
+            var photos = await _context.AuctionsItemsPhotos.Where(x => x.AuctionItemId == itemId).ToListAsync();
+            return photos.GroupBy(photo => photo.AuctionItemId).Select(group => group.ToList()).ToList();
         }
     }
 }
