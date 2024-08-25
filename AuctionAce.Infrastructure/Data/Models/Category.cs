@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+
 namespace AuctionAce.Infrastructure.Data.Models;
 
 public partial class Category

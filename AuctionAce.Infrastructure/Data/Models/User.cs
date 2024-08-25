@@ -1,5 +1,4 @@
-﻿using AuctionAce.Infrastructure.Data.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace AuctionAce.Infrastructure.Data.Models;
@@ -26,9 +25,13 @@ public partial class User
 
     public virtual ICollection<Auction> Auctions { get; set; } = new List<Auction>();
 
+    public virtual ICollection<ChatHistory> ChatHistories { get; set; } = new List<ChatHistory>();
+
     public virtual Address? IdAddressNavigation { get; set; }
 
     public virtual Role? IdRolesNavigation { get; set; }
-    public virtual ICollection<ChatHistory> ChatHistories { get; set; }
-    public virtual ICollection<Leaderboards> Leaderboards { get; set; }
+
+    public virtual ICollection<Leaderboard> Leaderboards { get; set; } = new List<Leaderboard>();
+
+    public virtual ICollection<Test1> Test1s { get; set; } = new List<Test1>();
 }

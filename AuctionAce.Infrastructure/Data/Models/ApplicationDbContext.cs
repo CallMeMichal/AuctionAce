@@ -1,5 +1,5 @@
-﻿using AuctionAce.Infrastructure.Data;
-using AuctionAce.Infrastructure.Data.Models;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
 namespace AuctionAce.Infrastructure.Data.Models;
@@ -14,21 +14,24 @@ public partial class ApplicationDbContext : DbContext
         : base(options)
     {
     }
+
     public virtual DbSet<Address> Addresses { get; set; }
 
     public virtual DbSet<Auction> Auctions { get; set; }
 
     public virtual DbSet<AuctionItem> AuctionItems { get; set; }
 
-    public virtual DbSet<AuctionsItemsPhotos> AuctionsItemsPhotos { get; set; }
+    public virtual DbSet<AuctionsItemsPhoto> AuctionsItemsPhotos { get; set; }
 
     public virtual DbSet<Category> Categories { get; set; }
 
     public virtual DbSet<ChatHistory> ChatHistories { get; set; }
 
-    public virtual DbSet<Leaderboards> Leaderboards { get; set; }
+    public virtual DbSet<Leaderboard> Leaderboards { get; set; }
 
     public virtual DbSet<Role> Roles { get; set; }
+
+    public virtual DbSet<Test1> Test1s { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
 
@@ -111,7 +114,7 @@ public partial class ApplicationDbContext : DbContext
                 .HasConstraintName("FK_Auction_Items_Auctions");
         });
 
-        modelBuilder.Entity<AuctionsItemsPhotos>(entity =>
+        modelBuilder.Entity<AuctionsItemsPhoto>(entity =>
         {
             entity.ToTable("Auctions_Items_Photos");
 
@@ -125,7 +128,7 @@ public partial class ApplicationDbContext : DbContext
                 .HasForeignKey(d => d.AuctionItemId)
                 .HasConstraintName("FK_Auctions_Items_Photos_Auction_Items");
 
-            entity.HasOne(d => d.Auctions).WithMany(p => p.AuctionsItemsPhotoss)
+            entity.HasOne(d => d.Auctions).WithMany(p => p.AuctionsItemsPhotos)
                 .HasForeignKey(d => d.AuctionsId)
                 .HasConstraintName("FK_Auctions_Items_Photos_Auctions");
         });
@@ -158,7 +161,7 @@ public partial class ApplicationDbContext : DbContext
                 .HasConstraintName("FK_Chat_History_Users");
         });
 
-        modelBuilder.Entity<Leaderboards>(entity =>
+        modelBuilder.Entity<Leaderboard>(entity =>
         {
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.AuctionItemId).HasColumnName("auction_item_id");
@@ -182,6 +185,22 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.Name)
                 .HasMaxLength(50)
                 .HasColumnName("name");
+        });
+
+        modelBuilder.Entity<Test1>(entity =>
+        {
+            entity.ToTable("Test1");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Name)
+                .HasMaxLength(10)
+                .IsFixedLength()
+                .HasColumnName("name");
+            entity.Property(e => e.UserId).HasColumnName("user_id");
+
+            entity.HasOne(d => d.User).WithMany(p => p.Test1s)
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("FK_Test1_Users");
         });
 
         modelBuilder.Entity<User>(entity =>

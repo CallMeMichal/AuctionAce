@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Models\ViewModels\User\**" />
+    <Content Remove="Models\ViewModels\User\**" />
+    <EmbeddedResource Remove="Models\ViewModels\User\**" />
+    <None Remove="Models\ViewModels\User\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Remove="Views\Auction\MyAuctions.cshtml" />
     <Content Remove="Views\Home\AddAuction.cshtml" />
   </ItemGroup>
@@ -42,10 +49,6 @@
 
   <ItemGroup>
     <UpToDateCheckInput Remove="Views\Auction\MyAuctions.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Models\ViewModels\User\" />
   </ItemGroup>
 
 </Project>

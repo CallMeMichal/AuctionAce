@@ -6,7 +6,7 @@ namespace AuctionAce.Application.Services.Helpers
 {
     public static class Helpers
     {
-        public static PhotosAuctionItemDomain ProcessPhotos(List<AuctionsItemsPhotos> auctionPhoto, List<List<AuctionsItemsPhotos>> itemPhoto)
+        public static PhotosAuctionItemDomain ProcessPhotos(List<AuctionsItemsPhoto> auctionPhoto, List<List<AuctionsItemsPhoto>> itemPhoto)
         {
             var auctionImages = auctionPhoto.Select(photo => new AuctionImage
             {
@@ -31,7 +31,7 @@ namespace AuctionAce.Application.Services.Helpers
             };
         }
 
-        public static PhotosAuctionItemDomain ProcessPhotos(List<List<AuctionsItemsPhotos>> itemPhoto)
+        public static PhotosAuctionItemDomain ProcessPhotos(List<List<AuctionsItemsPhoto>> itemPhoto)
         {
             var itemImages = itemPhoto.
                 SelectMany(group => group)

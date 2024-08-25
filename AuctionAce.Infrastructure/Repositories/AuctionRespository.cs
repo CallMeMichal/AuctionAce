@@ -61,7 +61,7 @@ namespace AuctionAce.Infrastructure.Repositories
                     string filePath = item.Key;
                     string fileName = item.Value;
 
-                    var newPhoto = new AuctionsItemsPhotos
+                    var newPhoto = new AuctionsItemsPhoto
                     {
                         Path = filePath,
                         FileName = fileName,
@@ -105,18 +105,18 @@ namespace AuctionAce.Infrastructure.Repositories
             return true;
         }
 
-        public async Task<List<AuctionsItemsPhotos>> GetPhotosForAuction(int auctionId)
+        public async Task<List<AuctionsItemsPhoto>> GetPhotosForAuction(int auctionId)
         {
             return await _context.AuctionsItemsPhotos.Where(x => x.AuctionsId == auctionId && x.AuctionItemId == null).ToListAsync();
         }
 
-        public async Task<List<List<AuctionsItemsPhotos>>> GetPhotosForItems(int auctionId)
+        public async Task<List<List<AuctionsItemsPhoto>>> GetPhotosForItems(int auctionId)
         {
             var photos = await _context.AuctionsItemsPhotos.Where(x => x.AuctionsId == auctionId && x.AuctionItemId != null).ToListAsync();
             return photos.GroupBy(photo => photo.AuctionItemId).Select(group => group.ToList()).ToList();
         }
 
-        public async Task<List<List<AuctionsItemsPhotos>>> GetPhotosForOneItem(int itemId)
+        public async Task<List<List<AuctionsItemsPhoto>>> GetPhotosForOneItem(int itemId)
         {
             var photos = await _context.AuctionsItemsPhotos.Where(x => x.AuctionItemId == itemId).ToListAsync();
             return photos.GroupBy(photo => photo.AuctionItemId).Select(group => group.ToList()).ToList();

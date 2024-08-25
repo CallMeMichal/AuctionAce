@@ -1,5 +1,4 @@
-﻿using AuctionAce.Infrastructure.Data;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace AuctionAce.Infrastructure.Data.Models;
@@ -21,9 +20,10 @@ public partial class Auction
     public int? IdCategory { get; set; }
 
     public string? Description { get; set; }
+
     public virtual ICollection<AuctionItem> AuctionItems { get; set; } = new List<AuctionItem>();
 
-    public virtual ICollection<AuctionsItemsPhotos> AuctionsItemsPhotoss { get; set; } = new List<AuctionsItemsPhotos>();
+    public virtual ICollection<AuctionsItemsPhoto> AuctionsItemsPhotos { get; set; } = new List<AuctionsItemsPhoto>();
 
     public virtual Category? IdCategoryNavigation { get; set; }
 
