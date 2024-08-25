@@ -1,4 +1,5 @@
 ﻿using AuctionAce.Infrastructure.Data;
+using AuctionAce.Infrastructure.Data.Models;
 using AuctionAce.Infrastructure.Repositories;
 
 namespace AuctionAce.Application.Services

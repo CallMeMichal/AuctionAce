@@ -1,5 +1,5 @@
 ﻿using AuctionAce.Api.Models.ViewModels.Base;
-using AuctionAce.Infrastructure.Data;
+using AuctionAce.Infrastructure.Data.Models;
 
 namespace AuctionAce.Api.Models.ViewModels.Home
 {

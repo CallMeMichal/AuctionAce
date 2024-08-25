@@ -1,4 +1,4 @@
-﻿using AuctionAce.Infrastructure.Data;
+﻿using AuctionAce.Infrastructure.Data.Models;
 using AuctionAce.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;

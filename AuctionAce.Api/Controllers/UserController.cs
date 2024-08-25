@@ -4,7 +4,7 @@ using AuctionAce.Api.Models.DTO.Register;
 using AuctionAce.Api.Models.ViewModels.Home;
 using AuctionAce.Application.Middleware;
 using AuctionAce.Application.Services;
-using AuctionAce.Infrastructure.Data;
+using AuctionAce.Infrastructure.Data.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

@@ -1,4 +1,4 @@
-﻿using AuctionAce.Infrastructure.Data;
+﻿using AuctionAce.Infrastructure.Data.Models;
 
 namespace AuctionAce.Api.Models.DTO.Login
 {

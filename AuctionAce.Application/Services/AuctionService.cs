@@ -2,6 +2,7 @@
 using AuctionAce.Domain.Entities;
 using AuctionAce.Infrastructure.Repositories;
 using AuctionAce.Infrastructure;
+using AuctionAce.Infrastructure.Data.Models;
 
 namespace AuctionAce.Application.Services
 {
