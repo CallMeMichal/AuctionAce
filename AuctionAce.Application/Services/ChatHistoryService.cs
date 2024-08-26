@@ -1,11 +1,11 @@
-﻿using AuctionAce.Domain.Entities;
+﻿using AuctionAce.Application.Interfaces.ChatHistory;
+using AuctionAce.Domain.Entities;
 using AuctionAce.Infrastructure.Data.Models;
 using AuctionAce.Infrastructure.Repositories;
-using Microsoft.AspNetCore.Http;
 
 namespace AuctionAce.Application.Services
 {
-    public class ChatHistoryService
+    public class ChatHistoryService : IChatHistoryService
     {
         public readonly ChatHistoryRepostiory _chatHistoryRespository;
 

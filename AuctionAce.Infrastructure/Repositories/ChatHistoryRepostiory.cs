@@ -1,5 +1,4 @@
-﻿using AuctionAce.Infrastructure.Data;
-using AuctionAce.Infrastructure.Data.Models;
+﻿using AuctionAce.Infrastructure.Data.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace AuctionAce.Infrastructure.Repositories
@@ -15,7 +14,8 @@ namespace AuctionAce.Infrastructure.Repositories
 
         public async Task AddChatHistory(ChatHistory chat)
         {
-            await _context.ChatHistories.AddAsync(chat);            
+            await _context.ChatHistories.AddAsync(chat);
+            await _context.SaveChangesAsync();
         }
 
         public async Task<List<ChatHistory>> GetListChatHistoryByAuctionItemId(int id)
@@ -23,5 +23,5 @@ namespace AuctionAce.Infrastructure.Repositories
             var chatHistory = await _context.ChatHistories.Where(x => x.Id == id).ToListAsync();
             return chatHistory;
         }
-    } 
+    }
 }

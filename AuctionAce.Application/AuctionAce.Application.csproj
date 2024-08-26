@@ -16,4 +16,12 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Interfaces\Auction\" />
+    <Folder Include="Interfaces\Calendar\" />
+    <Folder Include="Interfaces\Login\" />
+    <Folder Include="Interfaces\Authentication\" />
+    <Folder Include="Interfaces\User\" />
+  </ItemGroup>
+
 </Project>
