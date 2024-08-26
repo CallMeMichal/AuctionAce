@@ -15,9 +15,22 @@ namespace AuctionAce.Api.Hubs
             _chatHistoryService = chatHistoryService;
         }
 
-        public async Task JoinGroup(string groupName)
+        public async Task JoinGroup(string groupName, string auctionItemId)
         {
             await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
+            var auctionIdItem = Convert.ToInt32(auctionItemId);
+            var chatHistories = await _chatHistoryService.GetChatHistory(auctionIdItem);
+
+            chatHistories = chatHistories.OrderBy(chat => chat.Date).ToList();
+
+            var formattedChatHistories = chatHistories.Select(chat => new
+            {
+                chat.Message,
+                chat.UserEmail,
+                DateFormatted = chat.Date.Value.ToString("(MM/dd HH:mm)"),
+            }).ToList();
+
+            await Clients.Group(groupName).SendAsync("ReceiveHistoryMessages", formattedChatHistories);
         }
 
         public async Task SendMessageToGroup(string groupName, string message, string userEmail, string auctionItemId, string userId)

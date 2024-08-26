@@ -15,6 +15,8 @@ public partial class ChatHistory
 
     public string? Message { get; set; }
 
+    public string? UserEmail { get; set; }
+
     public virtual AuctionItem? AuctionItem { get; set; }
 
     public virtual User? User { get; set; }

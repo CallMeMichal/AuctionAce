@@ -20,7 +20,7 @@ namespace AuctionAce.Infrastructure.Repositories
 
         public async Task<List<ChatHistory>> GetListChatHistoryByAuctionItemId(int id)
         {
-            var chatHistory = await _context.ChatHistories.Where(x => x.Id == id).ToListAsync();
+            var chatHistory = await _context.ChatHistories.Where(x => x.AuctionItemId == id).ToListAsync();
             return chatHistory;
         }
     }

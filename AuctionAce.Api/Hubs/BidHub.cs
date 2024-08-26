@@ -1,5 +1,4 @@
-﻿using AuctionAce.Infrastructure.Repositories;
-using Microsoft.AspNetCore.SignalR;
+﻿using Microsoft.AspNetCore.SignalR;
 
 namespace AuctionAce.Api.Hubs
 {
@@ -13,7 +12,7 @@ namespace AuctionAce.Api.Hubs
         public async Task SendBidToGroup(string groupName, long bid, string userEmail)
         {
             var date = DateTime.Now.ToString("(MM/dd HH:mm)");
-            
+
             await Clients.Group(groupName).SendAsync("ReceiveBid", bid, userEmail, date);
 
         }

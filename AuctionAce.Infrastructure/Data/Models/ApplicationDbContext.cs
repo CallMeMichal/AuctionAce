@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 
 namespace AuctionAce.Infrastructure.Data.Models;
 
@@ -148,6 +150,7 @@ public partial class ApplicationDbContext : DbContext
                 .HasColumnType("datetime")
                 .HasColumnName("date");
             entity.Property(e => e.Message).HasColumnName("message");
+            entity.Property(e => e.UserEmail).HasColumnName("user_email");
             entity.Property(e => e.UserId).HasColumnName("user_id");
 
             entity.HasOne(d => d.AuctionItem).WithMany(p => p.ChatHistories)

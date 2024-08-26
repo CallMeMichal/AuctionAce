@@ -1,11 +1,10 @@
-﻿using AuctionAce.Application.Interfaces.ChatHistory;
-using AuctionAce.Domain.Entities;
+﻿using AuctionAce.Domain.Entities;
 using AuctionAce.Infrastructure.Data.Models;
 using AuctionAce.Infrastructure.Repositories;
 
 namespace AuctionAce.Application.Services
 {
-    public class ChatHistoryService : IChatHistoryService
+    public class ChatHistoryService
     {
         public readonly ChatHistoryRepostiory _chatHistoryRespository;
 
@@ -22,9 +21,34 @@ namespace AuctionAce.Application.Services
                 Date = request.Date,
                 UserId = request.UserId,
                 Message = request.Message,
+                UserEmail = request.UserEmail,
+
             };
 
-            var response = _chatHistoryRespository.AddChatHistory(data);
+            await _chatHistoryRespository.AddChatHistory(data);
+        }
+
+        public async Task<List<ChatHistoryDomain>> GetChatHistory(int itemId)
+        {
+            var response = await _chatHistoryRespository.GetListChatHistoryByAuctionItemId(itemId);
+            List<ChatHistoryDomain> chatHistory = new List<ChatHistoryDomain>();
+            if (response.Count > 0)
+            {
+                foreach (var chatHistoryItem in response)
+                {
+                    chatHistory.Add(new ChatHistoryDomain()
+                    {
+                        AuctionItemId = chatHistoryItem.AuctionItemId,
+                        Date = chatHistoryItem.Date,
+                        Message = chatHistoryItem.Message,
+                        UserId = chatHistoryItem.UserId,
+                        UserEmail = chatHistoryItem.UserEmail
+                    });
+                }
+                return chatHistory;
+            }
+            else
+                return new List<ChatHistoryDomain>();
         }
     }
 }

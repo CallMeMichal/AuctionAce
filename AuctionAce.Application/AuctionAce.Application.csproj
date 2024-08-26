@@ -19,6 +19,7 @@
   <ItemGroup>
     <Folder Include="Interfaces\Auction\" />
     <Folder Include="Interfaces\Calendar\" />
+    <Folder Include="Interfaces\ChatHistory\" />
     <Folder Include="Interfaces\Login\" />
     <Folder Include="Interfaces\Authentication\" />
     <Folder Include="Interfaces\User\" />

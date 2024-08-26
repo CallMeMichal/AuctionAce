@@ -152,7 +152,7 @@
 
         connection.start()
             .then(() => {
-                connection.invoke("JoinGroup", itemGuid)
+                connection.invoke("JoinGroup", itemGuid,auctionItemId)
                     .catch(err => console.error("Error joining group: ", err.toString()));
             })
             .catch(err => console.error("Error establishing connection: ", err.toString()));
@@ -162,6 +162,21 @@
             messageElement.className = "message";
             messageElement.textContent = `${date}: ${userEmail}: ${message}`;
             document.getElementById("chatBox").appendChild(messageElement);
+        });
+
+        connection.on("ReceiveHistoryMessages", function (formattedChatHistories) {
+
+            var chatBox = document.getElementById("chatBox")
+            chatBox.innerHTML = '';
+
+            formattedChatHistories.forEach(function (chatMessage) {
+                var messageElement = document.createElement("div");
+                var formattedData = chatMessage.dateFormatted;
+                var userEmail = chatMessage.userEmail;
+                var message = chatMessage.message;
+                messageElement.textContent = `${formattedData}: ${userEmail}: ${message}`;
+                document.getElementById("chatBox").appendChild(messageElement);
+            });
         });
 
         $('#sendButton').click(function () {
