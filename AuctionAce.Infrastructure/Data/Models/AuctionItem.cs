@@ -19,8 +19,6 @@ public partial class AuctionItem
 
     public string? BuyNowPrice { get; set; }
 
-    public string? Amount { get; set; }
-
     public bool? NewUsed { get; set; }
 
     public int? IdStatus { get; set; }
@@ -28,6 +26,8 @@ public partial class AuctionItem
     public string? Guid { get; set; }
 
     public virtual ICollection<AuctionsItemsPhoto> AuctionsItemsPhotos { get; set; } = new List<AuctionsItemsPhoto>();
+
+    public virtual ICollection<BidHistory> BidHistories { get; set; } = new List<BidHistory>();
 
     public virtual ICollection<ChatHistory> ChatHistories { get; set; } = new List<ChatHistory>();
 

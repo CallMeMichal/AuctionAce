@@ -23,6 +23,8 @@ public partial class ApplicationDbContext : DbContext
 
     public virtual DbSet<AuctionsItemsPhoto> AuctionsItemsPhotos { get; set; }
 
+    public virtual DbSet<BidHistory> BidHistories { get; set; }
+
     public virtual DbSet<Category> Categories { get; set; }
 
     public virtual DbSet<ChatHistory> ChatHistories { get; set; }
@@ -35,7 +37,7 @@ public partial class ApplicationDbContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=AuctionAce;Integrated Security=True;Encrypt=True;Trust Server Certificate=True");
+        => optionsBuilder.UseSqlServer("data source=MICHAť\\SQLEXPRESS;initial catalog=AuctionAce;MultipleActiveResultSets=True;App=EntityFramework;TrustServerCertificate=True;Trusted_Connection=True");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -85,10 +87,6 @@ public partial class ApplicationDbContext : DbContext
             entity.ToTable("Auction_Items");
 
             entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.Amount)
-                .HasMaxLength(10)
-                .IsFixedLength()
-                .HasColumnName("amount");
             entity.Property(e => e.BuyNowPrice)
                 .HasMaxLength(10)
                 .IsFixedLength()
@@ -129,6 +127,31 @@ public partial class ApplicationDbContext : DbContext
             entity.HasOne(d => d.Auctions).WithMany(p => p.AuctionsItemsPhotos)
                 .HasForeignKey(d => d.AuctionsId)
                 .HasConstraintName("FK_Auctions_Items_Photos_Auctions");
+        });
+
+        modelBuilder.Entity<BidHistory>(entity =>
+        {
+            entity.ToTable("Bid_History");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Date)
+                .HasColumnType("datetime")
+                .HasColumnName("date");
+            entity.Property(e => e.IdAuctionItems).HasColumnName("id_auction_items");
+            entity.Property(e => e.IdUsers).HasColumnName("id_users");
+            entity.Property(e => e.IsWin).HasColumnName("isWin");
+            entity.Property(e => e.Price)
+                .HasColumnType("decimal(18, 0)")
+                .HasColumnName("price");
+            entity.Property(e => e.UserEmail).HasColumnName("user_email");
+
+            entity.HasOne(d => d.IdAuctionItemsNavigation).WithMany(p => p.BidHistories)
+                .HasForeignKey(d => d.IdAuctionItems)
+                .HasConstraintName("FK_Bid_History_Auction_Items");
+
+            entity.HasOne(d => d.IdUsersNavigation).WithMany(p => p.BidHistories)
+                .HasForeignKey(d => d.IdUsers)
+                .HasConstraintName("FK_Bid_History_Users");
         });
 
         modelBuilder.Entity<Category>(entity =>

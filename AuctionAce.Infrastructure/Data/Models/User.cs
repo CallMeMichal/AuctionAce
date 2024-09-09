@@ -25,6 +25,8 @@ public partial class User
 
     public virtual ICollection<Auction> Auctions { get; set; } = new List<Auction>();
 
+    public virtual ICollection<BidHistory> BidHistories { get; set; } = new List<BidHistory>();
+
     public virtual ICollection<ChatHistory> ChatHistories { get; set; } = new List<ChatHistory>();
 
     public virtual Address? IdAddressNavigation { get; set; }

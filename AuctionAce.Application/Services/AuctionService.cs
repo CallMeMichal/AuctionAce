@@ -59,7 +59,6 @@ namespace AuctionAce.Application.Services
                         Category = item.Category ?? string.Empty,
                         StartingPrice = item.StartingPrice ?? string.Empty,
                         BuyNowPrice = item.BuyNowPrice ?? string.Empty,
-                        Amount = item.Amount ?? string.Empty,
                         NewUsed = item.NewUsed,
                     }).ToList()
                 });
@@ -114,7 +113,6 @@ namespace AuctionAce.Application.Services
                         Category = item.Category ?? string.Empty,
                         StartingPrice = item.StartingPrice ?? string.Empty,
                         BuyNowPrice = item.BuyNowPrice ?? string.Empty,
-                        Amount = item.Amount,
                         NewUsed = item.NewUsed ,
                     }).ToList()
                 });
@@ -246,6 +244,17 @@ namespace AuctionAce.Application.Services
                 };
             }
             return null;
+        }
+
+        public async Task<TimeSpan> GetRemainingTimeForAuction(int auctionId)
+        {
+            var remainingTime = await _auctionRespository.GetTimeForAuction(auctionId);
+            return remainingTime;
+        }
+
+        public async Task<int> GetAuctionIdByItemId(int itemId)
+        {
+            return await _auctionRespository.GetAutionId(itemId);
         }
     }
 }

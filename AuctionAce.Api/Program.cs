@@ -47,8 +47,7 @@ namespace AuctionAce.Api
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
 
-            app.MapHub<ChatHub>("/chathub");
-            app.MapHub<BidHub>("/bidhub");
+            app.MapHub<Hub>("/hub");
             app.Run();
         }
     }

@@ -121,5 +121,19 @@ namespace AuctionAce.Infrastructure.Repositories
             var photos = await _context.AuctionsItemsPhotos.Where(x => x.AuctionItemId == itemId).ToListAsync();
             return photos.GroupBy(photo => photo.AuctionItemId).Select(group => group.ToList()).ToList();
         }
+    
+        public async Task<TimeSpan> GetTimeForAuction(int auctionId)
+        {
+            var auction = _context.Auctions.FirstOrDefault(x=>x.Id == auctionId);
+            var now = DateTime.Now;
+            var timeRemaining = auction.EndDate - now;
+            return (TimeSpan)timeRemaining;
+        }
+
+        public async Task<int> GetAutionId(int itemId)
+        {
+            var auction = await _context.AuctionItems.FirstOrDefaultAsync(x => x.Id == itemId);
+            return (int)auction.IdAuctions;
+        }
     }
 }
