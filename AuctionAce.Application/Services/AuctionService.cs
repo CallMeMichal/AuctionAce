@@ -1,8 +1,6 @@
-﻿using AuctionAce.Infrastructure.Data;
-using AuctionAce.Domain.Entities;
-using AuctionAce.Infrastructure.Repositories;
-using AuctionAce.Infrastructure;
+﻿using AuctionAce.Domain.Entities;
 using AuctionAce.Infrastructure.Data.Models;
+using AuctionAce.Infrastructure.Repositories;
 
 namespace AuctionAce.Application.Services
 {
@@ -113,7 +111,7 @@ namespace AuctionAce.Application.Services
                         Category = item.Category ?? string.Empty,
                         StartingPrice = item.StartingPrice ?? string.Empty,
                         BuyNowPrice = item.BuyNowPrice ?? string.Empty,
-                        NewUsed = item.NewUsed ,
+                        NewUsed = item.NewUsed,
                     }).ToList()
                 });
             }
@@ -239,7 +237,7 @@ namespace AuctionAce.Application.Services
                     new PhotosItemDomain
                     {
                         Id = itemId,
-                        ItemImageBase64 = itemImages.Select(image => image.ItemImageBase64).ToList()
+                        ItemImageBase64 = itemImages.Select(image => image.ItemImageBase64).ToList(),
                     }
                 };
             }
@@ -255,6 +253,15 @@ namespace AuctionAce.Application.Services
         public async Task<int> GetAuctionIdByItemId(int itemId)
         {
             return await _auctionRespository.GetAutionId(itemId);
+        }
+
+        public async Task<int> GetStartPriceForItem(int itemId)
+        {
+            return await _auctionRespository.GetStartPriceForItem(itemId);
+        }
+        public async Task<int> GetBuyNowPriceForItem(int itemId)
+        {
+            return await _auctionRespository.GetBuyNowPriceForItem(itemId);
         }
     }
 }

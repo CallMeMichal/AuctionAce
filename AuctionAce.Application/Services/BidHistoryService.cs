@@ -1,7 +1,6 @@
 ﻿using AuctionAce.Domain.Entities;
 using AuctionAce.Infrastructure.Data.Models;
 using AuctionAce.Infrastructure.Repositories;
-using Azure.Core;
 
 namespace AuctionAce.Application.Services
 {
@@ -40,12 +39,18 @@ namespace AuctionAce.Application.Services
                 bidHistoryDomains.Add(new BidHistoryDomain
                 {
                     DateTime = bidHistoryDomain.Date,
-                    Price=bidHistoryDomain.Price,
-                    UserEmail=bidHistoryDomain.UserEmail,
+                    Price = bidHistoryDomain.Price,
+                    UserEmail = bidHistoryDomain.UserEmail,
                 });
             }
 
             return bidHistoryDomains;
+        }
+
+        public async Task<int> GetHighestBidForItem(int itemId)
+        {
+            var highestBid = await _bidRepostiory.GetHighestBidForItem(itemId);
+            return highestBid;
         }
     }
 }

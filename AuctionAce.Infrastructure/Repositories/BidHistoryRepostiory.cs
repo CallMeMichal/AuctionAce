@@ -27,5 +27,11 @@ namespace AuctionAce.Infrastructure.Repositories
             var bidHistory = await _context.BidHistories.Where(x => x.IdAuctionItems == auctionItemId).ToListAsync();
             return bidHistory;
         }
+        public async Task<int> GetHighestBidForItem(int itemId)
+        {
+            var allBids = await GetBidHistory(itemId);
+            var highestBid = allBids.Max(x => x.Price);
+            return Convert.ToInt32(highestBid);
+        }
     }
 }

@@ -60,7 +60,7 @@
 </div>
 <div class="row">
     <div class="col-md-5">
-        <input type="number" id="actualPrice" disabled/>
+        <input type="text" id="actualPrice" value="@Model.ActualHighestPrice" disabled />
     </div>
     <div class="col-md-2">
         <button id="bidButton" class="btn btn-primary ms-2">Bid</button>
@@ -84,7 +84,7 @@
 
 
 <script>
-    let highestBid = 0;
+    let highestBid = @Model.ActualHighestPrice;
     let remainingTime = { days: 0, hours: 0, minutes: 0, seconds: 0 };
     const itemGuid = '@Model.Guid';
     const userEmail = '@userEmail';
@@ -95,8 +95,6 @@
         const connection = new signalR.HubConnectionBuilder()
             .withUrl("/hub")
             .build();
-
-        console.log(itemGuid);
 
         connection.start()
             .then(() => {
@@ -157,7 +155,7 @@
             });
 
             highestBid = highestBid;
-            $('#actualPrice').val(highestBid);
+            
         });
 
         connection.on("ReceiveBid", function (bid, userEmail, date) {
@@ -176,9 +174,14 @@
 
         $('#bidButton').click(function () {
             const offer = $('#newBid')[0].valueAsNumber;
-            if (offer) {
+            if (offer > highestBid) {
                 connection.invoke("SendBidToGroup", itemGuid, offer, userEmail, userId, auctionItemId)
                     .catch(err => console.error("Error sending bid: ", err.toString()));
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: `The offer must be greater than ${highestBid}`,
+                });
             }
         });
 
@@ -211,6 +214,7 @@
                     tableBody.rows[i].cells[0].textContent = i + 1;
                 }
                 $('#actualPrice').val(highestBid);
+                
             } else if (bid <= highestBid) {
                 // Dodaj komunikat błędu, gdy oferta jest równa lub niższa od najwyższej
                 Swal.fire({
