@@ -76,6 +76,7 @@ namespace AuctionAce.Application.Services
 
             foreach (var auction in userAuctions)
             {
+                var a = auction.AuctionItems;
                 var status = "Pending";
 
                 if (auction.StartDate.HasValue && auction.EndDate.HasValue)

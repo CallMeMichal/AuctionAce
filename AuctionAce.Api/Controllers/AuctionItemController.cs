@@ -21,6 +21,7 @@ namespace AuctionAce.Api.Controllers
             var buyNowPrice = _auctionService.GetBuyNowPriceForItem(itemId).Result;
             var startPrice = _auctionService.GetStartPriceForItem(itemId).Result;
             var highestPrice = _bidHistoryService.GetHighestBidForItem(itemId).Result;
+            var auctionId = _auctionService.GetAuctionIdByItemId(itemId).Result;
             if (highestPrice == null || highestPrice == 0)
             {
                 highestPrice = startPrice;
@@ -34,6 +35,7 @@ namespace AuctionAce.Api.Controllers
             item.StartPrice = startPrice;
             item.BuyNowPrice = buyNowPrice;
             item.ActualHighestPrice = highestPrice;
+            item.AuctionId = auctionId;
 
             return View(item);
         }

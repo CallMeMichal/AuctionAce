@@ -11,5 +11,6 @@ namespace AuctionAce.Api.Models.ViewModels.ItemViewModel
         public int BuyNowPrice { get; set; }
         public int ActualHighestPrice { get; set; }
         public List<PhotosItemDomain> ItemDomain { get; set; }
+        public int AuctionId { get; set; }
     }
 }

@@ -30,6 +30,10 @@
         {
             foreach (var item in Model.AuctionStatus)
             {
+                <div>
+                    Status: @item.Status
+                </div>
+
                 <div class="col-md-3 mb-4 card-wrapper" data-startdate="@item.StartDate.ToString("o")" data-status="@item.Status" data-enddate="@item.EndDate.ToString("o")">
                     <div class="card position-relative custom-card-width">
                         @if (item.AllAuctionsPhotos != null && item.AllAuctionsPhotos.AuctionImages != null && item.AllAuctionsPhotos.AuctionImages.Count > 0)
@@ -45,6 +49,7 @@
                             @if(item.AuctionName.Length >27){
 
                                 <h5 class="card-title">@item.AuctionName.Substring(0,24)...</h5>
+
                             }
                             else
                             {
@@ -282,58 +287,58 @@
         });
 
         function updateTimer() {
-    cards.forEach(function (cardWrapper) {
-        var endDate = new Date(cardWrapper.getAttribute('data-enddate'));
-        var startDate = new Date(cardWrapper.getAttribute('data-startdate'));
-        var now = new Date();
-        var timeToStart = startDate - now;
-        var timeRemaining = endDate - now;
+            cards.forEach(function (cardWrapper) {
+                var endDate = new Date(cardWrapper.getAttribute('data-enddate'));
+                var startDate = new Date(cardWrapper.getAttribute('data-startdate'));
+                var now = new Date();
+                var timeToStart = startDate - now;
+                var timeRemaining = endDate - now;
 
-        var statusBubble = cardWrapper.querySelector('.status-bubble');
+                var statusBubble = cardWrapper.querySelector('.status-bubble');
 
-        if (timeToStart > 0) {
-            // Aukcja jeszcze się nie rozpoczęła
-            var daysToStart = Math.floor(timeToStart / (1000 * 60 * 60 * 24));
-            var hoursToStart = Math.floor((timeToStart % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            var minutesToStart = Math.floor((timeToStart % (1000 * 60 * 60)) / (1000 * 60));
-            var secondsToStart = Math.floor((timeToStart % (1000 * 60)) / 1000);
+                if (timeToStart > 0) {
+                    // Aukcja jeszcze się nie rozpoczęła
+                    var daysToStart = Math.floor(timeToStart / (1000 * 60 * 60 * 24));
+                    var hoursToStart = Math.floor((timeToStart % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    var minutesToStart = Math.floor((timeToStart % (1000 * 60 * 60)) / (1000 * 60));
+                    var secondsToStart = Math.floor((timeToStart % (1000 * 60)) / 1000);
 
-            cardWrapper.querySelector('.card-time').textContent =
-                `Auction starts in: ${daysToStart}d ${hoursToStart}h ${minutesToStart}m ${secondsToStart}s`;
+                    cardWrapper.querySelector('.card-time').textContent =
+                        `Auction starts in: ${daysToStart}d ${hoursToStart}h ${minutesToStart}m ${secondsToStart}s`;
 
-            // Zaktualizuj status na "Pending"
-            cardWrapper.setAttribute('data-status', 'Pending');
-            statusBubble.className = 'status-bubble status-pending';
-            statusBubble.textContent = 'Pending';
+                    // Zaktualizuj status na "Pending"
+                    cardWrapper.setAttribute('data-status', 'Pending');
+                    statusBubble.className = 'status-bubble status-pending';
+                    statusBubble.textContent = 'Pending';
 
-        } else if (timeRemaining > 0) {
-            // Aukcja jest aktywna
-            var days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
-            var hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            var minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
-            var seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+                } else if (timeRemaining > 0) {
+                    // Aukcja jest aktywna
+                    var days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+                    var hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    var minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+                    var seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
 
-            cardWrapper.querySelector('.card-time').textContent =
-                `Time left: ${days}d ${hours}h ${minutes}m ${seconds}s`;
+                    cardWrapper.querySelector('.card-time').textContent =
+                        `Time left: ${days}d ${hours}h ${minutes}m ${seconds}s`;
 
-            // Zaktualizuj status na "Active"
-            cardWrapper.setAttribute('data-status', 'Active');
-            statusBubble.className = 'status-bubble status-open';
-            statusBubble.textContent = 'Active';
+                    // Zaktualizuj status na "Active"
+                    cardWrapper.setAttribute('data-status', 'Active');
+                    statusBubble.className = 'status-bubble status-open';
+                    statusBubble.textContent = 'Active';
 
-        } else {
-            // Aukcja zakończona
-            cardWrapper.querySelector('.card-time').textContent = "Auction ended";
+                } else {
+                    // Aukcja zakończona
+                    cardWrapper.querySelector('.card-time').textContent = "Auction ended";
 
-            // Zaktualizuj status na "Inactive"
-            cardWrapper.setAttribute('data-status', 'Inactive');
-            statusBubble.className = 'status-bubble status-closed';
-            statusBubble.textContent = 'Inactive';
+                    // Zaktualizuj status na "Inactive"
+                    cardWrapper.setAttribute('data-status', 'Inactive');
+                    statusBubble.className = 'status-bubble status-closed';
+                    statusBubble.textContent = 'Inactive';
+                }
+            });
         }
-    });
-}
 
-setInterval(updateTimer, 1000);
+        setInterval(updateTimer, 1000);
 
     });
 </script>
