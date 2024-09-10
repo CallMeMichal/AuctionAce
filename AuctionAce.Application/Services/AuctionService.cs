@@ -76,22 +76,26 @@ namespace AuctionAce.Application.Services
 
             foreach (var auction in userAuctions)
             {
-                var a = auction.AuctionItems;
+                var a = auction.AuctionItems.Count(x => x.IdStatus == 1);
                 var status = "Pending";
 
                 if (auction.StartDate.HasValue && auction.EndDate.HasValue)
                 {
-                    if (today < auction.StartDate.Value.Date)
+                    if (today < auction.StartDate.Value.Date && a >= 1)
                     {
                         status = "Pending";
                     }
-                    else if (today >= auction.StartDate.Value.Date && today <= auction.EndDate.Value.Date)
+                    else if (today >= auction.StartDate.Value.Date && today <= auction.EndDate.Value.Date && a >= 1)
                     {
                         status = "Active";
                     }
-                    else
+                    else if (a < 1)
                     {
                         status = "Inactive";
+                    }
+                    else
+                    {
+                        status = "unknow";
                     }
                 }
 
@@ -141,6 +145,7 @@ namespace AuctionAce.Application.Services
                 StartDate = startDate,
                 EndDate = endDate,
                 IdUsers = auctionerId,
+
             };
 
             // Zapis aukcji i uzyskanie jej ID
@@ -160,7 +165,8 @@ namespace AuctionAce.Application.Services
                     BuyNowPrice = item.BuyNowPrice,
                     NewUsed = item.NewUsed,
                     Guid = Helpers.Helpers.GetGuid(),
-                    IdAuctions = auctionId
+                    IdAuctions = auctionId,
+                    IdStatus = 0,
                 };
 
                 // Zapis przedmiotu i uzyskanie jego ID
@@ -184,27 +190,6 @@ namespace AuctionAce.Application.Services
             return null;
         }
 
-        public async Task<bool> AddItemToAuction(List<AuctionItemsDomain> request, int idAuction)
-        {
-            var items = request.Select(r => new AuctionItem
-            {
-                Name = r.Name,
-                Description = r.Description,
-                StartingPrice = r.StartingPrice,
-                BuyNowPrice = r.BuyNowPrice,
-                NewUsed = r.NewUsed,
-                Guid = Helpers.Helpers.GetGuid(),
-                IdAuctions = idAuction
-            }).ToList();
-            var response = await _auctionRespository.AddItemsToAuction(items);
-
-            if (response)
-            {
-                return true;
-            }
-
-            return false;
-        }
 
         /// <summary>
         /// pobieranie wszystkich itemów i wszystkich zdjec dla aukcji oraz itemu
