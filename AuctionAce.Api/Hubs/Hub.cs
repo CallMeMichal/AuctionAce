@@ -97,7 +97,15 @@ namespace AuctionAce.Api.Hubs
 
         }
 
+        public async Task SetActiveItemsInAuction(int auctionId)
+        {
+           await _auctionService.SetActiveItemsInAuction(auctionId);
+        }
 
+        public async Task SetInactiveItemsInAuctionWithoutBids(int auctionId)
+        {
+            await _auctionService.SetActiveItemsInAuctionWithoutBids(auctionId);
+        }
         private object ParsedRemainingTime(string time)
         {
             var parts = time.Split(new[] {'.',':'},StringSplitOptions.RemoveEmptyEntries);

@@ -158,6 +158,29 @@ namespace AuctionAce.Infrastructure.Repositories
             return true;
         }
 
+        public async Task SetActiveItemsInAuction(int auctionId)
+        {
+            var itemsAuction = await _context.AuctionItems.Where(x => x.IdAuctions == auctionId).ToListAsync();
+            foreach(var item in itemsAuction)
+            {
+                item.IdStatus = 1;
+            }
+            await _context.SaveChangesAsync();
+        }
+        public async Task SetActiveItemsInAuctionWithoutBids(int auctionId)
+        {
+            var itemsAuction = await _context.AuctionItems.Where(x => x.IdAuctions == auctionId).ToListAsync();
+            foreach (var item in itemsAuction)
+            {
+                var hasBidHistory = await _context.BidHistories.AnyAsync(b => b.IdAuctionItems == item.Id);
+
+                if (!hasBidHistory)
+                {
+                    item.IdStatus = 0;
+                }
+            }
+            await _context.SaveChangesAsync();
+        }
 
     }
 }

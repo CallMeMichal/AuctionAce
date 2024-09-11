@@ -24,18 +24,19 @@ namespace AuctionAce.Application.Services
             foreach (var auction in auctions)
             {
                 var status = "Pending";
-
+                var open = auction.AuctionItems.Count(x => x.IdStatus == 1);
+                var closed = auction.AuctionItems.Count(x => x.IdStatus == 0);
                 if (auction.StartDate.HasValue && auction.EndDate.HasValue)
                 {
-                    if (today < auction.StartDate.Value.Date)
+                    if (today < auction.StartDate.Value && closed >0)
                     {
                         status = "Pending";
                     }
-                    else if (today >= auction.StartDate.Value.Date && today <= auction.EndDate.Value.Date)
+                    else if (today >= auction.StartDate.Value && today <= auction.EndDate.Value && open >= 1)
                     {
                         status = "Active";
                     }
-                    else
+                    else if (today < auction.StartDate.Value && today > auction.EndDate.Value && open < 1)
                     {
                         status = "Inactive";
                     }
@@ -76,26 +77,23 @@ namespace AuctionAce.Application.Services
 
             foreach (var auction in userAuctions)
             {
-                var a = auction.AuctionItems.Count(x => x.IdStatus == 1);
-                var status = "Pending";
 
+                var status = "Pending";
+                var open = auction.AuctionItems.Count(x => x.IdStatus == 1);
+                var closed = auction.AuctionItems.Count(x => x.IdStatus == 0);
                 if (auction.StartDate.HasValue && auction.EndDate.HasValue)
                 {
-                    if (today < auction.StartDate.Value.Date && a >= 1)
+                    if (today < auction.StartDate.Value && closed > 0)
                     {
                         status = "Pending";
                     }
-                    else if (today >= auction.StartDate.Value.Date && today <= auction.EndDate.Value.Date && a >= 1)
+                    else if (today >= auction.StartDate.Value && today <= auction.EndDate.Value && open >= 1)
                     {
                         status = "Active";
                     }
-                    else if (a < 1)
+                    else if (open < 1)
                     {
                         status = "Inactive";
-                    }
-                    else
-                    {
-                        status = "unknow";
                     }
                 }
 
@@ -157,6 +155,7 @@ namespace AuctionAce.Application.Services
             // Przetwarzanie zdjęć dla poszczególnych przedmiotów
             foreach (var item in itemsInfo)
             {
+                
                 var auctionItem = new AuctionItem
                 {
                     Name = item.Name,
@@ -248,6 +247,15 @@ namespace AuctionAce.Application.Services
         public async Task<int> GetBuyNowPriceForItem(int itemId)
         {
             return await _auctionRespository.GetBuyNowPriceForItem(itemId);
+        }
+
+        public async Task SetActiveItemsInAuction(int auctionId)
+        {
+            await _auctionRespository.SetActiveItemsInAuction(auctionId);
+        }
+        public async Task SetActiveItemsInAuctionWithoutBids(int auctionId)
+        {
+            await _auctionRespository.SetActiveItemsInAuctionWithoutBids(auctionId);
         }
     }
 }

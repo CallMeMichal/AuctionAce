@@ -30,11 +30,7 @@
         {
             foreach (var item in Model.AuctionStatus)
             {
-                <div>
-                    Status: @item.Status
-                </div>
-
-                <div class="col-md-3 mb-4 card-wrapper" data-startdate="@item.StartDate.ToString("o")" data-status="@item.Status" data-enddate="@item.EndDate.ToString("o")">
+                <div class="col-md-3 mb-4 card-wrapper"  data-startdate="@item.StartDate.ToString("o")" data-status="@item.Status" data-enddate="@item.EndDate.ToString("o")">
                     <div class="card position-relative custom-card-width">
                         @if (item.AllAuctionsPhotos != null && item.AllAuctionsPhotos.AuctionImages != null && item.AllAuctionsPhotos.AuctionImages.Count > 0)
                         {
@@ -286,8 +282,16 @@
             }
         });
 
+            const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/hub")
+            .build();
+
+        connection.start()
+            .catch(err => console.error("Error establishing connection: ", err.toString()));
+
         function updateTimer() {
             cards.forEach(function (cardWrapper) {
+                var auctionId = cardWrapper.querySelector('.like-icon').getAttribute('data-auction-id');
                 var endDate = new Date(cardWrapper.getAttribute('data-enddate'));
                 var startDate = new Date(cardWrapper.getAttribute('data-startdate'));
                 var now = new Date();
@@ -295,6 +299,12 @@
                 var timeRemaining = endDate - now;
 
                 var statusBubble = cardWrapper.querySelector('.status-bubble');
+                var currentStatus = cardWrapper.getAttribute('data-status'); // Pobierz bieżący status
+
+                // Sprawdź, czy aukcja już jest zakończona
+                if (currentStatus === 'Inactive') {
+                    return; // Jeśli aukcja jest zakończona, nie zmieniaj jej statusu
+                }
 
                 if (timeToStart > 0) {
                     // Aukcja jeszcze się nie rozpoczęła
@@ -326,17 +336,25 @@
                     statusBubble.className = 'status-bubble status-open';
                     statusBubble.textContent = 'Active';
 
-                } else {
-                    // Aukcja zakończona
-                    cardWrapper.querySelector('.card-time').textContent = "Auction ended";
+                    
+                    if (auctionId) {
+                        connection.invoke("SetActiveItemsInAuction", parseInt(auctionId,10))
+                            .catch(err => console.error("Error to set active items: ", err.toString()));
+                    }
 
+                } else {
                     // Zaktualizuj status na "Inactive"
                     cardWrapper.setAttribute('data-status', 'Inactive');
                     statusBubble.className = 'status-bubble status-closed';
-                    statusBubble.textContent = 'Inactive';
+                    connection.invoke("SetInactiveItemsInAuctionWithoutBids", parseInt(auctionId, 10))
+                        .catch(err => console.error("Error to set inactive items: ", err.toString())); 
+                    statusBubble.textContent = 'Inactive'; // Dodanie komunikatu "Auction Ended"
                 }
             });
         }
+
+
+
 
         setInterval(updateTimer, 1000);
 
