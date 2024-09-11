@@ -1,4 +1,5 @@
 ﻿using AuctionAce.Infrastructure.Repositories;
+using Microsoft.EntityFrameworkCore.Query;
 using System.Linq.Expressions;
 
 namespace AuctionAce.Application.Services
@@ -36,5 +37,12 @@ namespace AuctionAce.Application.Services
         
             return response;
         }
+
+        public async Task GetUserItems(int userId)
+        {
+            await _userBoughtItemsRepostiory.GetUserBoughtItems(userId);
+        }
+
+       
     }
 }

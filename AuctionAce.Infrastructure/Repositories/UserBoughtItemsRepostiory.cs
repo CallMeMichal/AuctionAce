@@ -1,4 +1,5 @@
 ﻿using AuctionAce.Infrastructure.Data.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,5 +35,19 @@ namespace AuctionAce.Infrastructure.Repositories
             return false;
         }
 
+        public async Task GetUserBoughtItems(int userId)
+        {
+            try
+            {
+                var response = await _context.UserBoughtItems.Where(x => x.IdUser == userId).Include(x => x.IdAuctionItemNavigation).ThenInclude(x=>x.AuctionsItemsPhotos).Include(x => x.IdUserNavigation).ToListAsync();
+            }
+            catch (Exception ex)
+            {
+
+            }
+            
+            var a = 0;
+            
+        }
     }
 }
