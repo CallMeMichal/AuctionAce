@@ -150,9 +150,9 @@ namespace AuctionAce.Infrastructure.Repositories
             return convertedPrice;
         }
 
-        public async Task<bool> UpdateAuctionItemStatus(string guid, int status)
+        public async Task<bool> UpdateAuctionItemStatus(int itemId, int status)
         {
-            var item = await _context.AuctionItems.FirstOrDefaultAsync(x => x.Guid == guid);
+            var item = await _context.AuctionItems.FirstOrDefaultAsync(x => x.Id == itemId);
             item.IdStatus = status;
             await _context.SaveChangesAsync();
             return true;

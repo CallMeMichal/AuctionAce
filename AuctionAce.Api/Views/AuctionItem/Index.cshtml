@@ -223,7 +223,7 @@
         });
 
         $('#buyNowButton').click(function () {
-            
+            console.log(userId + @Model.Id + @Model.BuyNowPrice)
             Swal.fire({
                 title: `Are you sure you want to buy the item for ${@Model.BuyNowPrice}`,
                 icon: "warning",
@@ -240,7 +240,8 @@
                     }).then(() => {
                         connection.invoke("LeaveGroup", itemGuid)
                             .catch(err => console.error("Error sending message: ", err.toString()));
-                        window.location.href = '@Url.Action("Index", "BoughtItems", new { itemGuid = Model.Guid })';
+                        window.location.href = '@Url.Action("Index", "BoughtItems")' + `?itemId=${@Model.Id}&buyNowPrice=${@Model.BuyNowPrice}&userId=${userId}`;
+
                     });
 
                 }

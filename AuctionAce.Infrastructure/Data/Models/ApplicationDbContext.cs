@@ -244,20 +244,16 @@ public partial class ApplicationDbContext : DbContext
 
         modelBuilder.Entity<UserBoughtItem>(entity =>
         {
-            entity.HasNoKey();
-
-            entity.Property(e => e.Id)
-                .ValueGeneratedOnAdd()
-                .HasColumnName("id");
+            entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.IdAuctionItem).HasColumnName("id_auction_item");
             entity.Property(e => e.IdUser).HasColumnName("id_user");
             entity.Property(e => e.Prize).HasColumnName("prize");
 
-            entity.HasOne(d => d.IdAuctionItemNavigation).WithMany()
+            entity.HasOne(d => d.IdAuctionItemNavigation).WithMany(p => p.UserBoughtItems)
                 .HasForeignKey(d => d.IdAuctionItem)
                 .HasConstraintName("FK_UserBoughtItems_Auction_Items");
 
-            entity.HasOne(d => d.IdUserNavigation).WithMany()
+            entity.HasOne(d => d.IdUserNavigation).WithMany(p => p.UserBoughtItems)
                 .HasForeignKey(d => d.IdUser)
                 .HasConstraintName("FK_UserBoughtItems_Users");
         });

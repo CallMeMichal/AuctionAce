@@ -34,4 +34,6 @@ public partial class AuctionItem
     public virtual Auction? IdAuctionsNavigation { get; set; }
 
     public virtual ICollection<Leaderboard> Leaderboards { get; set; } = new List<Leaderboard>();
+
+    public virtual ICollection<UserBoughtItem> UserBoughtItems { get; set; } = new List<UserBoughtItem>();
 }

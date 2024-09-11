@@ -34,4 +34,6 @@ public partial class User
     public virtual Role? IdRolesNavigation { get; set; }
 
     public virtual ICollection<Leaderboard> Leaderboards { get; set; } = new List<Leaderboard>();
+
+    public virtual ICollection<UserBoughtItem> UserBoughtItems { get; set; } = new List<UserBoughtItem>();
 }
