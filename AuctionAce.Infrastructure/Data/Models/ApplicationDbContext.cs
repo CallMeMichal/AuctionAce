@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 
 namespace AuctionAce.Infrastructure.Data.Models;
 
@@ -32,6 +34,8 @@ public partial class ApplicationDbContext : DbContext
     public virtual DbSet<Role> Roles { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
+
+    public virtual DbSet<UserBoughtItem> UserBoughtItems { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
@@ -236,6 +240,26 @@ public partial class ApplicationDbContext : DbContext
             entity.HasOne(d => d.IdRolesNavigation).WithMany(p => p.Users)
                 .HasForeignKey(d => d.IdRoles)
                 .HasConstraintName("FK_Users_Roles");
+        });
+
+        modelBuilder.Entity<UserBoughtItem>(entity =>
+        {
+            entity.HasNoKey();
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedOnAdd()
+                .HasColumnName("id");
+            entity.Property(e => e.IdAuctionItem).HasColumnName("id_auction_item");
+            entity.Property(e => e.IdUser).HasColumnName("id_user");
+            entity.Property(e => e.Prize).HasColumnName("prize");
+
+            entity.HasOne(d => d.IdAuctionItemNavigation).WithMany()
+                .HasForeignKey(d => d.IdAuctionItem)
+                .HasConstraintName("FK_UserBoughtItems_Auction_Items");
+
+            entity.HasOne(d => d.IdUserNavigation).WithMany()
+                .HasForeignKey(d => d.IdUser)
+                .HasConstraintName("FK_UserBoughtItems_Users");
         });
 
         OnModelCreatingPartial(modelBuilder);
