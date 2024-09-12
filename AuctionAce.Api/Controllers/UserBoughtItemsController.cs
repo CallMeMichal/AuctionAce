@@ -16,42 +16,62 @@ namespace AuctionAce.Api.Controllers
 			_boughtItemsService = boughtItemsService;
 		}
 
-		[HttpGet]
-		[JwtAuthentication("1", "2")]
-		public IActionResult Index(int itemId, int buyNowPrice)
-		{
-			var userId = SessionHelper.GetUserIdFromSession(HttpContext);
-			UserBoughtItemsModel model = new UserBoughtItemsModel();
+        [HttpGet]
+        [JwtAuthentication("1", "2")]
+        public IActionResult Index(int itemId, int buyNowPrice)
+        {
+            var userId = SessionHelper.GetUserIdFromSession(HttpContext);
+            List<UserBoughtItemsModel> model = new List<UserBoughtItemsModel>();
 
-			if (itemId != 0 && buyNowPrice != 0)
-			{
-				string status = "inactive";
-				var setButtonVisibility = _boughtItemsService.SetAuctionItemStatus(itemId, status).Result;
-				var setItemToUser = _boughtItemsService.AddItemToBought(itemId, userId, buyNowPrice).Result;
+            if (itemId != 0 && buyNowPrice != 0)
+            {
+                string status = "inactive";
+                var setButtonVisibility = _boughtItemsService.SetAuctionItemStatus(itemId, status).Result;
+                var setItemToUser = _boughtItemsService.AddItemToBought(itemId, userId, buyNowPrice).Result;
+            }
 
-			}
+            var boughtItemsData = _boughtItemsService.GetUserItems(userId).Result;
+            var itemPhotosGroups = new List<UserBoughtItemsPhotosGroupModel>();
+            foreach (var item in boughtItemsData)
+            {
+                foreach (var photoGroup in item.GroupedItemPhotos)
+                {
+                    var groupItemId = photoGroup.AuctionItemId;
+                    var photos = photoGroup.Photos;
 
-			var boughtItemsData = _boughtItemsService.GetUserItems(userId).Result;
-			model.itemPhotos = new Dictionary<int?, List<UserBoughtItemsPhotoModel>>();
-			foreach (var item in boughtItemsData)
-			{
-				model.YourPrize = item.YourPrize;
-				model.Category = item.Category;
-				model.ItemName = item.ItemName;
-				model.NewUsed = item.NewUsed;
-				model.Description = item.Description;
-				foreach (var group in item.GroupedItemPhotos)
-				{
-					// Dodajemy do słownika pogrupowane zdjęcia według AuctionItemId
-					model.itemPhotos.Add(group.Key, group.Value.Select(photoItem => new UserBoughtItemsPhotoModel
-					{
-						Id = photoItem.Id,
-						PhotoBase64 = photoItem.PhotoBase64
-					}).ToList());
-				}
-			}
+                    itemPhotosGroups.Add(new UserBoughtItemsPhotosGroupModel
+                    {
+                        AuctionItemId = groupItemId,
+                        Photos = photos.Select(p => new UserBoughtItemsPhotoModel
+                        {
+                            Id = p.Id,
+                            PhotoBase64 = p.PhotoBase64
+                        }).ToList()
+                    });
+                }
+            }
 
-			return View(model);
-		}
-	}
+            foreach (var item in boughtItemsData)
+            {
+                var boughtItem = new UserBoughtItemsModel
+                {
+                    YourPrize = item.YourPrize,
+                    Category = item.Category,
+                    ItemName = item.ItemName,
+                    NewUsed = item.NewUsed,
+                    Description = item.Description,
+                    ItemPhotos = itemPhotosGroups
+                        .Where(p => p.AuctionItemId == item.AuctionItemId)
+                        .ToList()
+                };
+
+                model.Add(boughtItem);
+            }
+
+            return View(model);
+        }
+
+
+
+    }
 }

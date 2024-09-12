@@ -1,69 +1,88 @@
 ﻿@using AuctionAce.Api.Models.ViewModels.UserBoughtItems
-@model UserBoughtItemsModel
+@model List<UserBoughtItemsModel>
 @{
-	Layout = "~/Views/Shared/_LayoutLogged.cshtml";
+    Layout = "~/Views/Shared/_LayoutLogged.cshtml";
+    int counter = 1;
 }
 
-
 <div class="container">
-	<div class="row">
-		<div class="col-12">
-			<table class="table table-image">
-				<thead>
-					<tr>
-						<th scope="col"></th>
-						<th scope="col">Item name</th>
-						<th scope="col">Item photo</th>
-						<th scope="col">Item description</th>
-						<th scope="col">Item category</th>
-						<th scope="col">Condition</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<th scope="row">1</th>
-						<td class="w-25">
-							<img src="https://s3.eu-central-1.amazonaws.com/bootstrapbaymisc/blog/24_days_bootstrap/sheep-3.jpg" class="img-fluid img-thumbnail" alt="Sheep">
-						</td>
-						<td>Bootstrap 4 CDN and Starter Template</td>
-						<td>Cristina</td>
-						<td>913</td>
-						<td>2.846</td>
-					</tr>
-					<tr>
-						<th scope="row">2</th>
-						<td class="w-25">
-							<img src="https://s3.eu-central-1.amazonaws.com/bootstrapbaymisc/blog/24_days_bootstrap/sheep-5.jpg" class="img-fluid img-thumbnail" alt="Sheep">
-						</td>
-						<td>Bootstrap Grid 4 Tutorial and Examples</td>
-						<td>Cristina</td>
-						<td>1.434</td>
-						<td>3.417</td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
-	</div>
+    <div class="row">
+        <div class="col-12">
+            <table class="table table-image">
+                <thead>
+                    <tr>
+                        <th scope="col"></th>
+                        <th scope="col">Item name</th>
+                        <th scope="col">Prize</th>
+                        <th scope="col">Item photo</th>
+                        <th scope="col">Item description</th>
+                        <th scope="col">Item category</th>
+                        <th scope="col">Condition</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        var carouselId = $"carouselExampleInterval{counter}";
+                        var photos = item.ItemPhotos
+                        .SelectMany(group => group.Photos)
+                        .ToList();
+                        <tr>
+                            <th scope="row">@counter</th>
+                            <td>@item.ItemName</td>
+                            <td>@item.YourPrize</td>
+                            <td class="w-25">
+                                @if (photos.Any())
+                                {
+                                    <div id="@carouselId" class="carousel slide" data-bs-ride="carousel">
+                                        <div class="carousel-inner">
+                                            @for (int i = 0; i < photos.Count; i++)
+                                            {
+                                                var photo = photos[i];
+                                                <div class="carousel-item @(i == 0 ? "active" : "")" data-bs-interval="10000">
+                                                    <img src="data:image/jpeg;base64,@photo.PhotoBase64" class="d-block w-100" alt="...">
+                                                </div>
+                                            }
+                                        </div>
+                                        <button class="carousel-control-prev" type="button" data-bs-target="#@carouselId" data-bs-slide="prev">
+                                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                            <span class="visually-hidden">Previous</span>
+                                        </button>
+                                        <button class="carousel-control-next" type="button" data-bs-target="#@carouselId" data-bs-slide="next">
+                                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                            <span class="visually-hidden">Next</span>
+                                        </button>
+                                    </div>
+                                }
+                            </td>
+                            <td>@item.Description</td>
+                            <td>@item.Category</td>
+                            <td>@item.NewUsed</td>
+                        </tr>
+                        counter++;
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 
-
-
 <style>
-	.container {
-		padding: 2rem 0rem;
-		max-width:fit-content;
-	}
+    .container {
+        padding: 2rem 0rem;
+    }
 
-	h4 {
-		margin: 2rem 0rem 1rem;
-	}
+    h4 {
+        margin: 2rem 0rem 1rem;
+    }
 
-	.table-image {
-		td, th
+    .table-image td, .table-image th {
+        vertical-align: middle;
+    }
 
-	{
-		vertical-align: middle;
-	}
-
-	}
+    .carousel-inner img {
+        max-width: 100%;
+        max-height: 200px;
+        object-fit: cover;
+    }
 </style>

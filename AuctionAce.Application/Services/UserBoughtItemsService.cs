@@ -37,52 +37,47 @@ namespace AuctionAce.Application.Services
 			return response;
 		}
 
-		public async Task<List<UserBoughtItemsDomain>> GetUserItems(int userId)
-		{
-			var data = await _userBoughtItemsRepostiory.GetUserBoughtItems(userId);
-			string newUsed = "";
-			if (data.Count > 0)
-			{
-				List<UserBoughtItemsDomain> userBoughtItemsDomains = new List<UserBoughtItemsDomain>();
-				foreach (var item in data)
-				{
+        public async Task<List<UserBoughtItemsDomain>> GetUserItems(int userId)
+        {
+            var data = await _userBoughtItemsRepostiory.GetUserBoughtItems(userId);
+            string newUsed = "";
+            if (data.Count > 0)
+            {
+                List<UserBoughtItemsDomain> userBoughtItemsDomains = new List<UserBoughtItemsDomain>();
+                foreach (var item in data)
+                {
+                    var groupedPhotos = item.IdAuctionItemNavigation.AuctionsItemsPhotos
+                        .GroupBy(photo => photo.AuctionItemId)
+                        .Select(group => new UserBoughtItemsPhotosGroup
+                        {
+                            AuctionItemId = group.Key,
+                            Photos = group.Select(photo => new UserBoughtItemsPhotoDomain
+                            {
+                                Id = photo.Id,
+                                PhotoBase64 = Helpers.Helpers.GetImageDataBase64(photo.Path)
+                            }).ToList()
+                        }).ToList();
 
-					var groupedPhotos = item.IdAuctionItemNavigation.AuctionsItemsPhotos
-				   .GroupBy(photo => photo.AuctionItemId)
-				   .ToDictionary(
-					   group => group.Key, // AuctionItemId jako klucz
-					   group => group.Select(photo => new UserBoughtItemsPhotoDomain
-					   {
-						   Id = photo.Id,
-						   PhotoBase64 = Helpers.Helpers.GetImageDataBase64(photo.Path)
-					   }).ToList() // Lista zdjęć jako wartość
-				   );
-
-					if (item.IdAuctionItemNavigation.NewUsed == true)
-					{
-						newUsed = "new";
-					}
-					else
-					{
-						newUsed = "used";
-					}
-
-					userBoughtItemsDomains.Add(new UserBoughtItemsDomain
-					{
-						YourPrize = item.Prize,
-						Category = item.IdAuctionItemNavigation.Category,
-						Description = item.IdAuctionItemNavigation.Description,
-						ItemName = item.IdAuctionItemNavigation.Name,
-						NewUsed = newUsed,
-						GroupedItemPhotos = groupedPhotos,
-					});
-				}
-				return userBoughtItemsDomains;
-			}
-			return new List<UserBoughtItemsDomain>();
-		}
+                    newUsed = item.IdAuctionItemNavigation.NewUsed == true ? "new" : "used";
+                    userBoughtItemsDomains.Add(new UserBoughtItemsDomain
+                    {
+                        AuctionItemId = item.IdAuctionItemNavigation.Id,
+                        YourPrize = item.Prize,
+                        Category = item.IdAuctionItemNavigation.Category,
+                        Description = item.IdAuctionItemNavigation.Description,
+                        ItemName = item.IdAuctionItemNavigation.Name,
+                        NewUsed = newUsed,
+                        GroupedItemPhotos = groupedPhotos,
+                    });
+                }
+                return userBoughtItemsDomains;
+            }
+            return new List<UserBoughtItemsDomain>();
+        }
 
 
 
-	}
+
+
+    }
 }
