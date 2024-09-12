@@ -1,10 +1,5 @@
 ﻿using AuctionAce.Infrastructure.Data.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AuctionAce.Infrastructure.Repositories
 {
@@ -35,19 +30,12 @@ namespace AuctionAce.Infrastructure.Repositories
             return false;
         }
 
-        public async Task GetUserBoughtItems(int userId)
+        public async Task<List<UserBoughtItem>> GetUserBoughtItems(int userId)
         {
-            try
-            {
-                var response = await _context.UserBoughtItems.Where(x => x.IdUser == userId).Include(x => x.IdAuctionItemNavigation).ThenInclude(x=>x.AuctionsItemsPhotos).Include(x => x.IdUserNavigation).ToListAsync();
-            }
-            catch (Exception ex)
-            {
 
-            }
-            
-            var a = 0;
-            
+            var response = await _context.UserBoughtItems.Where(x => x.IdUser == userId).Include(x => x.IdAuctionItemNavigation).ThenInclude(x => x.AuctionsItemsPhotos).Include(x => x.IdUserNavigation).ToListAsync();
+            return response;
+
         }
     }
 }
