@@ -238,11 +238,12 @@ namespace AuctionAce.Application.Services
 			return null;
 		}
 
-		public async Task<TimeSpan> GetRemainingTimeForAuction(int auctionId)
+		public async Task<double> GetRemainingTimeForAuction(int auctionId)
 		{
 			var remainingTime = await _auctionRespository.GetTimeForAuction(auctionId);
-			return remainingTime;
-		}
+            var remainingTimeMilliseconds = remainingTime.TotalMilliseconds;
+			return remainingTimeMilliseconds;
+        }
 
 		public async Task<int> GetAuctionIdByItemId(int itemId)
 		{

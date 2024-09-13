@@ -80,6 +80,11 @@
         <div class="col-md-12">
             <span id="countdownTimer" class="h5">timer</span>
         </div>
+        <div class="col-md-12">
+            <div class="progress">
+                <div id="progressBar" class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -124,169 +129,207 @@
             document.getElementById("chatBox").appendChild(messageElement);
         });
 
-        connection.on("ReceiveRemainingAuctionTime", function (remainingTime) {
-        });
+        connection.on("ReceiveRemainingAuctionTime", function (remainingTimeMilliseconds) {
+            function formatTime(ms) {
+                const days = Math.floor(ms / (24 * 60 * 60 * 1000));
+                ms -= days * 24 * 60 * 60 * 1000;
+                const hours = Math.floor(ms / (60 * 60 * 1000));
+                ms -= hours * 60 * 60 * 1000;
+                const minutes = Math.floor(ms / (60 * 1000));
+                ms -= minutes * 60 * 1000;
+                const seconds = Math.floor(ms / 1000);
 
-        connection.on("ReceiveHistoryMessages", function (formattedChatHistories) {
-
-            var chatBox = document.getElementById("chatBox")
-            chatBox.innerHTML = '';
-
-            formattedChatHistories.forEach(function (chatMessage) {
-                var messageElement = document.createElement("div");
-                var formattedData = chatMessage.dateFormatted;
-                var userEmail = chatMessage.userEmail;
-                var message = chatMessage.message;
-                messageElement.textContent = `${formattedData}: ${userEmail}: ${message}`;
-                document.getElementById("chatBox").appendChild(messageElement);
-            });
-        });
-
-        connection.on("ReceiveHistoryBids", function (formattedBidHistories, highestBid) {
-            console.log(formattedBidHistories);
-            var leaderboardBody = document.getElementById("leaderboardBody");
-            leaderboardBody.innerHTML = '';
-
-            formattedBidHistories.forEach(function (bid, index) {
-                console.log(bid);
-                var row = document.createElement("tr");
-                var indexCell = document.createElement("td");
-                indexCell.textContent = index + 1;
-
-                var userCell = document.createElement("td");
-                userCell.textContent = bid.userEmail;
-
-                var priceCell = document.createElement("td");
-                priceCell.textContent = bid.price;
-
-                row.appendChild(indexCell);
-                row.appendChild(userCell);
-                row.appendChild(priceCell);
-
-                leaderboardBody.appendChild(row);
-            });
-
-            highestBid = highestBid;
+                return `${days}d ${hours}h ${minutes}m ${seconds}s`;
+            }
             
-        });
 
-        connection.on("ReceiveBid", function (bid, userEmail, date) {
-            updateLeaderboard(bid, userEmail);
-        });
+            connection.on("ReceiveHistoryMessages", function (formattedChatHistories) {
 
-        $('#sendButton').click(function () {
-            const message = $('#messageInput').val();
-            if (message) {
+                var chatBox = document.getElementById("chatBox")
+                chatBox.innerHTML = '';
 
-                connection.invoke("SendMessageToGroup", itemGuid, message, userEmail, auctionItemId, userId)
-                    .catch(err => console.error("Error sending message: ", err.toString()));
-                $('#messageInput').val(''); // Wyczyść pole tekstowe po wysłaniu wiadomości
-            }
-        });
-
-        $('#bidButton').click(function () {
-            const offer = $('#newBid')[0].valueAsNumber;
-            if (offer > highestBid) {
-                connection.invoke("SendBidToGroup", itemGuid, offer, userEmail, userId, auctionItemId)
-                    .catch(err => console.error("Error sending bid: ", err.toString()));
-            } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: `The offer must be greater than ${highestBid}`,
+                formattedChatHistories.forEach(function (chatMessage) {
+                    var messageElement = document.createElement("div");
+                    var formattedData = chatMessage.dateFormatted;
+                    var userEmail = chatMessage.userEmail;
+                    var message = chatMessage.message;
+                    messageElement.textContent = `${formattedData}: ${userEmail}: ${message}`;
+                    document.getElementById("chatBox").appendChild(messageElement);
                 });
-            }
-        });
+            });
+
+            connection.on("ReceiveHistoryBids", function (formattedBidHistories, highestBid) {
+                console.log(formattedBidHistories);
+                var leaderboardBody = document.getElementById("leaderboardBody");
+                leaderboardBody.innerHTML = '';
+
+                formattedBidHistories.forEach(function (bid, index) {
+                    console.log(bid);
+                    var row = document.createElement("tr");
+                    var indexCell = document.createElement("td");
+                    indexCell.textContent = index + 1;
+
+                    var userCell = document.createElement("td");
+                    userCell.textContent = bid.userEmail;
+
+                    var priceCell = document.createElement("td");
+                    priceCell.textContent = bid.price;
+
+                    row.appendChild(indexCell);
+                    row.appendChild(userCell);
+                    row.appendChild(priceCell);
+
+                    leaderboardBody.appendChild(row);
+                });
+
+                highestBid = highestBid;
+            
+            });
+
+            connection.on("ReceiveBid", function (bid, userEmail, date) {
+                updateLeaderboard(bid, userEmail);
+            });
+
+            $('#sendButton').click(function () {
+                const message = $('#messageInput').val();
+                if (message) {
+
+                    connection.invoke("SendMessageToGroup", itemGuid, message, userEmail, auctionItemId, userId)
+                        .catch(err => console.error("Error sending message: ", err.toString()));
+                    $('#messageInput').val(''); // Wyczyść pole tekstowe po wysłaniu wiadomości
+                }
+            });
+
+            $('#bidButton').click(function () {
+                const offer = $('#newBid')[0].valueAsNumber;
+                if (offer > highestBid) {
+                    connection.invoke("SendBidToGroup", itemGuid, offer, userEmail, userId, auctionItemId)
+                        .catch(err => console.error("Error sending bid: ", err.toString()));
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: `The offer must be greater than ${highestBid}`,
+                    });
+                }
+            });
         
-        $('#quitButton').click(function () {
-            Swal.fire({
-                title: "Are you sure?",
-                text: "You can come back here before the time runs out!",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Yes, quit!"
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    Swal.fire({
-                        title: "Success!",
-                        icon: "success"
-                    }).then(() => {
-                        connection.invoke("LeaveGroup", itemGuid)
-                            .catch(err => console.error("Error sending message: ", err.toString()));
-                        // Możesz przekierować użytkownika po zakończeniu animacji
-                        window.location.href = '@Url.Action("AuctionItemList", "Auction", new { auctionId = Model.AuctionId })';
-                    });
-                    
-                }
-            })
-        });
-
-        $('#buyNowButton').click(function () {
-            Swal.fire({
-                title: `Are you sure you want to buy the item for ${@Model.BuyNowPrice}`,
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Yes, buy!"
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    Swal.fire({
-                        title: "Success!",
-                        text: "Item purchased successfully",
-                        icon: "success"
-                    }).then(() => {
-                        connection.invoke("LeaveGroup", itemGuid)
-                            .catch(err => console.error("Error leaving message: ", err.toString()));
-                        window.location.href = '@Url.Action("Index", "UserBoughtItems")' + `?itemId=${@Model.Id}&buyNowPrice=${@Model.BuyNowPrice}`;
-
-                    });
-
-                }
-            })
-        });
-
-
-        function updateLeaderboard(bid, userEmail) {
-            const tableBody = document.getElementById('leaderboardBody');
-
-            // Sprawdź, czy oferta jest większa niż najwyższa oferta
-            if (bid > highestBid) {
-                // Jeśli tabela jest pełna (10 wierszy), usuń ostatni wiersz
-                if (tableBody.rows.length >= 10) {
-                    tableBody.deleteRow(tableBody.rows.length - 1);
-                }
-
-                // Wstaw nowy wiersz na początku tabeli
-                const newRow = tableBody.insertRow(0);
-                newRow.insertCell(0).textContent = 1;
-                newRow.insertCell(1).textContent = userEmail;
-                newRow.insertCell(2).textContent = bid;
-
-                highestBid = bid;
-
-                // Zaktualizuj numery pozycji
-                for (let i = 0; i < tableBody.rows.length; i++) {
-                    tableBody.rows[i].cells[0].textContent = i + 1;
-                }
-                $('#actualPrice').val(highestBid);
-                
-            } else if (bid <= highestBid) {
-                // Dodaj komunikat błędu, gdy oferta jest równa lub niższa od najwyższej
+            $('#quitButton').click(function () {
                 Swal.fire({
-                    icon: 'error',
-                    title: `The offer must be greater than ${highestBid}`,
-                });
-            }
-        }
+                    title: "Are you sure?",
+                    text: "You can come back here before the time runs out!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Yes, quit!"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire({
+                            title: "Success!",
+                            icon: "success"
+                        }).then(() => {
+                            connection.invoke("LeaveGroup", itemGuid)
+                                .catch(err => console.error("Error sending message: ", err.toString()));
+                            // Możesz przekierować użytkownika po zakończeniu animacji
+                            window.location.href = '@Url.Action("AuctionItemList", "Auction", new { auctionId = Model.AuctionId })';
+                        });
+                    
+                    }
+                })
+            });
 
+            $('#buyNowButton').click(function () {
+                Swal.fire({
+                    title: `Are you sure you want to buy the item for ${@Model.BuyNowPrice}`,
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Yes, buy!"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire({
+                            title: "Success!",
+                            text: "Item purchased successfully",
+                            icon: "success"
+                        }).then(() => {
+                            connection.invoke("LeaveGroup", itemGuid)
+                                .catch(err => console.error("Error leaving message: ", err.toString()));
+                            window.location.href = '@Url.Action("Index", "UserBoughtItems")' + `?itemId=${@Model.Id}&buyNowPrice=${@Model.BuyNowPrice}`;
+
+                        });
+
+                    }
+                })
+            });
+
+
+            function updateLeaderboard(bid, userEmail) {
+                const tableBody = document.getElementById('leaderboardBody');
+
+                // Sprawdź, czy oferta jest większa niż najwyższa oferta
+                if (bid > highestBid) {
+                    // Jeśli tabela jest pełna (10 wierszy), usuń ostatni wiersz
+                    if (tableBody.rows.length >= 10) {
+                        tableBody.deleteRow(tableBody.rows.length - 1);
+                    }
+
+                    // Wstaw nowy wiersz na początku tabeli
+                    const newRow = tableBody.insertRow(0);
+                    newRow.insertCell(0).textContent = 1;
+                    newRow.insertCell(1).textContent = userEmail;
+                    newRow.insertCell(2).textContent = bid;
+
+                    highestBid = bid;
+
+                    // Zaktualizuj numery pozycji
+                    for (let i = 0; i < tableBody.rows.length; i++) {
+                        tableBody.rows[i].cells[0].textContent = i + 1;
+                    }
+                    $('#actualPrice').val(highestBid);
+                
+                } else if (bid <= highestBid) {
+                    // Dodaj komunikat błędu, gdy oferta jest równa lub niższa od najwyższej
+                    Swal.fire({
+                        icon: 'error',
+                        title: `The offer must be greater than ${highestBid}`,
+                    });
+                }
+            }
+        
+            function updateCountdown() {
+                    if (remainingTimeMilliseconds <= 0) {
+                        document.getElementById("countdownTimer").textContent = "Auction ended";
+                        clearInterval(intervalId);
+                        return;
+                    }
+                    document.getElementById("countdownTimer").textContent = formatTime(remainingTimeMilliseconds);
+                    remainingTimeMilliseconds -= 1000;
+            }
+
+          updateCountdown();
+          let intervalId = setInterval(updateCountdown, 1000); 
+        });
     });
 </script>
 
 
 
 <style>
+
+    .progress {
+        height: 30px;
+        background-color: #f3f3f3;
+    }
+
+    .progress-bar {
+        height: 100%;
+        background-color: #007bff;
+        text-align: center;
+        line-height: 30px;
+        color: white;
+    }
+
     .carousel-inner img {
         width: 100%; /* Szerokość zdjęcia dopasowana do kontenera */
         height: auto; /* Automatyczna wysokość, aby zachować proporcje */

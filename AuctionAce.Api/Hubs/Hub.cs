@@ -27,7 +27,7 @@ namespace AuctionAce.Api.Hubs
             var bidHistories = await _bidHistoryService.GetBidHistory(auctionIdItem);
             var auctionId = await _auctionService.GetAuctionIdByItemId(auctionIdItem);
             var remainingTime = await _auctionService.GetRemainingTimeForAuction(auctionId);
-            var parsedRemainingTime = ParsedRemainingTime(remainingTime.ToString());
+ 
 
             chatHistories = chatHistories.OrderBy(chat => chat.Date).ToList();
 
@@ -49,7 +49,7 @@ namespace AuctionAce.Api.Hubs
                 
             await Clients.Group(groupName).SendAsync("ReceiveHistoryMessages", formattedChatHistories);
             await Clients.Group(groupName).SendAsync("ReceiveHistoryBids", formattedBidHistories,highestBid);
-            await Clients.Group(groupName).SendAsync("ReceiveRemainingAuctionTime", parsedRemainingTime);
+            await Clients.Group(groupName).SendAsync("ReceiveRemainingAuctionTime", remainingTime);
         }
 
         public async Task SendMessageToGroup(string groupName, string message, string userEmail, string auctionItemId, string userId)
@@ -106,24 +106,7 @@ namespace AuctionAce.Api.Hubs
         {
             await _auctionService.SetInactiveItemsInAuctionWithoutBids(auctionId);
         }
-        private object ParsedRemainingTime(string time)
-        {
-            var parts = time.Split(new[] {'.',':'},StringSplitOptions.RemoveEmptyEntries);
-            if (parts.Length != 5) throw new FormatException("Invalid remaining time format");
-            var days = int.Parse(parts[0]);
-            var hours = int.Parse(parts[1]);
-            var minutes = int.Parse(parts[2]);
-            var seconds = int.Parse(parts[3]);
-            var milliseconds = int.Parse(parts[4].PadRight(3, '0')); // Pad to milliseconds
-
-            return new
-            {
-                days,
-                hours,
-                minutes,
-                seconds,
-                milliseconds
-            };
-        }
+        
+        
     }
 }
