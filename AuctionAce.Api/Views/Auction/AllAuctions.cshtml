@@ -342,8 +342,7 @@
                             .catch(err => console.error("Error to set active items: ", err.toString()));
                     }
 
-                } else {
-                    // Zaktualizuj status na "Inactive"
+                }else {
                     cardWrapper.setAttribute('data-status', 'Inactive');
                     statusBubble.className = 'status-bubble status-closed';
                     connection.invoke("SetInactiveItemsInAuctionWithoutBids", parseInt(auctionId, 10))

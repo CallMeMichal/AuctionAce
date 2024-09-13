@@ -67,7 +67,7 @@ namespace AuctionAce.Api.Controllers
                     StartingPrice = item.StartingPrice,
                     BuyNowPrice = item.BuyNowPrice,
                     NewUsed = item.NewUsed,
-                    ItemImagePaths = itemImagePaths
+                    ItemImagePaths = itemImagePaths,
                 };
 
                 itemsDomain.Add(auctionItemDomain);

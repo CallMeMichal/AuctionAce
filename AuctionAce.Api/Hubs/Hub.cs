@@ -104,7 +104,7 @@ namespace AuctionAce.Api.Hubs
 
         public async Task SetInactiveItemsInAuctionWithoutBids(int auctionId)
         {
-            await _auctionService.SetActiveItemsInAuctionWithoutBids(auctionId);
+            await _auctionService.SetInactiveItemsInAuctionWithoutBids(auctionId);
         }
         private object ParsedRemainingTime(string time)
         {

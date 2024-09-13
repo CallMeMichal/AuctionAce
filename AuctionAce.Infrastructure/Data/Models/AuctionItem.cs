@@ -25,6 +25,8 @@ public partial class AuctionItem
 
     public string? Guid { get; set; }
 
+    public bool? IsBought { get; set; }
+
     public virtual ICollection<AuctionsItemsPhoto> AuctionsItemsPhotos { get; set; } = new List<AuctionsItemsPhoto>();
 
     public virtual ICollection<BidHistory> BidHistories { get; set; } = new List<BidHistory>();

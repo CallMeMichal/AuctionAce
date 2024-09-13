@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 
 namespace AuctionAce.Infrastructure.Data.Models;
 
@@ -98,6 +100,7 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.Guid).HasColumnName("guid");
             entity.Property(e => e.IdAuctions).HasColumnName("id_auctions");
             entity.Property(e => e.IdStatus).HasColumnName("id_status");
+            entity.Property(e => e.IsBought).HasColumnName("isBought");
             entity.Property(e => e.Name).HasColumnName("name");
             entity.Property(e => e.NewUsed).HasColumnName("new_used");
             entity.Property(e => e.StartingPrice)

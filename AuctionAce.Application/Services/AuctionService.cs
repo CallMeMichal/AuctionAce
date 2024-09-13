@@ -135,6 +135,7 @@ namespace AuctionAce.Application.Services
 
 		public async Task<bool> AddAuctionAsync(string auctionName, string auctionDescription, DateTime startDate, DateTime endDate, int auctionerId, Dictionary<string, string> auctionImagePaths, List<AuctionItemsDomain> itemsInfo)
 		{
+			var status = 0;
 			// Tworzenie rekordu dla aukcji
 			Auction auction = new Auction()
 			{
@@ -145,7 +146,15 @@ namespace AuctionAce.Application.Services
 				IdUsers = auctionerId,
 
 			};
-
+			DateTime dateNow = DateTime.Now;
+			if(dateNow>startDate && dateNow < endDate)
+			{
+			     status = 1;
+			}
+			else
+			{
+				status = 0;
+			}
 			// Zapis aukcji i uzyskanie jej ID
 			var auctionId = await _auctionRespository.AddAuctionAsync(auction);
 
@@ -155,7 +164,6 @@ namespace AuctionAce.Application.Services
 			// Przetwarzanie zdjęć dla poszczególnych przedmiotów
 			foreach (var item in itemsInfo)
 			{
-
 				var auctionItem = new AuctionItem
 				{
 					Name = item.Name,
@@ -165,7 +173,8 @@ namespace AuctionAce.Application.Services
 					NewUsed = item.NewUsed,
 					Guid = Helpers.Helpers.GetGuid(),
 					IdAuctions = auctionId,
-					IdStatus = 0,
+					IdStatus = status,
+					IsBought = false,
 				};
 
 				// Zapis przedmiotu i uzyskanie jego ID
@@ -253,9 +262,9 @@ namespace AuctionAce.Application.Services
 		{
 			await _auctionRespository.SetActiveItemsInAuction(auctionId);
 		}
-		public async Task SetActiveItemsInAuctionWithoutBids(int auctionId)
+		public async Task SetInactiveItemsInAuctionWithoutBids(int auctionId)
 		{
-			await _auctionRespository.SetActiveItemsInAuctionWithoutBids(auctionId);
+			await _auctionRespository.SetInactiveItemsInAuctionWithoutBids(auctionId);
 		}
 	}
 }

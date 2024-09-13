@@ -22,6 +22,13 @@ namespace AuctionAce.Infrastructure.Repositories
                 IdUser = userId,
                 Prize = price,
             });
+            var item = await _context.AuctionItems.FirstOrDefaultAsync(x => x.Id == itemId);
+            if (item != null)
+            {
+                item.IsBought = true;
+                _context.AuctionItems.Update(item);
+            }
+            
             var savedResponse = await _context.SaveChangesAsync();
             if (savedResponse > 0)
             {

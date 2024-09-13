@@ -163,18 +163,22 @@ namespace AuctionAce.Infrastructure.Repositories
             var itemsAuction = await _context.AuctionItems.Where(x => x.IdAuctions == auctionId).ToListAsync();
             foreach(var item in itemsAuction)
             {
-                item.IdStatus = 1;
+                if (item.IdStatus == 0 && item.IsBought == false)
+                {
+                    item.IdStatus = 1;
+                }
+
             }
             await _context.SaveChangesAsync();
         }
-        public async Task SetActiveItemsInAuctionWithoutBids(int auctionId)
+        public async Task SetInactiveItemsInAuctionWithoutBids(int auctionId)
         {
             var itemsAuction = await _context.AuctionItems.Where(x => x.IdAuctions == auctionId).ToListAsync();
             foreach (var item in itemsAuction)
             {
                 var hasBidHistory = await _context.BidHistories.AnyAsync(b => b.IdAuctionItems == item.Id);
 
-                if (!hasBidHistory)
+                if (!hasBidHistory && item.IsBought == false)
                 {
                     item.IdStatus = 0;
                 }

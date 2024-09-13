@@ -39,21 +39,5 @@ namespace AuctionAce.Api.Controllers
 
             return View(item);
         }
-
-        [HttpPost]
-        public IActionResult SendMessageToGroup(string groupName, string message)
-        {
-            return View("Index");
-        }
-
-        /*public IActionResult GetHistoryMessages(string groupName)
-        {
-            return View();
-        }
-
-        public IActionResult GetActiveUsersForGroup()
-        {
-            return View();
-        }*/
     }
 }
