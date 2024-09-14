@@ -45,7 +45,16 @@
                                 </button>
                             </td>
                             <td>
-                                <a href="@Url.Action("Index", "AuctionItem", new { itemId = i.Id,itemGuid =i.Guid})" class="btn btn-primary @(i.IdStatus == 0 ? "disabled" : "")"@(i.IdStatus == 0 ? "tabindex='-1' aria-disabled='true'" :"")>@(i.IdStatus == 0 ? "Closed" : "Join")</a>
+                                @if (userId != 0)
+                                {
+                                    <a href="@Url.Action("Index", "AuctionItem", new { itemId = i.Id,itemGuid =i.Guid})" class="btn btn-primary @(i.IdStatus == 0 ? "disabled" : "")" @(i.IdStatus == 0 ? "tabindex='-1' aria-disabled='true'" : "")>@(i.IdStatus == 0 ? "Closed" : "Join")</a>
+                                }
+                                else
+                                {
+
+                                 <span class="btn btn-secondary" tabindex="-1" aria-disabled="true">Login Required</span>
+                                }
+
                             </td>
                         </tr>
 

@@ -33,5 +33,39 @@ namespace AuctionAce.Infrastructure.Repositories
             var highestBid = allBids.Max(x => x.Price);
             return Convert.ToInt32(highestBid);
         }
+
+        public async Task<int> GetHighestBidForItemAndSave(int itemId)
+        {
+            var allBids = await GetBidHistory(itemId);
+            var highestBid = allBids.Max(x => x.Price);
+
+            var userId = allBids.FirstOrDefault(z => z.Price == highestBid).IdUsers;
+
+            if (userId != null)
+            {
+                var item = _context.AuctionItems.FirstOrDefault(x=>x.Id == itemId);
+                if (item != null)
+                {
+                    item.IsBought = true;
+                }
+                var a = allBids.FirstOrDefault(a => a.IdUsers == userId);
+                if(a != null)
+                {
+                    a.IsWin = true;
+                }
+
+                UserBoughtItem userBoughtItem = new UserBoughtItem()
+                {
+                    Prize = Convert.ToInt32(highestBid),
+                    IdUser = userId,
+                    IdAuctionItem = itemId,
+                    
+                };
+                _context.UserBoughtItems.Add(userBoughtItem);
+                await _context.SaveChangesAsync();
+            }
+
+            return Convert.ToInt32(highestBid);
+        }
     }
 }

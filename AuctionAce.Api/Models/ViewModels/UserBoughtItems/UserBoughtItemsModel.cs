@@ -7,8 +7,6 @@
         public string Category { get; set; }
         public string NewUsed { get; set; }
         public string Description { get; set; }
-
-        // Zmieniamy na listę grup zdjęć
         public List<UserBoughtItemsPhotosGroupModel> ItemPhotos { get; set; }
     }
 

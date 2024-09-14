@@ -4,6 +4,7 @@ using AuctionAce.Api.Models.ViewModels.Auctions;
 using AuctionAce.Application.Middleware;
 using AuctionAce.Application.Services;
 using AuctionAce.Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AuctionAce.Api.Controllers
@@ -156,7 +157,8 @@ namespace AuctionAce.Api.Controllers
             return View(model);
         }
 
-        [JwtAuthentication("1", "2")]
+        /* [JwtAuthentication("1", "2")]*/
+        [AllowAnonymous]
         [HttpGet]
         public IActionResult AuctionItemList(int auctionId)
         {

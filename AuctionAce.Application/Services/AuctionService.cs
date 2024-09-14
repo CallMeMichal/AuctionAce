@@ -121,7 +121,60 @@ namespace AuctionAce.Application.Services
 			return auctionList;
 		}
 
-		public async Task<List<Auction>> GetAuctionsByIdUserAsync(int idUser)
+        public async Task<List<AuctionListDomain>> GetAllAuctionsAsync()
+        {
+            var auctions = await _auctionRespository.GetAuctionsAsync();
+            var auctionsItem = await _auctionRespository.GetAuctionsItemsAsync();
+			
+            List<AuctionListDomain> auctionList = new List<AuctionListDomain>();
+
+            var today = DateTime.Now;
+
+            foreach (var auction in auctions)
+            {
+                var status = "Pending";
+                var open = auction.AuctionItems.Count(x => x.IdStatus == 1);
+                var closed = auction.AuctionItems.Count(x => x.IdStatus == 0);
+                if (auction.StartDate.HasValue && auction.EndDate.HasValue)
+                {
+                    if (today < auction.StartDate.Value && closed > 0)
+                    {
+                        status = "Pending";
+                    }
+                    else if (today >= auction.StartDate.Value && today <= auction.EndDate.Value && open >= 1)
+                    {
+                        status = "Active";
+                    }
+                    else if (open < 1)
+                    {
+                        status = "Inactive";
+                    }
+                }
+
+                auctionList.Add(new AuctionListDomain
+                {
+                    Id = auction.Id,
+                    Description = auction.Description ?? string.Empty,
+                    AuctionName = auction.AuctionName ?? string.Empty,
+                    IdUsers = auction.IdUsers ?? 0,
+                    StartDate = auction.StartDate ?? DateTime.MinValue,
+                    EndDate = auction.EndDate ?? DateTime.MinValue,
+                    Status = status,
+                    AuctionsListItem = auctionsItem.Where(x => x.IdAuctions == auction.Id).Select(item => new AuctionsItemList
+                    {
+                        Id = item.Id,
+                        Name = item.Name ?? string.Empty,
+                        Description = item.Description ?? string.Empty,
+                        Category = item.Category ?? string.Empty,
+                        StartingPrice = item.StartingPrice ?? string.Empty,
+                        BuyNowPrice = item.BuyNowPrice ?? string.Empty,
+                        NewUsed = item.NewUsed,
+                    }).ToList()
+                });
+            }
+            return auctionList;
+        }
+        public async Task<List<Auction>> GetAuctionsByIdUserAsync(int idUser)
 		{
 			var auctions = await _auctionRespository.GetAuctionsByIdUserAsync(idUser);
 
@@ -267,5 +320,11 @@ namespace AuctionAce.Application.Services
 		{
 			await _auctionRespository.SetInactiveItemsInAuctionWithoutBids(auctionId);
 		}
-	}
+
+		public async Task CloseAuction(int auctionId)
+		{
+			await _auctionRespository.CloseAuction(auctionId);
+		}
+
+    }
 }

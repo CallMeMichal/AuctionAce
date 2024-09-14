@@ -50,7 +50,17 @@ namespace AuctionAce.Application.Services
         public async Task<int> GetHighestBidForItem(int itemId)
         {
             var highestBid = await _bidRepostiory.GetHighestBidForItem(itemId);
+            
             return highestBid;
         }
+
+        public async Task<int> GetHighestBidForItemAndSave(int itemId)
+        {
+            var highestBid = await _bidRepostiory.GetHighestBidForItemAndSave(itemId);
+
+            return highestBid;
+        }
+
+
     }
 }

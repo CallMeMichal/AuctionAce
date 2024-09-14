@@ -106,6 +106,15 @@ namespace AuctionAce.Api.Hubs
         {
             await _auctionService.SetInactiveItemsInAuctionWithoutBids(auctionId);
         }
+
+        public async Task GetHighestBid(string auctionItemId,string groupName)
+        {
+
+            var highestBid = await _bidHistoryService.GetHighestBidForItemAndSave(Convert.ToInt32(auctionItemId));
+            var auctionId = await _auctionService.GetAuctionIdByItemId(Convert.ToInt32(auctionItemId));
+            await _auctionService.CloseAuction(auctionId);
+            await Clients.Group(groupName).SendAsync("HighestBid", highestBid);
+        }
         
         
     }

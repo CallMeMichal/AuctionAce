@@ -35,7 +35,7 @@
                         @if (item.AllAuctionsPhotos != null && item.AllAuctionsPhotos.AuctionImages != null && item.AllAuctionsPhotos.AuctionImages.Count > 0)
                         {
                             var firstImage = item.AllAuctionsPhotos.AuctionImages.First();
-                            <img class="card-img-top img-thumbnail fixed-size" src="data:image/png;base64,@firstImage.AuctionImageBase64" alt="Card image cap" data-bs-toggle="modal" data-bs-target="#carouselModal-@item.Id">
+                            <img class="card-img-top img-thumbnail fixed-size" src="data:image/png;base64,@firstImage.AuctionImageBase64" alt="Card image cap" style="height:15rem" data-bs-toggle="modal" data-bs-target="#carouselModal-@item.Id">
                         }
                         else
                         {
@@ -342,7 +342,7 @@
                             .catch(err => console.error("Error to set active items: ", err.toString()));
                     }
 
-                }else {
+                }else{
                     cardWrapper.setAttribute('data-status', 'Inactive');
                     statusBubble.className = 'status-bubble status-closed';
                     connection.invoke("SetInactiveItemsInAuctionWithoutBids", parseInt(auctionId, 10))

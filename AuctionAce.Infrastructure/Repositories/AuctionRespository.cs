@@ -186,5 +186,19 @@ namespace AuctionAce.Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
+        public async Task CloseAuction(int auctionId)
+        {
+            var auction = await _context.Auctions.FirstOrDefaultAsync(x => x.Id == auctionId);
+            
+            if (auction != null)
+            {
+                foreach (var item in auction.AuctionItems)
+                {
+                    item.IdStatus = 0;
+                }
+                await _context.SaveChangesAsync();
+            }
+
+        }
     }
 }
