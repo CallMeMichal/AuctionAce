@@ -5,7 +5,6 @@ using AuctionAce.Application.Services;
 using AuctionAce.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
 
 namespace AuctionAce.Api.Controllers
 {
@@ -13,11 +12,13 @@ namespace AuctionAce.Api.Controllers
     {
         private readonly AuctionService _auctionService;
         private readonly LoginService _loginService;
+        private readonly UserBoughtItemsService _userBoughtItemsService;
 
-        public HomeController(AuctionService auctionService, LoginService loginService)
+        public HomeController(AuctionService auctionService, LoginService loginService, UserBoughtItemsService userBoughtItemsService)
         {
             _auctionService = auctionService;
             _loginService = loginService;
+            _userBoughtItemsService = userBoughtItemsService;
         }
 
         [AllowAnonymous]
@@ -30,6 +31,7 @@ namespace AuctionAce.Api.Controllers
 
             model.User = await _loginService.UserLogin(idUser);
             var auctions = await _auctionService.GetAuctionsByIdUserAsync(idUser);
+            var items = await _userBoughtItemsService.GetUserItems(); /// todo zrobic wyswietlanie tych kupionych rzeczy pod przycisk w widoku
             model.Auctions = auctions;
 
             var allAuctionsPhoto = new List<AuctionListDomain>();
@@ -51,7 +53,7 @@ namespace AuctionAce.Api.Controllers
                 };
                 allAuctionsPhoto.Add(auctionStatus);
             }
-            model.AuctionStatus = allAuctionsPhoto;
+            model.AuctionStatus = allAuctionsPhoto.OrderBy(a => Guid.NewGuid()).ToList();
             return View(model);
         }
     }

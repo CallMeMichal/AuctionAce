@@ -1,108 +1,115 @@
-﻿        @{
-            Layout = "~/Views/Shared/_LayoutLogged.cshtml";
-            string url = Url.Action("AllAuctionsById");
-        }
-
-        <div class="container mt-5">
-            <h1 class="mb-4">Auction Form</h1>
-            <form id="auctionForm">
-                <div class="form-group">
-                    <label for="auctionName">Auction Name</label>
-                    <input type="text" class="form-control" id="auctionName" name="auctionName" required>
-                </div>
-                <div class="form-group">
-                    <label for="description">Description</label>
-                    <textarea class="form-control" id="description" name="description" rows="3"></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="startDate">Start Date</label>
-                    <input type="datetime-local" class="form-control" id="startDate" name="startDate" required>
-                </div>
-                <div class="form-group">
-                    <label for="endDate">End Date</label>
-                    <input type="datetime-local" class="form-control" id="endDate" name="endDate" required>
-                </div>
-                <div class="form-group">
-                    <label for="image">Auction Photo</label>
-            <input type="file" class="form-control-file" id="image" name="image" multiple>
-                </div>
-
-                <!-- Tabela przedmiotów -->
-                <div id="itemList" name="itemList">
-                    <h2>Item List</h2>
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Description</th>
-                                <th>Category</th>
-                                <th>Start Price</th>
-                                <th>Buy Now Price</th>
-                                <th>Condition</th>
-                                <th>Photo</th>
-                            </tr>
-                        </thead>
-                        <tbody id="itemsTableBody">
-                            <!-- Tutaj będą dynamicznie dodawane wiersze -->
-                        </tbody>
-                    </table>
-                </div>
-
-                <div class="form-group">
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addItemModal">Add item</button>
-                    <button type="button" class="btn btn-primary float-right" id="saveButton">Save</button>
-                </div>
-            </form>
-        </div>
-
-        <!-- Modal dodawania przedmiotu -->
-        <div class="modal fade" id="addItemModal" tabindex="-1" role="dialog" aria-labelledby="addItemModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="addItemModalLabel">Add item</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form id="addItemForm">
-                            <div class="form-group">
-                                <label for="itemName">Name</label>
-                                <input type="text" class="form-control" id="itemName" name="Name" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="itemDescription">Item Description</label>
-                                <textarea class="form-control" id="itemDescription" name="Description" rows="3"></textarea>
-                            </div>
-                            <div class="form-group">
-                                <label for="itemCategory">Category</label>
-                                <input type="text" class="form-control" id="itemCategory" name="Category">
-                            </div>
-                            <div class="form-group">
-                                <label for="itemImage">Item Photo</label>
-                                <input type="file" class="form-control-file" id="itemImage" name="itemImage" multiple >
-                            </div>
-                            <div class="form-group">
-                                <label for="startPrice">Start Price</label>
-                                <input type="number" class="form-control" id="startPrice" name="StartingPrice">
-                            </div>
-                            <div class="form-group">
-                                <label for="buyNowPrice">Buy Now Price</label>
-                                <input type="number" class="form-control" id="buyNowPrice" name="BuyNowPrice">
-                            </div>
-                            <div class="form-group">
-                                <label for="condition">State:</label><br>
-                                <input type="radio" id="newCondition" name="condition" value="New">
-                                <label for="newCondition">New</label><br>
-                                <input type="radio" id="usedCondition" name="condition" value="Used">
-                                <label for="usedCondition">Used</label><br>
-                            </div>
-                            <button type="submit" class="btn btn-primary">Save</button>
-                        </form>
+﻿@{
+    Layout = "~/Views/Shared/_LayoutLogged.cshtml";
+    string url = Url.Action("AllAuctionsById");
+}
+<div class="container mt-5">
+   <h1 class="mb-4">Auction Form</h1>
+   <form id="auctionForm">
+      <div class="form-group">
+         <label for="auctionName">Auction Name</label>
+         <input type="text" class="form-control" id="auctionName" name="auctionName" required>
+      </div>
+      <div class="form-group">
+         <label for="description">Description</label>
+         <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+      </div>
+       <div class="form-group">
+            <label for="startDate">Start Date</label>
+            <div class="input-group">
+                <input type="datetime-local" class="form-control" id="startDate" name="startDate" required>
+                <div class="input-group-append">
+                    <div class="input-group-text">
+                        <input type="checkbox" id="startNow" name="startNow">
                     </div>
                 </div>
             </div>
+            <small class="form-text text-muted">Check to start now.</small>
         </div>
+      <div class="form-group">
+         <label for="endDate">End Date</label>
+         <input type="datetime-local" class="form-control" id="endDate" name="endDate" required>
+      </div>
+      <div class="form-group">
+       <label for="image">Auction Photo</label>
+       <div class="custom-file">
+           <input type="file" class="custom-file-input" id="image" name="image" multiple>
+           <label class="custom-file-label" for="image">Choose file</label>
+       </div>
+    </div>
 
-        <script  src="~/js/AddAuction.js"></script>
+      <!-- Tabela przedmiotów -->
+      <div id="itemList" name="itemList">
+         <h2>Item List</h2>
+         <table class="table">
+            <thead>
+               <tr>
+                  <th>Name</th>
+                  <th>Description</th>
+                  <th>Category</th>
+                  <th>Start Price</th>
+                  <th>Buy Now Price</th>
+                  <th>Condition</th>
+                  <th>Photo</th>
+               </tr>
+            </thead>
+            <tbody id="itemsTableBody">
+               <!-- Tutaj będą dynamicznie dodawane wiersze -->
+            </tbody>
+         </table>
+      </div>
+      <div class="form-group">
+         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addItemModal">Add item</button>
+         <button type="button" class="btn btn-primary float-right" id="saveButton">Save</button>
+      </div>
+   </form>
+</div>
+<!-- Modal dodawania przedmiotu -->
+<div class="modal fade" id="addItemModal" tabindex="-1" role="dialog" aria-labelledby="addItemModalLabel" aria-hidden="true">
+   <div class="modal-dialog" role="document">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h5 class="modal-title" id="addItemModalLabel">Add item</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+         </div>
+         <div class="modal-body">
+            <form id="addItemForm">
+               <div class="form-group">
+                  <label for="itemName">Name</label>
+                  <input type="text" class="form-control" id="itemName" name="Name" required>
+               </div>
+               <div class="form-group">
+                  <label for="itemDescription">Item Description</label>
+                  <textarea class="form-control" id="itemDescription" name="Description" rows="3"></textarea>
+               </div>
+               <div class="form-group">
+                  <label for="itemCategory">Category</label>
+                  <input type="text" class="form-control" id="itemCategory" name="Category">
+               </div>
+               <div class="form-group">
+                  <label for="itemImage">Item Photo</label>
+                  <input type="file" class="form-control-file" id="itemImage" name="itemImage" multiple >
+               </div>
+               <div class="form-group">
+                  <label for="startPrice">Start Price</label>
+                  <input type="number" class="form-control" id="startPrice" name="StartingPrice">
+               </div>
+               <div class="form-group">
+                  <label for="buyNowPrice">Buy Now Price</label>
+                  <input type="number" class="form-control" id="buyNowPrice" name="BuyNowPrice">
+               </div>
+               <div class="form-group">
+                  <label for="condition">State:</label><br>
+                  <input type="radio" id="newCondition" name="condition" value="New">
+                  <label for="newCondition">New</label><br>
+                  <input type="radio" id="usedCondition" name="condition" value="Used">
+                  <label for="usedCondition">Used</label><br>
+               </div>
+               <button type="submit" class="btn btn-primary">Save</button>
+            </form>
+         </div>
+      </div>
+   </div>
+</div>
+<script  src="~/js/AddAuction.js"></script>

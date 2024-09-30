@@ -1,4 +1,5 @@
 ﻿using AuctionAce.Domain.Entities;
+using AuctionAce.Infrastructure.Data.Models;
 using AuctionAce.Infrastructure.Repositories;
 
 namespace AuctionAce.Application.Services
@@ -37,7 +38,7 @@ namespace AuctionAce.Application.Services
 			return response;
 		}
 
-        public async Task<List<UserBoughtItemsDomain>> GetUserItems(int userId)
+        public async Task<List<UserBoughtItemsDomain>> GetUserItems(int userId = 0)
         {
             var data = await _userBoughtItemsRepostiory.GetUserBoughtItems(userId);
             string newUsed = "";

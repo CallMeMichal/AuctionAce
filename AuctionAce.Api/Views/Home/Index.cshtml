@@ -13,111 +13,104 @@
     }
 }
 
-<div class="container-fluid">
+<!-- Sekcja hero zajmująca pełną wysokość ekranu -->
+<div class="hero-section d-flex align-items-center justify-content-center" style="height: 95.6vh; background: linear-gradient(90deg, rgba(255,214,0,1) 0%, rgba(255,137,0,1) 100%); color: white;">
+    <div class="text-center">
+        <h1 class="display-3">Welcome to AuctionAce!</h1>
+        <p class="lead">Your one-stop destination for the best deals and unique items!</p>
+        <p class="lead">Bid now, grab deals, win unique auctions, and don’t miss out on the best offers!</p>
+
+        <button id="scrollToAuctions" class="btn btn-light btn-lg">Check out the latest active auctions</button>
+        <button id="scrollToItems" class="btn btn-light btn-lg">Check out sold items</button>
+    </div>
+</div>
+
+<!-- Sekcja z losowymi aukcjami -->
+<div id="random-auctions" class="container-fluid p-5">
+    
     <div class="row">
-        <div class="col-8" style="height: 100%; border-right: 2px solid black;">
-            <div class="row">
-                <!-- Dodanie kontenera row dla kart -->
-                @if (Model.AuctionStatus != null)
-                {
-                    foreach (var item in Model.AuctionStatus.Where(x => x.Status == "Active"))
-                    {
-                        <div class="col-md-4 mb-4">
-                            <!-- Ustawienie kart w kolumnach o szerokości 4 (trzy karty w wierszu) -->
-                            <div class="card position-relative">
-                                @if (item.AllAuctionsPhotos != null && item.AllAuctionsPhotos.AuctionImages != null && item.AllAuctionsPhotos.AuctionImages.Count > 0)
+        <!-- Dodanie kontenera row dla kart -->
+        @if (Model.AuctionStatus != null)
+        {
+            foreach (var item in Model.AuctionStatus.Where(x => x.Status == "Active"))
+            {
+                <div class="col-md-4 mb-4">
+                    <!-- Ustawienie kart w kolumnach o szerokości 4 (trzy karty w wierszu) -->
+                    <div class="card position-relative">
+                        @if (item.AllAuctionsPhotos != null && item.AllAuctionsPhotos.AuctionImages != null && item.AllAuctionsPhotos.AuctionImages.Count > 0)
+                        {
+                            var firstImage = item.AllAuctionsPhotos.AuctionImages.First();
+                            <img class="card-img-top img-thumbnail fixed-size" src="data:image/png;base64,@firstImage.AuctionImageBase64" style="height:15rem" alt="Card image cap" data-bs-toggle="modal" data-bs-target="#carouselModal-@item.Id">
+                        }
+                        else
+                        {
+                            <img class="card-img-top" src="path/to/default/image.png" alt="No image available">
+                        }
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                @if (item.AuctionName.Length > 27)
                                 {
-                                    var firstImage = item.AllAuctionsPhotos.AuctionImages.First();
-                                    <img class="card-img-top img-thumbnail fixed-size" src="data:image/png;base64,@firstImage.AuctionImageBase64" style="height:15rem" alt="Card image cap" data-bs-toggle="modal" data-bs-target="#carouselModal-@item.Id">
+                                    <p class="card-text">@item.AuctionName.Substring(0, 24)...</p>
                                 }
                                 else
                                 {
-                                    <img class="card-img-top" src="path/to/default/image.png" alt="No image available">
+                                    @item.AuctionName
                                 }
-                                <div class="card-body">
-                                    <h5 class="card-title">
-                                        @if (item.AuctionName.Length > 27)
-                                        {
-                                            <p class="card-text">@item.AuctionName.Substring(0, 24)...</p>
+                            </h5>
+                            <p class="card-text">
+                                @if (item.Description.Length > 48)
+                                {
+                                <p class="card-text">@item.Description.Substring(0, 45)...</p>
+                                }
+                                else
+                                {
+                                    @item.Description
+                                }
+                            </p>
+                            <p class="card-time" id="timer-@item.Id"></p>
+                            <a href="@Url.Action("AuctionItemList", "Auction", new { auctionId = item.Id })" class="btn btn-primary">View Auction Details</a>
+                        </div>
+                        <div class="status-bubble">
+                            @* Status will be added dynamically *@
+                        </div>
+                    </div>
 
-                                        }
-                                        else
-                                        {
-                                            @item.AuctionName
-                                        }
-                                    </h5>
-                                    <p class="card-text">
-                                        @if (item.Description.Length > 48)
-                                        {
-                                        <p class="card-text">@item.Description.Substring(0, 45)...</p>
-                                        }
-                                        else
-                                        {
-                                            @item.Description
-                                        }
-                                    </p>
-                                    <p class="card-time" id="timer-@item.Id"></p>
-                                    <a href="@Url.Action("AuctionItemList", "Auction", new { auctionId = item.Id })" class="btn btn-primary">View Auction Details</a>
-                                </div>
-                                <div class="status-bubble">
-                                    @* Status will be added dynamically *@
-                                </div>
-                            </div>
-
-                            <!-- Modal z carousel -->
-                            <div class="modal fade" id="carouselModal-@item.Id" tabindex="-1" aria-labelledby="carouselModalLabel-@item.Id" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered modal-lg">
-                                    <div class="modal-content">
-                                        <div class="modal-body">
-                                            <div id="carousel-@item.Id" class="carousel slide" data-bs-ride="carousel">
-                                                <div class="carousel-inner">
-                                                    @for (int i = 0; i < item.AllAuctionsPhotos.AuctionImages.Count; i++)
-                                                    {
-                                                        var image = item.AllAuctionsPhotos.AuctionImages[i];
-                                                        <div class="carousel-item @(i == 0 ? "active" : "")">
-                                                            <img class="d-block w-100" src="data:image/png;base64,@image.AuctionImageBase64" alt="Image @i">
-                                                        </div>
-                                                    }
+                    <!-- Modal z carousel -->
+                    <div class="modal fade" id="carouselModal-@item.Id" tabindex="-1" aria-labelledby="carouselModalLabel-@item.Id" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-body">
+                                    <div id="carousel-@item.Id" class="carousel slide" data-bs-ride="carousel">
+                                        <div class="carousel-inner">
+                                            @for (int i = 0; i < item.AllAuctionsPhotos.AuctionImages.Count; i++)
+                                            {
+                                                var image = item.AllAuctionsPhotos.AuctionImages[i];
+                                                <div class="carousel-item @(i == 0 ? "active" : "")">
+                                                    <img class="d-block w-100" src="data:image/png;base64,@image.AuctionImageBase64" alt="Image @i">
                                                 </div>
-                                                <a class="carousel-control-prev" href="#carousel-@item.Id" role="button" data-bs-slide="prev">
-                                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                                    <span class="visually-hidden">Previous</span>
-                                                </a>
-                                                <a class="carousel-control-next" href="#carousel-@item.Id" role="button" data-bs-slide="next">
-                                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                                    <span class="visually-hidden">Next</span>
-                                                </a>
-                                            </div>
+                                            }
                                         </div>
+                                        <a class="carousel-control-prev" href="#carousel-@item.Id" role="button" data-bs-slide="prev">
+                                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                            <span class="visually-hidden">Previous</span>
+                                        </a>
+                                        <a class="carousel-control-next" href="#carousel-@item.Id" role="button" data-bs-slide="next">
+                                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                            <span class="visually-hidden">Next</span>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    }
-                }
-            </div> <!-- Koniec wiersza dla kart -->
-        </div>
-
-        <!-- Prawa kolumna -->
-        <div class="col-4" style="background-color:green; height: 100%;">
-            <div>s</div>
-            <div>s</div>
-            <div>s</div>
-            <div>s</div>
-            <div>s</div>
-            <div>s</div>
-            <div>s</div>
-            <div>s</div>
-        </div>
+                    </div>
+                </div>
+            }
+        }
     </div>
 </div>
 
-
-
-
 <script>
-
-    
-
-
+    document.getElementById("scrollToAuctions").addEventListener("click", function () {
+        document.getElementById("random-auctions").scrollIntoView({ behavior: 'smooth' });
+    });
 </script>

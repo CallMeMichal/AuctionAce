@@ -38,9 +38,24 @@ namespace AuctionAce.Infrastructure.Repositories
         }
 
         public async Task<List<UserBoughtItem>> GetUserBoughtItems(int userId)
+        { 
+            IQueryable<UserBoughtItem> query = _context.UserBoughtItems.Include(x => x.IdAuctionItemNavigation)
+                .ThenInclude(x => x.AuctionsItemsPhotos)
+                .Include(x => x.IdUserNavigation);
+
+            if (userId != 0)
+            {
+                query = query.Where(x => x.IdUser == userId);
+            }
+
+            return await query.ToListAsync();
+        }
+
+
+        public async Task<List<UserBoughtItem>> GetBoughtItems()
         {
 
-            var response = await _context.UserBoughtItems.Where(x => x.IdUser == userId).Include(x => x.IdAuctionItemNavigation).ThenInclude(x => x.AuctionsItemsPhotos).Include(x => x.IdUserNavigation).ToListAsync();
+            var response = await _context.UserBoughtItems.Include(x => x.IdAuctionItemNavigation).ThenInclude(x => x.AuctionsItemsPhotos).Include(x => x.IdUserNavigation).ToListAsync();
             return response;
 
         }
