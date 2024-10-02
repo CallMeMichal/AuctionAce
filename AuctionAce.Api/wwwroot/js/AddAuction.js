@@ -13,13 +13,13 @@
         console.log(isNew);
         var itemImage = $("#itemImage")[0].files;
         var itemIndex = $("#itemsTableBody tr").length;
-
         if (itemImage.length > 0) {
             itemImagesMap[itemIndex] = [];
             for (var i = 0; i < itemImage.length; i++) {
                 itemImagesMap[itemIndex].push(itemImage[i]);
             }
         }
+        //$('#fileNameLabel').text(itemImage[0].name);
 
         // Dodanie wiersza do tabeli
         var tableRow =

@@ -1,8 +1,10 @@
 using AuctionAce.Api.Models;
 using AuctionAce.Api.Models.ViewModels.Auctions;
 using AuctionAce.Api.Models.ViewModels.Home;
+using AuctionAce.Api.Models.ViewModels.UserBoughtItems;
 using AuctionAce.Application.Services;
 using AuctionAce.Domain.Entities;
+using AuctionAce.Infrastructure.Data.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,13 +14,13 @@ namespace AuctionAce.Api.Controllers
     {
         private readonly AuctionService _auctionService;
         private readonly LoginService _loginService;
-        private readonly UserBoughtItemsService _userBoughtItemsService;
+        private readonly UserBoughtItemsService _boughtItemsService;
 
         public HomeController(AuctionService auctionService, LoginService loginService, UserBoughtItemsService userBoughtItemsService)
         {
             _auctionService = auctionService;
             _loginService = loginService;
-            _userBoughtItemsService = userBoughtItemsService;
+            _boughtItemsService = userBoughtItemsService;
         }
 
         [AllowAnonymous]
@@ -31,7 +33,41 @@ namespace AuctionAce.Api.Controllers
 
             model.User = await _loginService.UserLogin(idUser);
             var auctions = await _auctionService.GetAuctionsByIdUserAsync(idUser);
-            var items = await _userBoughtItemsService.GetUserItems(); /// todo zrobic wyswietlanie tych kupionych rzeczy pod przycisk w widoku
+            List<UserBoughtItemsModel> modelItems = new List<UserBoughtItemsModel>();
+            var boughtItemsData = _boughtItemsService.GetUserItems().Result;
+            var itemPhotosGroups = new List<UserBoughtItemsPhotosGroupModel>();
+            foreach (var item in boughtItemsData)
+            {
+                foreach (var photoGroup in item.GroupedItemPhotos)
+                {
+                    var groupItemId = photoGroup.AuctionItemId;
+                    var photos = photoGroup.Photos;
+
+                    itemPhotosGroups.Add(new UserBoughtItemsPhotosGroupModel
+                    {
+                        AuctionItemId = groupItemId,
+                        Photos = photos.Select(p => new UserBoughtItemsPhotoModel
+                        {
+                            Id = p.Id,
+                            PhotoBase64 = p.PhotoBase64
+                        }).ToList()
+                    });
+                }
+                var boughtItem = new UserBoughtItemsModel
+                {
+                    YourPrize = item.YourPrize,
+                    Category = item.Category,
+                    ItemName = item.ItemName,
+                    NewUsed = item.NewUsed,
+                    Description = item.Description,
+                    ItemPhotos = itemPhotosGroups
+                        .Where(p => p.AuctionItemId == item.AuctionItemId)
+                        .ToList()
+                };
+                modelItems.Add(boughtItem);
+            }
+            
+            model.UserBoughtItemsModels = modelItems;
             model.Auctions = auctions;
 
             var allAuctionsPhoto = new List<AuctionListDomain>();
