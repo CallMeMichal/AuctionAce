@@ -13,5 +13,6 @@ namespace AuctionAce.Api.Models.ViewModels.Auctions
         //lista aukcji połączona ze statusami
         public List<AuctionListDomain>? AuctionStatus { get; set; }
         public PhotosAuctionItemDomain SingleItemImages { get; set; }
+        public List<CategoriesDomain> CategoriesDomains { get; set; }
     }
 }

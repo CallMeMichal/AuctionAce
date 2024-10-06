@@ -8,14 +8,16 @@ namespace AuctionAce.Application.Services
 	{
 		private readonly AuctionRespository _auctionRespository;
 		private readonly UserBoughtItemsRepostiory _userBoughtItemsRepostiory;
+        private readonly CategoryService _categoryService;
 
-		public UserBoughtItemsService(AuctionRespository auctionRespository, UserBoughtItemsRepostiory userBoughtItemsRepostiory)
-		{
-			_auctionRespository = auctionRespository;
-			_userBoughtItemsRepostiory = userBoughtItemsRepostiory;
-		}
+        public UserBoughtItemsService(AuctionRespository auctionRespository, UserBoughtItemsRepostiory userBoughtItemsRepostiory, CategoryService categoryService)
+        {
+            _auctionRespository = auctionRespository;
+            _userBoughtItemsRepostiory = userBoughtItemsRepostiory;
+            _categoryService = categoryService;
+        }
 
-		public async Task<bool> SetAuctionItemStatus(int itemId, string status)
+        public async Task<bool> SetAuctionItemStatus(int itemId, string status)
 		{
 			var respone = false;
 
@@ -44,6 +46,7 @@ namespace AuctionAce.Application.Services
             string newUsed = "";
             if (data.Count > 0)
             {
+                /*var categoryName = "";*/
                 List<UserBoughtItemsDomain> userBoughtItemsDomains = new List<UserBoughtItemsDomain>();
                 foreach (var item in data)
                 {
@@ -60,11 +63,16 @@ namespace AuctionAce.Application.Services
                         }).ToList();
 
                     newUsed = item.IdAuctionItemNavigation.NewUsed == true ? "new" : "used";
+                    /*if (item.IdAuctionItemNavigation.IdCategory != null)
+                    {
+                        categoryName = await _categoryService.GetCategoryNameById(item.IdAuctionItemNavigation.IdCategory);
+                    }*/
+                    
                     userBoughtItemsDomains.Add(new UserBoughtItemsDomain
                     {
                         AuctionItemId = item.IdAuctionItemNavigation.Id,
                         YourPrize = item.Prize,
-                        Category = item.IdAuctionItemNavigation.Category,
+                        /*Category = categoryName,*/
                         Description = item.IdAuctionItemNavigation.Description,
                         ItemName = item.IdAuctionItemNavigation.Name,
                         NewUsed = newUsed,

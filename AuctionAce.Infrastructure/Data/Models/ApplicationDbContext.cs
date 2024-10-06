@@ -93,9 +93,6 @@ public partial class ApplicationDbContext : DbContext
                 .HasMaxLength(10)
                 .IsFixedLength()
                 .HasColumnName("buy_now_price");
-            entity.Property(e => e.Category)
-                .HasMaxLength(50)
-                .HasColumnName("category");
             entity.Property(e => e.Description).HasColumnName("description");
             entity.Property(e => e.Guid).HasColumnName("guid");
             entity.Property(e => e.IdAuctions).HasColumnName("id_auctions");

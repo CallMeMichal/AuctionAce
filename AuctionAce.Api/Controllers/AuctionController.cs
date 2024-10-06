@@ -13,11 +13,13 @@ namespace AuctionAce.Api.Controllers
     {
         private readonly AuctionService _auctionService;
         private readonly LoginService _loginService;
+        private readonly CategoryService _categoriesService;
 
-        public AuctionController(AuctionService auctionService, LoginService loginService)
+        public AuctionController(AuctionService auctionService, LoginService loginService, CategoryService categoriesService)
         {
             _auctionService = auctionService;
             _loginService = loginService;
+            _categoriesService = categoriesService;
         }
 
         [HttpGet]
@@ -41,7 +43,8 @@ namespace AuctionAce.Api.Controllers
             model.User = _loginService.UserLogin(userId).Result;
             var auctions = _auctionService.GetAuctionsByIdUserAsync(userId).Result;
             model.Auctions = auctions;
-
+            var categories = _categoriesService.GetCategories().Result;
+            model.CategoriesDomains = categories;
             return View(model);
         }
 
@@ -75,6 +78,7 @@ namespace AuctionAce.Api.Controllers
             }
 
             var auction = _auctionService.AddAuctionAsync(
+                request.idCategory,
                 request.AuctionName,
                 request.Description,
                 request.StartDate,

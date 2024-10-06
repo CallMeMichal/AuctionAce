@@ -7,13 +7,15 @@ namespace AuctionAce.Application.Services
 	public class AuctionService
 	{
 		public readonly AuctionRespository _auctionRespository;
+		public readonly CategoryService _categoryService;
 
-		public AuctionService(AuctionRespository auctionRespository)
-		{
-			_auctionRespository = auctionRespository;
-		}
+        public AuctionService(AuctionRespository auctionRespository, CategoryService categoryService)
+        {
+            _auctionRespository = auctionRespository;
+            _categoryService = categoryService;
+        }
 
-		public async Task<List<AuctionListDomain>> GetAuctionsAsync()
+        public async Task<List<AuctionListDomain>> GetAuctionsAsync()
 		{
 			var auctions = await _auctionRespository.GetAuctionsAsync();
 			var auctionsItem = await _auctionRespository.GetAuctionsItemsAsync();
@@ -36,7 +38,7 @@ namespace AuctionAce.Application.Services
 					{
 						status = "Active";
 					}
-					else if (today < auction.StartDate.Value && today > auction.EndDate.Value && open < 1)
+					else if (open < 1)
 					{
 						status = "Inactive";
 					}
@@ -55,7 +57,6 @@ namespace AuctionAce.Application.Services
 						Id = item.Id,
 						Name = item.Name ?? string.Empty,
 						Description = item.Description ?? string.Empty,
-						Category = item.Category ?? string.Empty,
 						StartingPrice = item.StartingPrice ?? string.Empty,
 						BuyNowPrice = item.BuyNowPrice ?? string.Empty,
 						NewUsed = item.NewUsed,
@@ -77,7 +78,6 @@ namespace AuctionAce.Application.Services
 
 			foreach (var auction in userAuctions)
 			{
-
 				var status = "Pending";
 				var open = auction.AuctionItems.Count(x => x.IdStatus == 1);
 				var closed = auction.AuctionItems.Count(x => x.IdStatus == 0);
@@ -97,7 +97,9 @@ namespace AuctionAce.Application.Services
 					}
 				}
 
-				auctionList.Add(new AuctionListDomain
+                
+
+                auctionList.Add(new AuctionListDomain
 				{
 					Id = auction.Id,
 					Description = auction.Description ?? string.Empty,
@@ -111,7 +113,6 @@ namespace AuctionAce.Application.Services
 						Id = item.Id,
 						Name = item.Name ?? string.Empty,
 						Description = item.Description ?? string.Empty,
-						Category = item.Category ?? string.Empty,
 						StartingPrice = item.StartingPrice ?? string.Empty,
 						BuyNowPrice = item.BuyNowPrice ?? string.Empty,
 						NewUsed = item.NewUsed,
@@ -165,7 +166,7 @@ namespace AuctionAce.Application.Services
                         Id = item.Id,
                         Name = item.Name ?? string.Empty,
                         Description = item.Description ?? string.Empty,
-                        Category = item.Category ?? string.Empty,
+                        //Category = item.IdCategory ?? string.Empty,
                         StartingPrice = item.StartingPrice ?? string.Empty,
                         BuyNowPrice = item.BuyNowPrice ?? string.Empty,
                         NewUsed = item.NewUsed,
@@ -186,7 +187,7 @@ namespace AuctionAce.Application.Services
 			return null;
 		}
 
-		public async Task<bool> AddAuctionAsync(string auctionName, string auctionDescription, DateTime startDate, DateTime endDate, int auctionerId, Dictionary<string, string> auctionImagePaths, List<AuctionItemsDomain> itemsInfo)
+		public async Task<bool> AddAuctionAsync(int categoryId,string auctionName, string auctionDescription, DateTime startDate, DateTime endDate, int auctionerId, Dictionary<string, string> auctionImagePaths, List<AuctionItemsDomain> itemsInfo)
 		{
 			var status = 0;
 			// Tworzenie rekordu dla aukcji
@@ -197,8 +198,9 @@ namespace AuctionAce.Application.Services
 				StartDate = startDate,
 				EndDate = endDate,
 				IdUsers = auctionerId,
+				IdCategory= categoryId,
 
-			};
+            };
 			DateTime dateNow = DateTime.Now;
 			if(dateNow>startDate && dateNow < endDate)
 			{
@@ -217,13 +219,16 @@ namespace AuctionAce.Application.Services
 			// Przetwarzanie zdjęć dla poszczególnych przedmiotów
 			foreach (var item in itemsInfo)
 			{
-				var auctionItem = new AuctionItem
+				/*var categoryId = await _categoryService.GetCategoryIdByName(item.Category);*/
+
+                var auctionItem = new AuctionItem
 				{
 					Name = item.Name,
 					Description = item.Description,
 					StartingPrice = item.StartingPrice,
 					BuyNowPrice = item.BuyNowPrice,
 					NewUsed = item.NewUsed,
+					/*IdCategory = categoryId,*/
 					Guid = Helpers.Helpers.GetGuid(),
 					IdAuctions = auctionId,
 					IdStatus = status,

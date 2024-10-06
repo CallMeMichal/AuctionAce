@@ -6,7 +6,6 @@
         // Pobieranie wartości z formularza
         var itemName = $("#itemName").val();
         var itemDescription = $("#itemDescription").val();
-        var itemCategory = $("#itemCategory").val();
         var startPrice = $("#startPrice").val();
         var buyNowPrice = $("#buyNowPrice").val();
         var isNew = $("input[name='condition']:checked").val();
@@ -26,12 +25,12 @@
             $("<tr>").append(
                 $("<td>").text(itemName),
                 $("<td>").text(itemDescription),
-                $("<td>").text(itemCategory),
                 $("<td>").text(startPrice),
                 $("<td>").text(buyNowPrice),
                 $("<td>").text(isNew),
                 $("<td>").append(itemImage.length > 0 ? $("<img>").attr("src", URL.createObjectURL(itemImage[0])).addClass("img-thumbnail") : ""),
             );
+
 
         $("#itemsTableBody").append(tableRow);
 
@@ -78,12 +77,12 @@
             denyButtonText: `Correct`
         }).then((result) => {
             if (result.isConfirmed) {
-                // Zbierz dane z formularza
                 var formData = new FormData();
                 formData.append('auctionName', $('#auctionName').val());
                 formData.append('description', $('#description').val());
                 formData.append('startDate', $('#startDate').val());
                 formData.append('endDate', $('#endDate').val());
+                formData.append('idCategory', $('#auctionCategory').val());
 
                 // Dodaj zdjęcie aukcji, jeśli istnieje
                 var auctionImage = $('#image')[0].files;
@@ -118,7 +117,6 @@
                         }
                     }
                 });
-
                 // Prześlij dane na serwer
                 $.ajax({
                     url: '/Auction/AddAuction',

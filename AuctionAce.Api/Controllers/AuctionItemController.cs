@@ -30,6 +30,7 @@ namespace AuctionAce.Api.Controllers
 
             ItemViewModel item = new ItemViewModel();
             item.Id = itemId;
+            
             item.Guid = itemGuid;
             item.ItemDomain = photosItemDomains;
             item.StartPrice = startPrice;

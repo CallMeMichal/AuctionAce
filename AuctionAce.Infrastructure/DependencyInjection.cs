@@ -19,6 +19,8 @@ namespace AuctionAce.Infrastructure
             services.AddScoped<ChatHistoryRepostiory>();
             services.AddScoped<BidHistoryRepostiory>();
             services.AddScoped<UserBoughtItemsRepostiory>();
+            services.AddScoped<CategoryRepository>();
+
 
             return services;
         }
