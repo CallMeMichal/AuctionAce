@@ -14,5 +14,7 @@ namespace AuctionAce.Api.Models.ViewModels.Auctions
         public List<AuctionListDomain>? AuctionStatus { get; set; }
         public PhotosAuctionItemDomain SingleItemImages { get; set; }
         public List<CategoriesDomain> CategoriesDomains { get; set; }
+
+        public List<WishlistDomain> WishlistDomains { get; set; } = new List<WishlistDomain>();
     }
 }

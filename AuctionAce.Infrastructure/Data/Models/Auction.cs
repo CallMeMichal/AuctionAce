@@ -28,4 +28,6 @@ public partial class Auction
     public virtual Category? IdCategoryNavigation { get; set; }
 
     public virtual User? IdUsersNavigation { get; set; }
+
+    public virtual ICollection<Wishlist> Wishlists { get; set; } = new List<Wishlist>();
 }

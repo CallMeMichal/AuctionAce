@@ -65,8 +65,10 @@
                             <a href="@Url.Action("AuctionItemList", "Auction", new { auctionId = item.Id })" class="btn btn-primary">View Auction Details</a>
                         </div>
                         <div class="like-container">
-                            <span class="like-icon" data-auction-id="@item.Id" onclick="heartClick()">&#9829;</span> <!-- Serduszko -->
+                            <span class="like-icon @(Model.WishlistDomains.Any(w => w.AuctionId == item.Id) ? "liked" : "")" data-auction-id="@item.Id">&#9829;</span> <!-- Serduszko -->
                         </div>
+
+
                         <div class="status-bubble">
                             @* Status will be added dynamically *@
                         </div>
@@ -110,6 +112,8 @@
 </div>
 
 <style>
+
+
     .fixed-size {
         height: 200px;
         object-fit: cover;
@@ -233,30 +237,29 @@
                 // Toggle like state
                 if (isLiked) {
                     this.classList.remove('liked');
+                    this.style.color = 'gray';
                 } else {
                     this.classList.add('liked');
+                    this.style.color = 'red';
                 }
 
-                // Update color
-                this.style.color = isLiked ? 'gray' : 'red';
+                var url = !isLiked ? '/Wishlist/AddToWishlist' : '/Wishlist/RemoveFromWishlist';
 
                 // Send an AJAX request to save the like state to the server
-                fetch('/like/auction', {
+                fetch(url, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ auctionId: auctionId, liked: !isLiked }),
+                    body: JSON.stringify({ auctionId: auctionId }),
                 })
                     .then(response => response.json())
                     .then(data => {
-                        // Handle response data if necessary
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
+                        console.log(data.message); // Odpowiedź serwera
                     });
             });
         });
+
 
         var statusBubbles = document.querySelectorAll('.status-bubble');
         cards.forEach(function (cardWrapper) {

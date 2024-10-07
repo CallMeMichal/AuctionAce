@@ -20,6 +20,7 @@ namespace AuctionAce.Infrastructure
             services.AddScoped<BidHistoryRepostiory>();
             services.AddScoped<UserBoughtItemsRepostiory>();
             services.AddScoped<CategoryRepository>();
+            services.AddScoped<WishlistRepository>();
 
 
             return services;

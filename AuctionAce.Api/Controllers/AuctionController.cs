@@ -4,6 +4,7 @@ using AuctionAce.Api.Models.ViewModels.Auctions;
 using AuctionAce.Application.Middleware;
 using AuctionAce.Application.Services;
 using AuctionAce.Domain.Entities;
+using AuctionAce.Infrastructure.Data.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,12 +15,14 @@ namespace AuctionAce.Api.Controllers
         private readonly AuctionService _auctionService;
         private readonly LoginService _loginService;
         private readonly CategoryService _categoriesService;
+        private readonly WishlistService _wishlistService;
 
-        public AuctionController(AuctionService auctionService, LoginService loginService, CategoryService categoriesService)
+        public AuctionController(AuctionService auctionService, LoginService loginService, CategoryService categoriesService, WishlistService wishlistService)
         {
             _auctionService = auctionService;
             _loginService = loginService;
             _categoriesService = categoriesService;
+            _wishlistService = wishlistService;
         }
 
         [HttpGet]
@@ -31,6 +34,7 @@ namespace AuctionAce.Api.Controllers
             model.User = await _loginService.UserLogin(userId);
             var auctions = await _auctionService.GetAuctionsByIdUserAsync(userId);
             model.Auctions = auctions;
+            
             return View(model);
         }
 
@@ -126,6 +130,9 @@ namespace AuctionAce.Api.Controllers
                 allAuctionsPhoto.Add(auctionStatus);
             }
 
+            var wishlist = _wishlistService.GetWishlistForUser(userId).Result;
+            model.WishlistDomains = wishlist;
+
             model.AuctionStatus = allAuctionsPhoto;
             return View("AllAuctions", model);
         }
@@ -136,6 +143,7 @@ namespace AuctionAce.Api.Controllers
         {
             AuctionViewModel model = new AuctionViewModel();
             var auctions = _auctionService.GetAuctionsAsync().Result;
+            var userId = SessionHelper.GetUserIdFromSession(HttpContext);
             var allAuctionsPhoto = new List<AuctionListDomain>();
             foreach (var auction in auctions)
             {
@@ -157,7 +165,8 @@ namespace AuctionAce.Api.Controllers
                 allAuctionsPhoto.Add(auctionStatus);
             }
             model.AuctionStatus = allAuctionsPhoto;
-
+            var wishlist = _wishlistService.GetWishlistForUser(userId).Result;
+            model.WishlistDomains = wishlist;
             return View(model);
         }
 
