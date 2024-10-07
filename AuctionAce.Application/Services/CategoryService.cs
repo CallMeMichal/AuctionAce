@@ -32,13 +32,13 @@ namespace AuctionAce.Application.Services
         {
             var categoryId = await _categoryRespository.GetCategoryIdByName(categoryName);
             return categoryId;
-        }
+        }*/
 
         public async Task<string> GetCategoryNameById(int? categoryId)
         {
             var categoryName = await _categoryRespository.GetCategoryNameById(categoryId);
             return categoryName;
-        }*/
+        }
 
     }
 }

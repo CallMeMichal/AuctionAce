@@ -71,7 +71,6 @@ namespace AuctionAce.Api.Controllers
                 {
                     Name = item.Name,
                     Description = item.Description,
-                    Category = item.Category,
                     StartingPrice = item.StartingPrice,
                     BuyNowPrice = item.BuyNowPrice,
                     NewUsed = item.NewUsed,

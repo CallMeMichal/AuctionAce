@@ -12,7 +12,7 @@
             <input type="text" class="form-control" id="auctionName" name="auctionName" required>
         </div>
         <div class="form-group">
-            <label for="auctionCategory">Category</label>
+            <label for="auctionCategory" required>Category</label>
             <select class="form-control" id="auctionCategory">
                 <option value="" disabled selected>Select a category</option>
                 @foreach (var category in Model.CategoriesDomains)
@@ -52,12 +52,11 @@
         <!-- Tabela przedmiotów -->
         <div id="itemList" name="itemList">
             <h2>Item List</h2>
-            <table class="table">
+            <table class="table" style="max-width:100%">
                 <thead>
                     <tr>
                         <th>Name</th>
                         <th>Description</th>
-                        <th>Category</th>
                         <th>Start Price</th>
                         <th>Buy Now Price</th>
                         <th>Condition</th>

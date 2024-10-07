@@ -187,6 +187,29 @@ namespace AuctionAce.Application.Services
 			return null;
 		}
 
+		public async Task<List<AuctionDataDomain>> GetAuctionById(List<WishlistDomain> likedIds)
+        {
+			List<AuctionDataDomain> auctionDataDomain = new List<AuctionDataDomain>();
+			foreach(var item in likedIds)
+			{
+                var auction = await _auctionRespository.GetAuctionById(item.AuctionId);
+				if (auction != null)
+				{
+					var itemAuction = new AuctionDataDomain()
+					{
+						Id = auction.Id,
+						StartDate = auction.StartDate.ToString(),
+						Category = _categoryService.GetCategoryNameById(auction.IdCategory).Result,
+						Description = auction.Description,
+						EndDate = auction.EndDate.ToString(),
+						Name = auction.AuctionName,
+					};
+                    auctionDataDomain.Add(itemAuction);
+                }
+            }
+			return auctionDataDomain;
+        }
+
 		public async Task<bool> AddAuctionAsync(int categoryId,string auctionName, string auctionDescription, DateTime startDate, DateTime endDate, int auctionerId, Dictionary<string, string> auctionImagePaths, List<AuctionItemsDomain> itemsInfo)
 		{
 			var status = 0;

@@ -36,7 +36,7 @@
                             <td>@i.Description</td>
                             <td>@i.StartingPrice</td>
                             <td>@i.BuyNowPrice</td>
-                            <td>@i.NewUsed</td>
+                            <td>@(i.NewUsed==true ? "New" : "Used")</td>
                             <td>
                                 <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#carouselModal-@i.Id" data-item-id="@i.Id">
                                     <i class="fas fa-images"></i>

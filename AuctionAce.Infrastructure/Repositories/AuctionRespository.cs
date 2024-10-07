@@ -52,6 +52,12 @@ namespace AuctionAce.Infrastructure.Repositories
             return auction;
         }
 
+        public async Task<Auction> GetAuctionById(int? auctionId)
+        {
+            var auction = await _context.Auctions.FirstOrDefaultAsync(x => x.Id == auctionId);
+            return auction;
+        }
+
         public async Task<bool> AddAuctionItemPhoto(Dictionary<string, string> file, int auctionId, int? auctionItemId)
         {
             try

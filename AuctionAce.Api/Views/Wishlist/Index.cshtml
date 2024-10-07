@@ -1,0 +1,35 @@
+﻿@using AuctionAce.Api.Models.ViewModels.WishlistViewModel
+@model WishlistViewModel
+@{
+    Layout = "~/Views/Shared/_LayoutLogged.cshtml";
+}
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Category</th>
+            <th>Jump to Auction</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var auction in Model.AuctionDataDomain)
+        {
+            <tr>
+                <td>@auction.Name</td>
+                <td>@auction.Description</td>
+                <td>@auction.StartDate</td>
+                <td>@auction.EndDate</td>
+                <td>@auction.Category</td>
+                <td>
+                    <a href="@Url.Action("AuctionItemList", "Auction", new { auctionId = auction.Id })" class="btn btn-primary">
+                        View Auction
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -98,18 +98,16 @@
                     var itemData = {
                         itemName: $(tr).find('td:eq(0)').text(),//
                         itemDescription: $(tr).find('td:eq(1)').text(),//
-                        itemCategory: $(tr).find('td:eq(2)').text(),//
-                        startPrice: $(tr).find('td:eq(3)').text(),// buy now
-                        buyNowPrice: $(tr).find('td:eq(4)').text(),//new
-                        condition: $(tr).find('td:eq(5)').text() // null
+                        startPrice: $(tr).find('td:eq(2)').text(),// buy now
+                        buyNowPrice: $(tr).find('td:eq(3)').text(),//new
+                        condition: $(tr).find('td:eq(4)').text() // null
                     };
+                    var isNew = itemData.condition === "New" ? true : false;
                     formData.append('Items[' + index + '].Name', itemData.itemName);
                     formData.append('Items[' + index + '].Description', itemData.itemDescription);
-                    formData.append('Items[' + index + '].Category', itemData.itemCategory);
                     formData.append('Items[' + index + '].StartingPrice', itemData.startPrice);
                     formData.append('Items[' + index + '].BuyNowPrice', itemData.buyNowPrice);
-                    formData.append('Items[' + index + '].NewUsed', itemData.condition);
-
+                    formData.append('Items[' + index + '].NewUsed', isNew);
                     // Dodaj zdjęcia dla przedmiotu, jeśli są dostępne
                     if (itemImagesMap[index]) {
                         for (var i = 0; i < itemImagesMap[index].length; i++) {
@@ -117,6 +115,9 @@
                         }
                     }
                 });
+
+                console.log("formdata");
+                console.log(formData);
                 // Prześlij dane na serwer
                 $.ajax({
                     url: '/Auction/AddAuction',
