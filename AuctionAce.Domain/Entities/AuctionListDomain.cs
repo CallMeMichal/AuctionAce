@@ -5,7 +5,7 @@
         public int Id { get; set; }
         public string Description { get; set; }
         public string AuctionName { get; set; }
-
+        public int? IdCategory { get; set; }
         public int IdUsers { get; set; }
 
         public DateTime StartDate { get; set; }

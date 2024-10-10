@@ -12,11 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.5" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="Interfaces\Auction\" />
     <Folder Include="Interfaces\Calendar\" />
     <Folder Include="Interfaces\ChatHistory\" />

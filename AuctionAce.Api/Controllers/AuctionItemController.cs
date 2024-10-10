@@ -37,7 +37,7 @@ namespace AuctionAce.Api.Controllers
             item.BuyNowPrice = buyNowPrice;
             item.ActualHighestPrice = highestPrice;
             item.AuctionId = auctionId;
-
+            
             return View(item);
         }
     }

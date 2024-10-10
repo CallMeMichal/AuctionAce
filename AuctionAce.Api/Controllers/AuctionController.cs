@@ -4,7 +4,6 @@ using AuctionAce.Api.Models.ViewModels.Auctions;
 using AuctionAce.Application.Middleware;
 using AuctionAce.Application.Services;
 using AuctionAce.Domain.Entities;
-using AuctionAce.Infrastructure.Data.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -121,6 +120,7 @@ namespace AuctionAce.Api.Controllers
                     IdUsers = auction.IdUsers,
                     StartDate = auction.StartDate,
                     EndDate = auction.EndDate,
+                    IdCategory = auction.IdCategory,
                     Status = auction.Status,
                     AllAuctionsPhotos = photos,
                     AuctionsListItem = auction.AuctionsListItem
@@ -128,6 +128,8 @@ namespace AuctionAce.Api.Controllers
 
                 allAuctionsPhoto.Add(auctionStatus);
             }
+            var categories = _categoriesService.GetCategories().Result;
+            model.CategoriesDomains = categories;
 
             var wishlist = _wishlistService.GetWishlistForUser(userId).Result;
             model.WishlistDomains = wishlist;
@@ -157,6 +159,7 @@ namespace AuctionAce.Api.Controllers
                     StartDate = auction.StartDate,
                     EndDate = auction.EndDate,
                     Status = auction.Status,
+                    IdCategory = auction.IdCategory,
                     AllAuctionsPhotos = photos,
                     AuctionsListItem = auction.AuctionsListItem
                 };
@@ -166,6 +169,9 @@ namespace AuctionAce.Api.Controllers
             model.AuctionStatus = allAuctionsPhoto;
             var wishlist = _wishlistService.GetWishlistForUser(userId).Result;
             model.WishlistDomains = wishlist;
+            var categories = _categoriesService.GetCategories().Result;
+            model.CategoriesDomains = categories;
+
             return View(model);
         }
 
@@ -177,6 +183,9 @@ namespace AuctionAce.Api.Controllers
             AuctionViewModel model = new AuctionViewModel();
             var auction = _auctionService.GetAuctionAsync(auctionId).Result;
             var photos = _auctionService.GetPhotos(auctionId).Result;
+            var auctionName = _auctionService.GetAuctionName(auctionId).Result;
+            model.AuctionName = auctionName.Item1;
+            model.AuctionDescription = auctionName.Item2;
             model.SingleItemImages = photos;
             model.AuctionItems = auction;
             return View(model);

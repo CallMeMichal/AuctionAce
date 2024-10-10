@@ -205,5 +205,11 @@ namespace AuctionAce.Infrastructure.Repositories
             }
 
         }
+
+        public async Task<(string,string)> GetAuctionName(int auctionId)
+        {
+            var auctionName = await _context.Auctions.FirstOrDefaultAsync(x => x.Id == auctionId);
+            return (auctionName.AuctionName,auctionName.Description);
+        }
     }
 }

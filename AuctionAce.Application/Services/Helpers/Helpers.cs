@@ -1,5 +1,4 @@
-﻿
-using AuctionAce.Domain.Entities;
+﻿using AuctionAce.Domain.Entities;
 using AuctionAce.Infrastructure.Data.Models;
 
 namespace AuctionAce.Application.Services.Helpers

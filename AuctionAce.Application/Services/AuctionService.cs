@@ -52,6 +52,7 @@ namespace AuctionAce.Application.Services
 					StartDate = auction.StartDate ?? DateTime.MinValue,
 					EndDate = auction.EndDate ?? DateTime.MinValue,
 					Status = status,
+					IdCategory = auction.IdCategory,
 					AuctionsListItem = auctionsItem.Where(x => x.IdAuctions == auction.Id).Select(item => new AuctionsItemList
 					{
 						Id = item.Id,
@@ -108,6 +109,7 @@ namespace AuctionAce.Application.Services
 					StartDate = auction.StartDate ?? DateTime.MinValue,
 					EndDate = auction.EndDate ?? DateTime.MinValue,
 					Status = status,
+					IdCategory = auction.IdCategory,
 					AuctionsListItem = auctionsItem.Where(x => x.IdAuctions == auction.Id).Select(item => new AuctionsItemList
 					{
 						Id = item.Id,
@@ -354,5 +356,10 @@ namespace AuctionAce.Application.Services
 			await _auctionRespository.CloseAuction(auctionId);
 		}
 
+		public async Task<(string,string)> GetAuctionName(int auctionId)
+		{
+			return await _auctionRespository.GetAuctionName(auctionId);
+
+        }
     }
 }

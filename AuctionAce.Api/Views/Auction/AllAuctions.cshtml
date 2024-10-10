@@ -21,6 +21,17 @@
                 <button id="show-inactive" class="btn btn-danger">Show Inactive</button>
                 <button id="show-pending" class="btn btn-secondary">Show Pending</button>
                 <button id="show-all" class="btn btn-light">Show All</button>
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Categories
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        @foreach (var category in Model.CategoriesDomains)
+                        {
+                            <a class="dropdown-item" href="#" data-category="@category.Id">@category.Name</a>
+                        }
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -30,7 +41,12 @@
         {
             foreach (var item in Model.AuctionStatus)
             {
-                <div class="col-md-3 mb-4 card-wrapper" data-startdate="@item.StartDate.ToString("o")" data-status="@item.Status" data-enddate="@item.EndDate.ToString("o")">
+                <div class="col-md-3 mb-4 card-wrapper"
+                     data-startdate="@item.StartDate.ToString("o")"
+                     data-status="@item.Status"
+                     data-enddate="@item.EndDate.ToString("o")"
+                     data-category="@item.IdCategory">
+                    <!-- Add category ID to data attributes -->
                     <div class="card position-relative custom-card-width">
                         @if (item.AllAuctionsPhotos != null && item.AllAuctionsPhotos.AuctionImages != null && item.AllAuctionsPhotos.AuctionImages.Count > 0)
                         {
@@ -44,9 +60,7 @@
                         <div class="card-body">
                             @if (item.AuctionName.Length > 27)
                             {
-
                                 <h5 class="card-title">@item.AuctionName.Substring(0, 24)...</h5>
-
                             }
                             else
                             {
@@ -61,20 +75,19 @@
                             {
                                 <p class="card-text">@item.Description</p>
                             }
-                            <p class="card-time" id="timer-@item.Id"></p>
-                            <a href="@Url.Action("AuctionItemList", "Auction", new { auctionId = item.Id })" class="btn btn-primary">View Auction Details</a>
+                            <p class="card-time" id="timer-@item.Id" style="min-height: 2rem;"></p>
+
+                            <div class="mt-auto d-flex justify-content-center">
+                                <a href="@Url.Action("AuctionItemList", "Auction", new { auctionId = item.Id })" class="btn btn-primary">View Auction Details</a>
+                            </div>
                         </div>
                         <div class="like-container">
-                            <span class="like-icon @(Model.WishlistDomains.Any(w => w.AuctionId == item.Id) ? "liked" : "")" data-auction-id="@item.Id">&#9829;</span> <!-- Serduszko -->
+                            <span class="like-icon @(Model.WishlistDomains.Any(w => w.AuctionId == item.Id) ? "liked" : "")" data-auction-id="@item.Id">&#9829;</span>
                         </div>
 
-
-                        <div class="status-bubble">
-                            @* Status will be added dynamically *@
-                        </div>
+                        <div class="status-bubble"></div>
                     </div>
 
-                    <!-- Modal z carousel -->
                     <div class="modal fade" id="carouselModal-@item.Id" tabindex="-1" aria-labelledby="carouselModalLabel-@item.Id" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered modal-lg">
                             <div class="modal-content">
@@ -103,15 +116,47 @@
                         </div>
                     </div>
                 </div>
-
             }
         }
-
     </div>
-
 </div>
 
 <style>
+
+    .custom-card-width {
+        display: flex;
+        flex-direction: column;
+        height: 100%; /* Ensures the card takes full height of the column */
+    }
+
+    .card-body {
+        flex-grow:0.2; /* Allows the card body to expand and take available space */
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .btn-primary {
+        align-self: flex-end; /* Ustawia przycisk na dole karty */
+    }
+
+    .fixed-size {
+        height: 200px;
+        object-fit: cover;
+    }
+
+    .card-title, .card-text {
+        word-wrap: break-word; /* Ensures long text wraps correctly */
+    }
+
+    .card-title {
+        min-height: 3rem; /* Ensures a consistent height for titles */
+    }
+
+    .card-text {
+        min-height: 4rem; /* Ensures a consistent height for descriptions */
+    }
+
 
 
     .fixed-size {
@@ -194,7 +239,32 @@
         var showInactiveButton = document.getElementById('show-inactive');
         var showPendingButton = document.getElementById('show-pending');
         var showAllButton = document.getElementById('show-all');
+        
+        var dropdownItems = document.querySelectorAll('.dropdown-item');
+        
+        dropdownItems.forEach(function (item) {
+            item.addEventListener('click', function (event) {
+                event.preventDefault(); // Zatrzymaj domyślne działanie linku
+                var selectedCategory = this.getAttribute('data-category');
+                console.log('Wybrana kategoria:', selectedCategory); // Log wybranej kategorii
 
+                // Filtrowanie kart w oparciu o kategorię
+                cards.forEach(function (card) {
+                    var cardCategory = card.getAttribute('data-category');
+                    console.log('Kategoria karty:', cardCategory); // Log kategorii karty
+
+                    if (cardCategory === selectedCategory || selectedCategory === "") {
+                        card.style.display = 'block'; // Pokazuje karty pasujące do wybranej kategorii
+                        console.log('Pokazuje kartę:', card); // Log pokazujący kartę
+                    } else {
+                        card.style.display = 'none'; // Ukrywa karty niepasujące do wybranej kategorii
+                        console.log('Ukrywa kartę:', card); // Log ukrywający kartę
+                    }
+                });
+            });
+        });
+
+        
         function filterCards(status) {
             cards.forEach(function (cardWrapper) {
                 var cardStatus = cardWrapper.getAttribute('data-status');
@@ -351,6 +421,7 @@
                     statusBubble.className = 'status-bubble status-closed';
                     connection.invoke("SetInactiveItemsInAuctionWithoutBids", parseInt(auctionId, 10))
                         .catch(err => console.error("Error to set inactive items: ", err.toString()));
+                    
                     statusBubble.textContent = 'Inactive'; // Dodanie komunikatu "Auction Ended"
                 }
             });
