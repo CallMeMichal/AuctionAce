@@ -67,9 +67,9 @@
                                 <h5 class="card-title">@item.AuctionName</h5>
                             }
 
-                            @if (item.Description.Length > 48)
+                            @if (item.Description.Length > 150)
                             {
-                                <p class="card-text">@item.Description.Substring(0, 45)...</p>
+                                <p class="card-text">@item.Description.Substring(0, 150)...</p>
                             }
                             else
                             {
