@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - AuctionAce.Api</title>
-    
+
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="~/css/style.css">
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
@@ -29,65 +29,93 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cdbootstrap/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cdbootstrap/css/cdb.min.css" />
     <link rel="stylesheet" href="~/css/AddAuctionStyle.css" asp-append-version="true" />
+
+
 </head>
 <body>
     <div class="container-fluid">
         <div class="row flex-nowrap">
             <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark">
-                <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
-                    <a href="/" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-                        @* <img src="~/images/auctionAceBaner/baner.png" alt="Logo AuctionAce" class="me-2" style="width: 400px; height: auto;" /> *@
+                <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100 w-100">
+                    <a href="/" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none w-100">
                         <span class="fs-5 d-none d-sm-inline">AuctionAce</span>
                     </a>
-                    <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
-                        <li>
-                            <a href="@Url.Action("AddAuction","Auction")" class="nav-link px-0 align-middle">
-                                <i class="fs-4 bi-people"></i>
-                                <span class="ms-1 d-none d-sm-inline">Add Auction</span>
+                    <ul class="nav flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start w-100" id="menu">
+                        <li class="w-100">
+                            <a href="@Url.Action("AddAuction","Auction")" class="nav-link nav-link-custom w-100">
+                                <i class="fas fa-plus-circle"></i>
+                                <span>Add Auction</span>
                             </a>
                         </li>
-                        <li>
-                            <a href="@Url.Action("AllAuctionsById","Auction")" class="nav-link px-0 align-middle">
-                                <i class="fs-4 bi-people"></i>
-                                <span class="ms-1 d-none d-sm-inline">My Auctions</span>
+                        <li class="w-100">
+                            <a href="@Url.Action("AllAuctionsById","Auction")" class="nav-link nav-link-custom w-100">
+                                <i class="fas fa-list"></i>
+                                <span>My Auctions</span>
                             </a>
                         </li>
-                        <li>
-                            <a href="@Url.Action("AllAuctions","Auction")" class="nav-link px-0 align-middle">
-                                <i class="fs-4 bi-people"></i>
-                                <span class="ms-1 d-none d-sm-inline">Auctions</span>
+                        <li class="w-100">
+                            <a href="@Url.Action("AllAuctions","Auction")" class="nav-link nav-link-custom w-100">
+                                <i class="fas fa-gavel"></i>
+                                <span>Auctions</span>
                             </a>
                         </li>
-                        <li>
-                            <a href="@Url.Action("GetCalendarData","Calendar")" class="nav-link px-0 align-middle">
-                                <i class="fs-4 bi-people"></i>
-                                <span class="ms-1 d-none d-sm-inline">Calendar</span>
+                        <li class="w-100">
+                            <a href="@Url.Action("GetCalendarData","Calendar")" class="nav-link nav-link-custom w-100">
+                                <i class="fas fa-calendar-alt"></i>
+                                <span>Calendar</span>
                             </a>
                         </li>
-                        <li>
-                            <a href="@Url.Action("Index","Wishlist")" class="nav-link px-0 align-middle">
-                                <i class="fs-4 bi-people"></i>
-                                <span class="ms-1 d-none d-sm-inline">Wishlist</span>
+                        <li class="w-100">
+                            <a href="@Url.Action("Index","Wishlist")" class="nav-link nav-link-custom w-100">
+                                <i class="fas fa-heart"></i>
+                                <span>Wishlist</span>
                             </a>
                         </li>
-                        <li>
-                            <a href="@Url.Action("Index","UserBoughtItems")" class="nav-link px-0 align-middle">
-                                <i class="fs-4 bi-people"></i>
-                                <span class="ms-1 d-none d-sm-inline">Bought Items</span>
+                        <li class="w-100">
+                            <a href="@Url.Action("Index","UserBoughtItems")" class="nav-link nav-link-custom w-100">
+                                <i class="fas fa-shopping-cart"></i>
+                                <span>Bought Items</span>
                             </a>
                         </li>
-                        <li>
-                            <a href="#" id="logoutButton" class="nav-link px-0 align-middle">
-                                <i class="fs-4 bi-people"></i>
-                                <span class="ms-1 d-none d-sm-inline">Logout</span>
+                        <li class="w-100">
+                            <a href="#" id="logoutButton" class="nav-link nav-link-custom w-100">
+                                <i class="fas fa-sign-out-alt"></i>
+                                <span>Logout</span>
                             </a>
                         </li>
                     </ul>
                     <hr>
                 </div>
             </div>
-            <div class="col py-3"> @RenderBody() </div>
+            <div class="col py-3">
+                @RenderBody()
+            </div>
         </div>
     </div>
 </body>
 </html>
+
+
+<style>
+    .nav-link-custom {
+        color: #007bff; /* Change text color to blue */
+        background-color: #343a40; /* Background color */
+        width: 100%; /* Stretches the button to full width */
+        text-align: center;
+        font-size: 18px;
+        padding: 12px;
+        border-radius: 8px;
+        transition: background-color 0.3s ease;
+        margin-bottom: 10px;
+    }
+
+        .nav-link-custom:hover {
+            background-color: #495057; /* Background color on hover */
+            color: #ffffff; /* Change text color to white on hover */
+            text-decoration: none;
+        }
+
+        .nav-link-custom i {
+            margin-right: 8px; /* Spacing for icons */
+        }
+</style>

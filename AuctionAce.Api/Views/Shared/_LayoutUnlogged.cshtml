@@ -36,6 +36,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cdbootstrap/css/cdb.min.css" />
 
     <link rel="stylesheet" href="~/css/AddAuctionStyle.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
 
     
@@ -48,21 +49,17 @@
                     <a href="/" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
                         <span class="fs-5 d-none d-sm-inline">AuctionAce</span>
                     </a>
-                    <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
-
-                        @* <li class="nav-item">
-                            <a href="@Url.Action("AllAuctions","Auction")" class="nav-link align-middle px-0">
-                                <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline">Auctions</span>
-                            </a>
-                        </li> *@
-                        <li>
-                            <a href="#" class="nav-link px-0 align-middle">
-                                <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline">Login</span>
+                    <ul class="nav flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start w-100" id="menu">
+                        <li class="w-100">
+                            <a href="#" class="nav-link nav-link-custom w-100" data-bs-toggle="modal" data-bs-target="#loginModal">
+                                <i class="fas fa-sign-in-alt"></i>
+                                <span>Login</span>
                             </a>
                         </li>
-                        <li>
-                            <a href="#" class="nav-link px-0 align-middle">
-                                <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Register</span>
+                        <li class="w-100">
+                            <a href="#" class="nav-link nav-link-custom w-100" data-bs-toggle="modal" data-bs-target="#registerModal">
+                                <i class="fas fa-user-plus"></i>
+                                <span>Register</span>
                             </a>
                         </li>
                     </ul>
@@ -165,3 +162,28 @@
 
 </body>
 </html>
+
+
+<style>
+    .nav-link-custom {
+        color: #ffffff;
+        background-color: #343a40;
+        width: 100%;
+        text-align: center;
+        font-size: 18px;
+        padding: 12px;
+        border-radius: 8px;
+        transition: background-color 0.3s ease;
+        margin-bottom: 10px;
+    }
+
+        .nav-link-custom:hover {
+            background-color: #495057;
+            color: #ffffff;
+            text-decoration: none;
+        }
+
+        .nav-link-custom i {
+            margin-right: 8px;
+        }
+</style>
