@@ -7,17 +7,26 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AuctionAce.Domain\AuctionAce.Domain.csproj" />
-    <ProjectReference Include="..\AuctionAce.Infrastructure\AuctionAce.Infrastructure.csproj" />
+    <Compile Remove="Interfaces\Auction\**" />
+    <Compile Remove="Interfaces\Authentication\**" />
+    <Compile Remove="Interfaces\Calendar\**" />
+    <Compile Remove="Interfaces\Login\**" />
+    <Compile Remove="Interfaces\User\**" />
+    <EmbeddedResource Remove="Interfaces\Auction\**" />
+    <EmbeddedResource Remove="Interfaces\Authentication\**" />
+    <EmbeddedResource Remove="Interfaces\Calendar\**" />
+    <EmbeddedResource Remove="Interfaces\Login\**" />
+    <EmbeddedResource Remove="Interfaces\User\**" />
+    <None Remove="Interfaces\Auction\**" />
+    <None Remove="Interfaces\Authentication\**" />
+    <None Remove="Interfaces\Calendar\**" />
+    <None Remove="Interfaces\Login\**" />
+    <None Remove="Interfaces\User\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Interfaces\Auction\" />
-    <Folder Include="Interfaces\Calendar\" />
-    <Folder Include="Interfaces\ChatHistory\" />
-    <Folder Include="Interfaces\Login\" />
-    <Folder Include="Interfaces\Authentication\" />
-    <Folder Include="Interfaces\User\" />
+    <ProjectReference Include="..\AuctionAce.Domain\AuctionAce.Domain.csproj" />
+    <ProjectReference Include="..\AuctionAce.Infrastructure\AuctionAce.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

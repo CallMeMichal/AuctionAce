@@ -1,11 +1,12 @@
-﻿using AuctionAce.Domain.Entities;
+﻿using AuctionAce.Application.Interfaces.AuctionServiceInterface;
+using AuctionAce.Domain.Entities;
 using AuctionAce.Infrastructure.Data.Models;
 using AuctionAce.Infrastructure.Repositories;
 
 namespace AuctionAce.Application.Services
 {
-	public class AuctionService
-	{
+	public class AuctionService : IAuctionService
+    {
 		public readonly AuctionRespository _auctionRespository;
 		public readonly CategoryService _categoryService;
 
