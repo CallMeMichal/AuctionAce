@@ -22,6 +22,8 @@ namespace AuctionAce.Api.Controllers
             var startPrice = _auctionService.GetStartPriceForItem(itemId).Result;
             var highestPrice = _bidHistoryService.GetHighestBidForItem(itemId).Result;
             var auctionId = _auctionService.GetAuctionIdByItemId(itemId).Result;
+            var ownerId = _auctionService.GetAuctionOwnerId(auctionId).Result;
+            string parsedOwneId = ownerId.ToString();
             if (highestPrice == null || highestPrice == 0)
             {
                 highestPrice = startPrice;
@@ -30,7 +32,7 @@ namespace AuctionAce.Api.Controllers
 
             ItemViewModel item = new ItemViewModel();
             item.Id = itemId;
-            
+            item.OwnerId = parsedOwneId;
             item.Guid = itemGuid;
             item.ItemDomain = photosItemDomains;
             item.StartPrice = startPrice;

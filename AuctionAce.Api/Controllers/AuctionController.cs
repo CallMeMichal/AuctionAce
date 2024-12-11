@@ -38,7 +38,7 @@ namespace AuctionAce.Api.Controllers
         }
 
         [HttpGet]
-        [JwtAuthentication("1", "2")]
+        [JwtAuthentication("2")]
         public IActionResult AddAuction()
         {
             AuctionViewModel model = new AuctionViewModel();
@@ -100,7 +100,7 @@ namespace AuctionAce.Api.Controllers
             }
         }
 
-        [JwtAuthentication("1", "2")]
+        [JwtAuthentication("2")]
         [HttpGet]
         public IActionResult AllAuctionsById()
         {

@@ -18,34 +18,36 @@ namespace AuctionAce.Application.Middleware
             var request = filterContext.HttpContext.Request;
             var token = request.Cookies["jwt"];
 
-            if (token != null)
+            try
             {
-                var userInfo = AuthenticationService.ValidateToken(token);
-                if (userInfo == null)
+                if (token != null)
                 {
-                    filterContext.Result = new ViewResult
+                    var userInfo = AuthenticationService.ValidateToken(token);
+                    if (userInfo == null)
                     {
-                        ViewName = "NoUserError",
-                    };
-                    return;
-                }
+                        filterContext.Result = new RedirectToActionResult("Unauthorized", "Unauthorized", null);
+                        return;
+                    }
 
-                if (_roles.Contains(userInfo[0]))
-                {
-                    return;
+                    if (_roles.Contains(userInfo[0]))
+                    {
+                        return; // Authorized user with proper role
+                    }
+                    else
+                    {
+                        filterContext.Result = new RedirectToActionResult("Unauthorized", "Unauthorized", null);
+                        return;
+                    }
                 }
                 else
                 {
-                    filterContext.Result = new ViewResult
-                    {
-                        ViewName = "Unauthorized",
-                    };
+                    filterContext.Result = new RedirectToActionResult("Unauthorized", "Unauthorized", null);
                     return;
                 }
             }
-            else
+            catch
             {
-                filterContext.Result = new StatusCodeResult(401);
+                filterContext.Result = new RedirectToActionResult("Unauthorized", "Unauthorized", null);
             }
         }
     }

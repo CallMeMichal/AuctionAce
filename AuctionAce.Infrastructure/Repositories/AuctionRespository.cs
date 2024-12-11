@@ -211,5 +211,12 @@ namespace AuctionAce.Infrastructure.Repositories
             var auctionName = await _context.Auctions.FirstOrDefaultAsync(x => x.Id == auctionId);
             return (auctionName.AuctionName,auctionName.Description);
         }
+
+        public async Task<int> GetAuctionOwnerId(int auctionId)
+        {
+            
+            var ownerObject = _context.Auctions.FirstOrDefault(x=>x.Id == auctionId);
+            return (int)ownerObject.IdUsers;
+        }
     }
 }

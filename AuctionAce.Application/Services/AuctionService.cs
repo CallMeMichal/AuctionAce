@@ -2,6 +2,7 @@
 using AuctionAce.Domain.Entities;
 using AuctionAce.Infrastructure.Data.Models;
 using AuctionAce.Infrastructure.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace AuctionAce.Application.Services
 {
@@ -361,6 +362,13 @@ namespace AuctionAce.Application.Services
 		{
 			return await _auctionRespository.GetAuctionName(auctionId);
 
+        }
+
+        public async Task<int> GetAuctionOwnerId(int auctionId)
+        {
+
+            var ownerObject = await _auctionRespository.GetAuctionOwnerId(auctionId);
+			return ownerObject;
         }
     }
 }
