@@ -1,9 +1,10 @@
-﻿using AuctionAce.Infrastructure.Data.Models;
+﻿using AuctionAce.Application.Interfaces;
+using AuctionAce.Infrastructure.Data.Models;
 using AuctionAce.Infrastructure.Repositories;
 
 namespace AuctionAce.Application.Services
 {
-    public class UserService
+    public class UserService : IUserService
     {
         public readonly UserRepository _userRepository;
 

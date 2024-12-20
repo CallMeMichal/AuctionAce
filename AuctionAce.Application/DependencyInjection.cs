@@ -1,5 +1,4 @@
-﻿using AuctionAce.Application.Interfaces.AuctionServiceInterface;
-using AuctionAce.Application.Services;
+﻿using AuctionAce.Application.Services;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AuctionAce.Application
