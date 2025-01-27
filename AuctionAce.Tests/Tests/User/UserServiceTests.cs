@@ -1,7 +1,5 @@
 ﻿using AuctionAce.Application.Interfaces;
-using AuctionAce.Infrastructure.Data.Models;
 using Moq;
-using Xunit;
 
 namespace AuctionAce.Tests.Tests.User
 {
@@ -9,7 +7,6 @@ namespace AuctionAce.Tests.Tests.User
     {
         private readonly Mock<IUserService> _userServiceMock;
 
-        // Zainicjalizuj mocka bezpośrednio w konstruktorze bez potrzeby wstrzykiwania go.
         public UserServiceTests()
         {
             _userServiceMock = new Mock<IUserService>();

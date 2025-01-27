@@ -1,5 +1,4 @@
 using AuctionAce.Application.Interfaces;
-using AuctionAce.Application.Services;
 using AuctionAce.Domain.Entities;
 using Moq;
 

@@ -129,3 +129,14 @@
     </div>
 </div>
 <script src="~/js/AddAuction.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Warning!',
+            text: 'In the Chrome browser, you can set the time directly when selecting a date. However, in Firefox, the time needs to be entered manually in the Start Date and End Date fields. The auction and the item must have at least one photo. ',
+            confirmButtonText: 'Confirm'
+        });
+    });
+</script>
