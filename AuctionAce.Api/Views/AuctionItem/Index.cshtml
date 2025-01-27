@@ -39,7 +39,7 @@
     <div class="col-md-2">
         <div class="col-md-12" style="margin-top:50%">
             <button class="btn-sm btn-primary buttons " id="quitButton">Quit</button>
-            <button class="btn-sm btn-primary buttons" id="buyNowButton">Buy Now : @Model.BuyNowPrice USD</button>
+            <button class="btn-sm btn-primary buttons"  id="buyNowButton" @(userId == Model.OwnerId ? "disabled" : "")>Buy Now : @Model.BuyNowPrice USD</button>
             <span id="countdownTimer" class="h5 buttons">timer</span>
         </div>
     </div>
